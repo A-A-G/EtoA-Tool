@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="EtoA-Tool_EXE" default="do-deploy" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+	<import file="build_jar.xml" as="build_jar" />
+
+	<target name="do-deploy" depends="build_jar.do-dist">
+		<mkdir dir="build/deploy" />
+
+		<fx:resources id="appRes">
+			<fx:fileset dir="build/dist" includes="EtoA-Tool.jar" />
+			<fx:fileset dir="${basedir}" includes="planets.rod" type="data"/>
+			<fx:fileset dir="${basedir}" includes="ships.rod" type="data"/>
+			<fx:fileset dir="${basedir}" includes="deffs.rod" type="data"/>
+		</fx:resources>
+
+		<mkdir dir="build/deploy" />
+		<fx:deploy verbose="true" embedJNLP="true" extension="false" includeDT="false" offlineAllowed="true" outdir="${basedir}/build/deploy" outfile="EtoA-Tool" nativeBundles="exe" updatemode="background">
+			<fx:platform basedir="${java.home}" />
+			<fx:info title="EtoA-Tool" vendor="DasMoeh" />
+			<fx:application refId="fxApplication" />
+			<fx:resources refid="appRes" />
+			<fx:preferences shortcut="true"/>
+		</fx:deploy>
+	</target>
+
+</project>

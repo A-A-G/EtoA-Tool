@@ -1,0 +1,340 @@
+/**
+ * 
+ */
+package data;
+
+import data.ShipAndDefenceBase.DebrisField;
+import data.ships.Ship;
+import data.ships.Ships;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.MapChangeListener;
+import javafx.collections.ObservableMap;
+
+/**
+ * @author AAG
+ *
+ */
+public class PlayerValues
+{
+  public static final int DEFAULT_TECH = 100;
+  public static final int DEFAULT_REPAIR = 40;
+
+  private final ObjectProperty<Integer> weapontech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
+  private final ObjectProperty<Integer> armortech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
+  private final ObjectProperty<Integer> shieldtech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
+  private final ObjectProperty<Integer> regenatech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
+  private final ObjectProperty<Integer> repair = new SimpleIntegerProperty(DEFAULT_REPAIR).asObject();
+
+  private final ObjectProperty<Double> weapons = new SimpleDoubleProperty(0).asObject();
+  private final ObjectProperty<Double> structure = new SimpleDoubleProperty(0).asObject();
+  private final ObjectProperty<Double> shield = new SimpleDoubleProperty(0).asObject();
+  private final ObjectProperty<Double> heal = new SimpleDoubleProperty(0).asObject();
+
+  private final ObjectProperty<Integer> units = new SimpleIntegerProperty(0).asObject();
+
+  private ObservableMap<ShipAndDefenceBase, Integer> shipsMap = null;
+  private ObservableMap<ShipAndDefenceBase, Integer> defencesMap = null;
+
+  private PlayerValues otherPlayer = null;
+
+  private boolean showDifference = false;
+
+  public PlayerValues()
+  {
+    weapontech.addListener((obs, oldValue, newValue) -> updateValues());
+    armortech.addListener((obs, oldValue, newValue) -> updateValues());
+    shieldtech.addListener((obs, oldValue, newValue) -> updateValues());
+    regenatech.addListener((obs, oldValue, newValue) -> updateValues());
+  }
+
+  public PlayerValues(final PlayerValues otherPlayer)
+  {
+    this();
+    if (otherPlayer.getShips() != null)
+    {
+      shipsMap = FXCollections.observableHashMap();
+      shipsMap.putAll(otherPlayer.getShips());
+    }
+    if (otherPlayer.getDefences() != null)
+    {
+      defencesMap = FXCollections.observableHashMap();
+      defencesMap.putAll(otherPlayer.getDefences());
+    }
+    weapontech.set(otherPlayer.weapontechProperty().get());
+    armortech.set(otherPlayer.armortechProperty().get());
+    shieldtech.set(otherPlayer.shieldtechProperty().get());
+    regenatech.set(otherPlayer.regenatechProperty().get());
+    repair.set(otherPlayer.repairProperty().get());
+    updateValues();
+  }
+
+  public void setChoosenShips(final ObservableMap<ShipAndDefenceBase, Integer> choosenShips)
+  {
+    shipsMap = choosenShips;
+    shipsMap.addListener((MapChangeListener<ShipAndDefenceBase, Integer>) change -> updateValues());
+  }
+
+  public void setChoosenDefense(final ObservableMap<ShipAndDefenceBase, Integer> choosenDefence)
+  {
+    defencesMap = choosenDefence;
+    defencesMap.addListener((MapChangeListener<ShipAndDefenceBase, Integer>) change -> updateValues());
+  }
+
+  private void updateValues()
+  {
+    double weaponsBase = 0;
+    double structureBase = 0;
+    double shieldBase = 0;
+    double healBase = 0;
+    int units = 0;
+    if (shipsMap != null)
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
+      {
+        weaponsBase = weaponsBase + ((double) pair.getKey().weapons.get() * pair.getValue());
+        structureBase = structureBase + ((double) pair.getKey().structure.get() * pair.getValue());
+        shieldBase = shieldBase + ((double) pair.getKey().shield.get() * pair.getValue());
+        healBase = healBase + ((double) pair.getKey().heal.get() * pair.getValue());
+        units = units + pair.getValue();
+      }
+    }
+    if (defencesMap != null)
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : defencesMap.entrySet())
+      {
+        weaponsBase = weaponsBase + ((double) pair.getKey().weapons.get() * pair.getValue());
+        structureBase = structureBase + ((double) pair.getKey().structure.get() * pair.getValue());
+        shieldBase = shieldBase + ((double) pair.getKey().shield.get() * pair.getValue());
+        healBase = healBase + ((double) pair.getKey().heal.get() * pair.getValue());
+        units = units + pair.getValue();
+      }
+    }
+    weapons.set((double) Math.round((weaponsBase * weapontech.getValue()) / 100.0));
+    structure.set((double) Math.round((structureBase * armortech.getValue()) / 100.0));
+    shield.set((double) Math.round((shieldBase * shieldtech.getValue()) / 100.0));
+    heal.set((double) Math.round((healBase * regenatech.getValue()) / 100.0));
+    if (showDifference && (otherPlayer != null))
+    {
+      weapons.set(Math.floor(weapons.get() - otherPlayer.structureProperty().get() - otherPlayer.shieldProperty().get()));
+      final double structAndShieldLeft = (structure.get() + shield.get()) - otherPlayer.weaponsProperty().get();
+      structure.set(Math.floor(structAndShieldLeft / 2.0));
+      shield.set(Math.floor(structAndShieldLeft / 2.0));
+      heal.set(heal.get() - (otherPlayer.weaponsProperty().get() * 0.9));
+    }
+    unitsProperty().set(units);
+  }
+
+  public double getCapacity()
+  {
+    double capacity = 0;
+    if (shipsMap != null)
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
+      {
+        if ((pair.getKey() instanceof Ship) && (!Ships.NO_LOOT_SHIPS.contains(pair.getKey().nameProperty().get())) && (!Ships.INCREASED_LOOT_SHIPS.contains(pair.getKey().nameProperty().get())))
+        {
+          capacity = capacity + (((Ship) pair.getKey()).capacityProperty().get() * (double) pair.getValue());
+        }
+      }
+    }
+    return capacity;
+  }
+
+  public double getIncreasedCapacity()
+  {
+    double capacity = 0;
+    if (shipsMap != null)
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
+      {
+        if ((pair.getKey() instanceof Ship) && (Ships.INCREASED_LOOT_SHIPS.contains(pair.getKey().nameProperty().get())))
+        {
+          capacity = capacity + (((Ship) pair.getKey()).capacityProperty().get() * (double) pair.getValue());
+        }
+      }
+    }
+    return capacity;
+  }
+
+  public void reduceBy(final double factor)
+  {
+    if (shipsMap != null)
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
+      {
+        shipsMap.put(pair.getKey(), (int) Math.ceil(pair.getValue() * factor));
+      }
+    }
+    if (defencesMap != null)
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : defencesMap.entrySet())
+      {
+        defencesMap.put(pair.getKey(), (int) Math.ceil(pair.getValue() * factor));
+      }
+    }
+    updateValues();
+  }
+
+  public String repairRemainingDefences(final ObservableMap<ShipAndDefenceBase, Integer> originalDefencesMap)
+  {
+    String repairString = "";
+    if ((defencesMap != null) && (originalDefencesMap != null) && (!defencesMap.isEmpty()))
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : defencesMap.entrySet())
+      {
+        if (originalDefencesMap.containsKey(pair.getKey()))
+        {
+          final int originalNumber = originalDefencesMap.get(pair.getKey());
+          final int currentNumber = pair.getValue();
+          final int repaired = (int) Math.round(((originalNumber - currentNumber) * repair.get()) / 100.0);
+          repairString = repairString + pair.getKey().nameProperty().get() + " \t " + pair.getValue() + " (+" + repaired + ")" + System.lineSeparator();
+          defencesMap.put(pair.getKey(), currentNumber + repaired);
+        }
+        else
+        {
+          System.out.println("Something wrong repairing defences!");
+        }
+      }
+    }
+    else
+    {
+      repairString = repairString + "Nichts vorhanden!" + System.lineSeparator();
+    }
+    return repairString;
+  }
+
+  public DebrisField getShipsDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
+  {
+    return ShipAndDefenceBase.getDebrisField(originalShips, shipsMap, DebrisField.TF_FACTOR_SHIPS);
+  }
+
+  public DebrisField getDefencesDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalDefences)
+  {
+    return ShipAndDefenceBase.getDebrisField(originalDefences, defencesMap, DebrisField.TF_FACTOR_DEFENCE);
+  }
+  
+  public double getShipsExperiance(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
+  {
+    return ShipAndDefenceBase.getExperiance(originalShips, shipsMap);
+  }
+
+  public double getDefencesExperiance(final ObservableMap<ShipAndDefenceBase, Integer> originalDefences)
+  {
+    return ShipAndDefenceBase.getExperiance(originalDefences, defencesMap);
+  }
+
+  public void updateFromSpyReport(final SpyReport spyReport)
+  {
+    weapontech.set((spyReport.getWeapontech() * 10) + 100);
+    armortech.set((spyReport.getArmortech() * 10) + 100);
+    shieldtech.set((spyReport.getShieldtech() * 10) + 100);
+    regenatech.set((spyReport.getRegenatech() * 10) + 100);
+  }
+
+  public String getValueString()
+  {
+    String valueString = String.format("Schild (%d): %,.0f", shieldtech.get(), shield.get()) + System.lineSeparator();
+    valueString = valueString + String.format("Struktur (%d): %,.0f", armortech.get(), structure.get()) + System.lineSeparator();
+    valueString = valueString + String.format("Waffen (%d): %,.0f", weapontech.get(), weapons.get()) + System.lineSeparator();
+    return valueString;
+  }
+
+  public String getFleetString()
+  {
+    return ShipAndDefenceBase.getShipAndDefenceBaseString(shipsMap);
+  }
+
+  public String getDefencesString()
+  {
+    return ShipAndDefenceBase.getShipAndDefenceBaseString(defencesMap);
+  }
+
+  public ObservableMap<ShipAndDefenceBase, Integer> getShips()
+  {
+    return shipsMap;
+  }
+
+  public ObservableMap<ShipAndDefenceBase, Integer> getDefences()
+  {
+    return defencesMap;
+  }
+
+  public void setShowDifference(final boolean showDifference)
+  {
+    this.showDifference = showDifference;
+    updateValues();
+  }
+
+  public boolean isShowDifference()
+  {
+    return showDifference;
+  }
+
+  public PlayerValues getOtherPlayer()
+  {
+    return otherPlayer;
+  }
+
+  public void setOtherPlayer(final PlayerValues otherPlayer)
+  {
+    this.otherPlayer = otherPlayer;
+    otherPlayer.weaponsProperty().addListener((obs, oldVal, newVal) -> updateValues());
+    otherPlayer.structureProperty().addListener((obs, oldVal, newVal) -> updateValues());
+    otherPlayer.shieldProperty().addListener((obs, oldVal, newVal) -> updateValues());
+    otherPlayer.healProperty().addListener((obs, oldVal, newVal) -> updateValues());
+  }
+
+  public ObjectProperty<Integer> weapontechProperty()
+  {
+    return weapontech;
+  }
+
+  public ObjectProperty<Integer> armortechProperty()
+  {
+    return armortech;
+  }
+
+  public ObjectProperty<Integer> shieldtechProperty()
+  {
+    return shieldtech;
+  }
+
+  public ObjectProperty<Integer> regenatechProperty()
+  {
+    return regenatech;
+  }
+
+  public ObjectProperty<Integer> repairProperty()
+  {
+    return repair;
+  }
+
+  public ObjectProperty<Double> weaponsProperty()
+  {
+    return weapons;
+  }
+
+  public ObjectProperty<Double> structureProperty()
+  {
+    return structure;
+  }
+
+  public ObjectProperty<Double> shieldProperty()
+  {
+    return shield;
+  }
+
+  public ObjectProperty<Double> healProperty()
+  {
+    return heal;
+  }
+
+  public ObjectProperty<Integer> unitsProperty()
+  {
+    return units;
+  }
+
+}

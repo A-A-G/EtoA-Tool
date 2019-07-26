@@ -1,0 +1,109 @@
+.context-menu
+{
+	-fx-base: rgb(0.0, 0.0, 0.0);
+}
+
+.menu-bar
+{
+	-fx-base: rgb(0.0, 0.0, 0.0);
+}
+
+VBox
+{
+	-fx-spacing: 10.0;
+	-fx-padding: 10.0;
+}
+
+.spacing
+{
+	-fx-spacing: 10.0;
+}
+
+.smallspacing
+{
+	-fx-spacing: 5.0;
+}
+
+.nospacing
+{
+	-fx-spacing: 0.0;
+}
+
+.padding
+{
+	-fx-padding: 10.0;
+}
+
+.toppadding
+{
+	-fx-padding: 10.0 0.0 0.0 0.0;
+}
+
+.nospaceandpaddding
+{
+	-fx-spacing: 0.0;
+	-fx-padding: 0.0;
+}
+
+.spaceandbottompadding
+{
+	-fx-spacing: 10.0;
+	-fx-padding: 0.0 0.0 10.0 0.0;
+}
+
+.label.highlight
+{
+	-fx-font-weight: bold;
+}
+
+.label.red
+{
+	-fx-text-fill: RED;
+}
+
+.bordered
+{
+	-fx-border-color: BLACk;
+	-fx-padding: 5.0;
+	-fx-border-radius: 10.0;
+}
+
+.titled-pane > .title 
+{
+	-fx-alignment: center;
+}
+
+.titled-pane.defender > .title 
+{
+	-fx-alignment: center-left;	
+	-fx-background-color: -fx-box-border, -fx-inner-border, WHEAT;
+}
+
+.titled-pane.attacker > .title 
+{
+	-fx-alignment: center-left;
+	-fx-background-color: derive(SANDYBROWN,65.0%), derive(SANDYBROWN,30.0%), SANDYBROWN;
+}
+
+.elementstyle
+{
+	-fx-background-color: -fx-box-border, -fx-inner-border, -fx-body-color; 
+    -fx-background-insets: 0.0, 1.0, 2.0;
+    -fx-background-radius: 5.0 5.0 0.0 0.0, 4.0 4.0 0.0 0.0, 3.0 3.0 0.0 0.0;
+	-fx-padding: 0.166667em 0.833333em 0.25em 0.833333em;
+}
+
+.redspinner .text-field
+{
+	-fx-text-fill: RED;
+}
+
+.greenspinner .text-field
+{
+	-fx-text-fill: GREEN;
+}
+
+.yellowspinner .text-field
+{
+	-fx-text-fill: YELLOW;
+}
