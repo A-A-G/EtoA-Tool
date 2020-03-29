@@ -29,7 +29,6 @@ import utils.Comparators;
  */
 public class Planets extends DataHandler<Planet>
 {
-  private static final String ROUND = "round19";
 
   public static final String NO_OWNER = "Niemand";
   public static final String EMPTY_SPACE = "Leerer Raum";
@@ -218,7 +217,7 @@ public class Planets extends DataHandler<Planet>
         int planetCounter = 1;
         for (final Planet p : planets2filter)
         {
-          output = output + "[url=http://" + ROUND + ".trantor.etoa.net/?page=cell&id=" + p.getID() + "&hl=" + p.getHL(planets2sort) + "]" + tokens[playerCounter % 2] + "[/url]\t";
+          output = output + "[url=http://" + EtoATool.getRound() + ".trantor.etoa.net/?page=cell&id=" + p.getID() + "&hl=" + p.getHL(planets2sort) + "]" + tokens[playerCounter % 2] + "[/url]\t";
           if ((planetCounter % 5) == 0)
           {
             output = output + "|\t";
@@ -227,7 +226,7 @@ public class Planets extends DataHandler<Planet>
         }
         for (; planetCounter <= 15; planetCounter++)
         {
-          output = output + "[url=http://" + ROUND + ".trantor.etoa.net/?page=cell&id=0&hl=0]" + tokens[2] + "[/url]\t";
+          output = output + "[url=http://" + EtoATool.getRound() + ".trantor.etoa.net/?page=cell&id=0&hl=0]" + tokens[2] + "[/url]\t";
           if ((planetCounter % 5) == 0)
           {
             output = output + "|\t";

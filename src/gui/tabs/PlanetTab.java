@@ -46,7 +46,7 @@ public class PlanetTab extends EtoATab
     VBox.setVgrow(playerView, Priority.ALWAYS);
     final VBox playerVBox = new VBox(new Label("Spieler"), playerView);
     playerVBox.setAlignment(Pos.CENTER);
-    final SplitPane planetsSplit = new SplitPane(planetsVBox, playerVBox, getCnPDataHBox("Copy & Paste Solarsystem!" + System.lineSeparator() + System.lineSeparator() + "Currently supported formats: Google Chrome", planets));
+    final SplitPane planetsSplit = new SplitPane(planetsVBox, playerVBox, getCnPDataHBox("Copy & Paste Solarsystem! " + System.lineSeparator() + System.lineSeparator() + "Currently supported formats: Google Chrome", planets));
     planetsSplit.setDividerPositions(0.55f, 0.75f);
     setContent(planetsSplit);
   }

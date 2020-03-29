@@ -356,7 +356,10 @@ public abstract class ShipAndDefenceBase extends EtoAItem implements Comparable<
       {
         if (originalMap.containsKey(pair.getKey()))
         {
-          if ((!(pair.getKey() instanceof Ship)) || ((!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_SHIPS)) && (!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_RACE_SHIPS))))
+          if ((!(pair.getKey() instanceof Ship)) || 
+        	 ((!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_SHIPS)) && 
+        	  (!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_RACE_SHIPS)) && 
+        	  (!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.COLLECT_SHIPS))))
           {
             final int destroyed = originalMap.get(pair.getKey()) - pair.getValue();
             exp = exp + ((pair.getKey().getValue() * destroyed) / 100.0);

@@ -42,7 +42,14 @@ public class EtoATool extends Application
 {
   private final static String VERSION = "0.4.4";
 
-  private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 01, 01);
+  private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 05, 01);
+  
+  private static final String ROUND = "round20";
+  
+  public static String getRound()
+  {
+    return ROUND;
+  }
 
   private static Stage PRIMARY_STAGE = null;
 

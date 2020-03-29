@@ -38,7 +38,7 @@ public class DefenceTab extends EtoATab
     final TextField searchField = new TextField();
     final VBox defenceVBox = new VBox(getSearchHBox(searchField), getDefenceTableView(filteredDefence), getAddLoadSaveHBox("Verteidigungsanlage", defences));
     defenceVBox.setAlignment(Pos.CENTER);
-    final SplitPane defenceSplit = new SplitPane(defenceVBox, getCnPDataHBox("Copy & Paste Daten der Verteidigungsanlage!" + System.lineSeparator() + System.lineSeparator() + "Currently supported formats: Google Chrome", defences));
+    final SplitPane defenceSplit = new SplitPane(defenceVBox, getCnPDataHBox("Copy & Paste Daten der Verteidigungsanlage! " + System.lineSeparator() + System.lineSeparator() + "Currently supported formats: Google Chrome", defences));
     defenceSplit.setDividerPositions(0.75f);
     setContent(defenceSplit);
     searchField.textProperty().addListener((observable, oldValue, newValue) -> filteredDefence.setPredicate(defence -> filterDefencesTable(defence, newValue)));
@@ -66,6 +66,7 @@ public class DefenceTab extends EtoATab
     sortedDefences.comparatorProperty().bind(defenceTable.comparatorProperty());
     defenceTable.setItems(sortedDefences);
     final TableColumn<Defence, String> nameCol = new TableColumn<>("Name");
+    nameCol.getStyleClass().add("table-cell-centerleft");
     nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
     nameCol.setCellFactory(TextFieldTableCell.<Defence>forTableColumn());
     defenceTable.getColumns().add(nameCol);

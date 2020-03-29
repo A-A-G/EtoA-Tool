@@ -54,7 +54,10 @@ public class ShipsTab extends EtoATab
     final CheckBox specialShipsCB = new CheckBox(Ships.SPECIAL_SHIPS);
     specialShipsCB.setIndeterminate(false);
     specialShipsCB.selectedProperty().set(true);
-    final HBox filterHBox = new HBox(civilShipsCB, warShipsCB, civilRaceShipsCB, raceShipsCB, specialShipsCB);
+    final CheckBox collectShipsCB = new CheckBox(Ships.COLLECT_SHIPS);
+    collectShipsCB.setIndeterminate(false);
+    collectShipsCB.selectedProperty().set(true);
+    final HBox filterHBox = new HBox(civilShipsCB, warShipsCB, civilRaceShipsCB, raceShipsCB, specialShipsCB, collectShipsCB);
     filterHBox.getStyleClass().add("spacing");
     filterHBox.setAlignment(Pos.CENTER);
     final VBox shipsVBox = new VBox(getSearchHBox(searchField), filterHBox, shipsTable, getAddLoadSaveHBox("Schiff", ships));
@@ -62,15 +65,16 @@ public class ShipsTab extends EtoATab
     final SplitPane shipsSplit = new SplitPane(shipsVBox, getCnPDataHBox("Copy & Paste Schiffsdaten!" + System.lineSeparator() + System.lineSeparator() + "Currently supported formats: Google Chrome", ships));
     shipsSplit.setDividerPositions(0.75f);
     setContent(shipsSplit);
-    searchField.textProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, newValue, civilShipsCB.isSelected(), warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), specialShipsCB.isSelected())));
-    civilShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), newValue, warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), specialShipsCB.isSelected())));
-    warShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), newValue, civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), specialShipsCB.isSelected())));
-    civilRaceShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), warShipsCB.isSelected(), newValue, raceShipsCB.isSelected(), specialShipsCB.isSelected())));
-    raceShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), newValue, specialShipsCB.isSelected())));
-    specialShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), newValue)));
+    searchField.textProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, newValue, civilShipsCB.isSelected(), warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), specialShipsCB.isSelected(), collectShipsCB.isSelected())));
+    civilShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), newValue, warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), specialShipsCB.isSelected(), collectShipsCB.isSelected())));
+    warShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), newValue, civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), specialShipsCB.isSelected(), collectShipsCB.isSelected())));
+    civilRaceShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), warShipsCB.isSelected(), newValue, raceShipsCB.isSelected(), specialShipsCB.isSelected(), collectShipsCB.isSelected())));
+    raceShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), newValue, specialShipsCB.isSelected(), collectShipsCB.isSelected())));
+    specialShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), newValue, collectShipsCB.isSelected())));
+    collectShipsCB.selectedProperty().addListener((observable, oldValue, newValue) -> filteredShips.setPredicate(ship -> filterShipsTable(ship, searchField.getText(), civilShipsCB.isSelected(), warShipsCB.isSelected(), civilRaceShipsCB.isSelected(), raceShipsCB.isSelected(), specialShipsCB.isSelected(), newValue)));
   }
 
-  private boolean filterShipsTable(final Ship ship, final String filterText, final boolean civilShips, final boolean warShips, final boolean civilRaceShips, final boolean raceShips, final boolean specialShips)
+  private boolean filterShipsTable(final Ship ship, final String filterText, final boolean civilShips, final boolean warShips, final boolean civilRaceShips, final boolean raceShips, final boolean specialShips, final boolean collectShips)
   {
     if (!civilShips && ship.categoryProperty().get().contains(Ships.CIVIL_SHIPS))
     {
@@ -89,6 +93,10 @@ public class ShipsTab extends EtoATab
       return false;
     }
     if (!specialShips && ship.categoryProperty().get().contains(Ships.SPECIAL_SHIPS))
+    {
+      return false;
+    }
+    if (!collectShips && ship.categoryProperty().get().contains(Ships.COLLECT_SHIPS))
     {
       return false;
     }
@@ -112,6 +120,7 @@ public class ShipsTab extends EtoATab
     sortedShips.comparatorProperty().bind(shipsTable.comparatorProperty());
     shipsTable.setItems(sortedShips);
     final TableColumn<Ship, String> nameCol = new TableColumn<>("Name");
+    nameCol.getStyleClass().add("table-cell-centerleft");
     nameCol.setCellValueFactory(new PropertyValueFactory<>("name"));
     nameCol.setCellFactory(TextFieldTableCell.<Ship>forTableColumn());
     shipsTable.getColumns().add(nameCol);

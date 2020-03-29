@@ -107,3 +107,13 @@ VBox
 {
 	-fx-text-fill: YELLOW;
 }
+
+.table-cell
+{ 
+  -fx-alignment: center; 
+} 
+
+.table-cell-centerleft
+{ 
+  -fx-alignment: center-left; 
+} 

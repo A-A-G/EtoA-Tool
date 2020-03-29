@@ -88,7 +88,7 @@ public class Defences extends DataHandler<Defence>
       }
       else if (line.contains("Max. Anzahl\t"))
       {
-        maxNumber = StringUtils.getTabSeparatedInt(line);
+        maxNumber = StringUtils.getTabSeparatedInt(line.replace("Max. ", ""));
         break; // do not parse more!
       }
       else

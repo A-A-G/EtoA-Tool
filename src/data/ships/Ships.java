@@ -29,7 +29,8 @@ public class Ships extends DataHandler<Ship>
   public static final String WAR_SHIPS = "Kriegsschiff";
   public static final String CIVIL_RACE_SHIPS = "Ziviles Rassenschiff";
   public static final String RACE_SHIPS = "Rassenspezifisches Schiff";
-  public static final String SPECIAL_SHIPS = "Spezialschiff";
+  public static final String SPECIAL_SHIPS = "Episches Schiff";
+  public static final String COLLECT_SHIPS = "Sammlerschiff";
 
   private static final String INITIAL_FILENAME = "ships.rod";
 
@@ -81,7 +82,7 @@ public class Ships extends DataHandler<Ship>
       }
       else if (line.contains("Piloten"))
       {
-        pilots = StringUtils.getTabSeparatedInt(line);
+        pilots = StringUtils.getTabSeparatedInt(line.replace("Anzahl ", ""));
       }
       else if (line.contains("Titan\t"))
       {
@@ -113,7 +114,7 @@ public class Ships extends DataHandler<Ship>
       }
       else if (line.contains("/100 AE\t"))
       {
-        usagePerAE = StringUtils.getTabSeparatedInt(line);
+        usagePerAE = StringUtils.getTabSeparatedInt(line.replace("/100 ", ""));
       }
       else if (line.contains("Waffen\t"))
       {
