@@ -25,6 +25,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TabPane.TabClosingPolicy;
 import javafx.scene.image.Image;
@@ -43,9 +44,9 @@ public class EtoATool extends Application
   private final static String VERSION = "0.4.4";
 
   private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 05, 01);
-  
+
   private static final String ROUND = "round20";
-  
+
   public static String getRound()
   {
     return ROUND;
@@ -109,9 +110,15 @@ public class EtoATool extends Application
       tabPane.getTabs().add(new KBSimTab(planets, ships, defences, statusBars.get(0)));
       tabPane.getTabs().add(new DistanceTab(planets, ships, defences, statusBars.get(1)));
       tabPane.getTabs().add(new KryptoTab(planets, ships, defences, statusBars.get(2)));
-      tabPane.getTabs().add(new RakTab(planets, ships, defences, statusBars.get(3)));
-      tabPane.getTabs().add(new AttStatisticsTab(planets, ships, defences, statusBars.get(4)));
-      tabPane.getTabs().add(new PriceTab(planets, ships, defences, statusBars.get(5)));
+      final Tab rakTab = new RakTab(planets, ships, defences, statusBars.get(3));
+      tabPane.getTabs().add(rakTab);
+      rakTab.setDisable(true);
+      final Tab attStatsTab = new AttStatisticsTab(planets, ships, defences, statusBars.get(4));
+      tabPane.getTabs().add(attStatsTab);
+      attStatsTab.setDisable(true);
+      final Tab priceTab = new PriceTab(planets, ships, defences, statusBars.get(5));
+      tabPane.getTabs().add(priceTab);
+      priceTab.setDisable(true);
       tabPane.getTabs().add(new PlanetTab(planets, ships, defences, statusBars.get(6)));
       tabPane.getTabs().add(new ShipsTab(planets, ships, defences, statusBars.get(7)));
       tabPane.getTabs().add(new DefenceTab(planets, ships, defences, statusBars.get(8)));
