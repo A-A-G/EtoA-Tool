@@ -35,7 +35,7 @@ public class AttackReport
   private int lootNahrung = 0;
   
   private int tfTitan = 0;
-  private int tSilizium = 0;
+  private int tfSilizium = 0;
   private int tfPVC = 0;
   
   private int expAttacker = 0;
