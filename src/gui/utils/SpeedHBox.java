@@ -25,7 +25,7 @@ public class SpeedHBox extends HBox
     getStyleClass().add("smallspacing");
     setAlignment(Pos.CENTER_LEFT);
     getChildren().add(new Label("Geschwindigkeit:"));
-    speedSpinner = Spinners.getSpinner(0, 200000, 10000, 100, 100, true, null);
+    speedSpinner = Spinners.getSpinner(0, 200000, 15000, 100, 100, true, null);
     getChildren().add(speedSpinner);
     getChildren().add(new Label("AE/h,"));
     getChildren().add(new Label("Start + Landung:"));

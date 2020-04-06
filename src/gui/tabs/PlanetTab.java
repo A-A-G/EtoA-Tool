@@ -9,6 +9,7 @@ import data.planets.Planets;
 import data.ships.Ships;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.geometry.Pos;
@@ -44,7 +45,10 @@ public class PlanetTab extends EtoATab
     final VBox planetsVBox = new VBox(getSearchHBox(searchField), getFilterHBoxAndHandleEvents(searchField, filteredPlanets, playerView), getPlanetsTableView(filteredPlanets), getLoadSaveHBox(planets));
     planetsVBox.setAlignment(Pos.CENTER);
     VBox.setVgrow(playerView, Priority.ALWAYS);
-    final VBox playerVBox = new VBox(new Label("Spieler"), playerView);
+    final Label playerHeaderLabel = new Label(planets.getPlayerCount() + " Spieler mit " + planets.getPlayerPlanetsCount() + " Planeten.");
+    planets.getPlayer().addListener((final ListChangeListener.Change<? extends String> c) -> playerHeaderLabel.setText(planets.getPlayerCount() + " Spieler mit " + planets.getPlayerPlanetsCount() + " Planeten."));
+    planets.getData().addListener((final ListChangeListener.Change<? extends Planet> c) -> playerHeaderLabel.setText(planets.getPlayerCount() + " Spieler mit " + planets.getPlayerPlanetsCount() + " Planeten."));
+    final VBox playerVBox = new VBox(playerHeaderLabel, playerView);
     playerVBox.setAlignment(Pos.CENTER);
     final SplitPane planetsSplit = new SplitPane(planetsVBox, playerVBox, getCnPDataHBox("Copy & Paste Solarsystem! " + System.lineSeparator() + System.lineSeparator() + "Currently supported formats: Google Chrome", planets));
     planetsSplit.setDividerPositions(0.55f, 0.75f);
@@ -127,10 +131,7 @@ public class PlanetTab extends EtoATab
     planetsTable.setItems(sortedPlanets);
     final TableColumn<Planet, String> coordsCol = new TableColumn<Planet, String>("Koordinaten");
     coordsCol.setCellValueFactory(new PropertyValueFactory<Planet, String>("coords"));
-    coordsCol.setComparator((final String first, final String second) ->
-    {
-      return Planet.compareCoords(first, second);
-    });
+    coordsCol.setComparator((final String first, final String second) -> Planet.compareCoords(first, second));
     planetsTable.getColumns().add(coordsCol);
     final TableColumn<Planet, String> ownerCol = new TableColumn<Planet, String>("Besitzer");
     ownerCol.setCellValueFactory(new PropertyValueFactory<Planet, String>("owner"));
@@ -144,7 +145,7 @@ public class PlanetTab extends EtoATab
     final TableColumn<Planet, Integer> systemIDCol = new TableColumn<Planet, Integer>("System ID");
     systemIDCol.setCellValueFactory(new PropertyValueFactory<Planet, Integer>("ID"));
     planetsTable.getColumns().add(systemIDCol);
-//    systemIDCol.setVisible(false);
+    systemIDCol.setVisible(false);
     final TableColumn<Planet, Integer> HLCol = new TableColumn<Planet, Integer>("HL");
     indexList = FXCollections.observableArrayList(planets.getData()).sorted();
     HLCol.setCellValueFactory(p ->
@@ -160,7 +161,7 @@ public class PlanetTab extends EtoATab
       return new ReadOnlyObjectWrapper<>(p.getValue().getHL(indexList));
     });
     planetsTable.getColumns().add(HLCol);
-//    HLCol.setVisible(false);
+    HLCol.setVisible(false);
     VBox.setVgrow(planetsTable, Priority.ALWAYS);
     return planetsTable;
   }

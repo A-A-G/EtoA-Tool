@@ -98,6 +98,24 @@ public class Planets extends DataHandler<Planet>
     }
     updateStatus(system + ": " + planetCounter + " Planeten hinzugefügt/aktualisiert (Changed: " + changed + ", Added: " + added + ").");
   }
+  
+  public long getPlayerPlanetsCount()
+  {
+    if (data == null)
+    {
+      return 0;
+    }
+    return data.stream().filter(p -> !p.getOwner().equals(NO_OWNER)).count();
+  }
+  
+  public int getPlayerCount()
+  {
+    if (player == null)
+    {
+      fillPlayer();
+    }
+    return player.size();
+  }
 
   public ObservableList<String> getPlayer()
   {
