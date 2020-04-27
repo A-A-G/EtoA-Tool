@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  */
 public class EtoATool extends Application
 {
-  private final static String VERSION = "0.5.0";
+  private final static String VERSION = "0.5.1";
 
   private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 05, 01);
 
@@ -89,7 +89,7 @@ public class EtoATool extends Application
       PRIMARY_STAGE = primaryStage;
       final BorderPane root = new BorderPane();
       final MenuBar rightBar = new MenuBar();
-      final Menu menuInfo = new Menu("Info", null, new MenuItem("EtoA-Tool " + VERSION), new MenuItem("by DasMoeh"), new MenuItem("belgarath19@web.de"));
+      final Menu menuInfo = new Menu("Info", null, new MenuItem("EtoA-Tool " + VERSION), new MenuItem("by AAG"), new MenuItem("https://github.com/A-A-G/EtoA-Tool"));
       rightBar.getMenus().addAll(menuInfo);
       final Region spacer = new Region();
       spacer.getStyleClass().add("menu-bar");

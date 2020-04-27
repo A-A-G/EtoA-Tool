@@ -6,14 +6,18 @@ package gui.tabs;
 import java.util.prefs.Preferences;
 
 import data.PlayerValues;
+import data.ShipAndDefenceBase;
 import data.SpyReport;
 import data.defence.Defence;
 import data.defence.Defences;
 import data.planets.Planets;
 import data.ships.Ship;
 import data.ships.Ships;
+import gui.utils.PlayerSpinners;
 import gui.utils.ShipAndDefenceSelector;
 import gui.utils.Spinners;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableMap;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
 import javafx.scene.Node;
@@ -67,7 +71,7 @@ public class KBSimTab extends EtoATab
     attackerValues.setChoosenShips(attackerShipSelector.getChoosenItemsMap());
     attackerShipSelector.setMaxWidth(Double.MAX_VALUE);
     HBox.setHgrow(attackerShipSelector, Priority.ALWAYS);
-    final HBox attackerHBox = new HBox(attackerShipSelector, getPlayerNode("Daten Angreifer", attackerValues, attackerSpinners, ATTACKER));
+    final HBox attackerHBox = new HBox(attackerShipSelector, getPlayerNode("Daten Angreifer", attackerValues, attackerSpinners, ATTACKER, attackerShipSelector));
     attackerHBox.setAlignment(Pos.CENTER);
     attackerHBox.getStyleClass().add("spacing");
     final ShipAndDefenceSelector<Ship> defenderShipSelector = new ShipAndDefenceSelector<>("Schiffe Verteidiger", ships);
@@ -123,6 +127,11 @@ public class KBSimTab extends EtoATab
 
   private Node getPlayerNode(final String header, final PlayerValues playerValues, final PlayerSpinners playerSpinners, final String styleClass)
   {
+    return getPlayerNode(header, playerValues, playerSpinners, styleClass, null);
+  }
+
+  private Node getPlayerNode(final String header, final PlayerValues playerValues, final PlayerSpinners playerSpinners, final String styleClass, final ShipAndDefenceSelector<Ship> selector)
+  {
     final Preferences preferences = Preferences.userNodeForPackage(getClass());
     if (styleClass.equals(ATTACKER))
     {
@@ -144,8 +153,8 @@ public class KBSimTab extends EtoATab
     if (styleClass.equals(DEFENDER))
     {
       gridPaneBonis.add(new Label("Reparatur % "), 0, 4);
-      Spinner<Integer> repSpinner = Spinners.getRepairSpinner(playerValues.repairProperty());
-      playerValues.repairProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(attackerValues, defenderSpinners));
+      final Spinner<Integer> repSpinner = Spinners.getRepairSpinner(playerValues.repairProperty());
+      playerValues.repairProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(fightSimulation, attackerValues, defenderSpinners));
       gridPaneBonis.add(repSpinner, 1, 4);
     }
     final TitledPane bonisTP = new TitledPane("Bonis", new Group(gridPaneBonis));
@@ -156,19 +165,19 @@ public class KBSimTab extends EtoATab
     final GridPane gridPaneValues = new GridPane();
     gridPaneValues.add(new Label("Waffen: "), 0, 0);
     playerSpinners.weapons = Spinners.getPlayerValueSpinner(playerValues.weaponsProperty());
-    playerSpinners.weapons.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(attackerValues, defenderSpinners));
+    playerSpinners.weapons.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(fightSimulation, attackerValues, defenderSpinners));
     gridPaneValues.add(playerSpinners.weapons, 1, 0);
     gridPaneValues.add(new Label("Struktur: "), 0, 1);
     playerSpinners.structure = Spinners.getPlayerValueSpinner(playerValues.structureProperty());
-    playerSpinners.structure.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(attackerValues, defenderSpinners));
+    playerSpinners.structure.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(fightSimulation, attackerValues, defenderSpinners));
     gridPaneValues.add(playerSpinners.structure, 1, 1);
     gridPaneValues.add(new Label("Schild: "), 0, 2);
     playerSpinners.shield = Spinners.getPlayerValueSpinner(playerValues.shieldProperty());
-    playerSpinners.shield.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(attackerValues, defenderSpinners));
+    playerSpinners.shield.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(fightSimulation, attackerValues, defenderSpinners));
     gridPaneValues.add(playerSpinners.shield, 1, 2);
     gridPaneValues.add(new Label("Heilung: "), 0, 3);
     playerSpinners.heal = Spinners.getPlayerValueSpinner(playerValues.healProperty());
-    playerSpinners.heal.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(attackerValues, defenderSpinners));
+    playerSpinners.heal.valueProperty().addListener((obs, oldVal, newVal) -> attackerSpinners.updateSpinners(fightSimulation, attackerValues, defenderSpinners));
     gridPaneValues.add(playerSpinners.heal, 1, 3);
     final TitledPane valuesTP = new TitledPane("Werte", new Group(gridPaneValues));
     valuesTP.setAlignment(Pos.CENTER);
@@ -179,13 +188,37 @@ public class KBSimTab extends EtoATab
     playerValuesVBox.getStyleClass().add("nospaceandpaddding");
     if (styleClass.equals(ATTACKER))
     {
+      final Button optimizeButton = new Button("Optimize");
+      optimizeButton.setOnAction(e ->
+      {
+        if (selector != null)
+        {
+          final ObservableMap<ShipAndDefenceBase, Integer> selectedShips = selector.getChoosenItemsMap();
+          if (selectedShips.size() == 1)
+          {
+            final double deffValues = defenderValues.structureProperty().get() + defenderValues.shieldProperty().get();
+            final ShipAndDefenceBase selected = selectedShips.keySet().iterator().next();
+            if (selected.weaponsProperty().doubleValue() > 0)
+            {
+              final long number = Math.round(Math.ceil(deffValues / ((selected.weaponsProperty().doubleValue() * playerValues.weapontechProperty().get()) / 100.0)));
+              final ObservableMap<String, Integer> itemMap = FXCollections.observableHashMap();
+              itemMap.put(selected.toString(), (int) number);
+              selector.update(itemMap);
+            }
+            else
+            {
+              statusLabel.setText("Select ship with an attack value!");
+            }
+          }
+          else
+          {
+            statusLabel.setText("Select exactly one Ship!");
+          }
+        }
+      });
       final String sumString = "Summe";
       final String diffString = "Differenz";
       final Button toggleButton = new Button(sumString);
-      final HBox buttonHBox = new HBox(toggleButton);
-      buttonHBox.setAlignment(Pos.CENTER);
-      buttonHBox.getStyleClass().add("padding");
-      playerValuesVBox.getChildren().add(buttonHBox);
       toggleButton.setOnAction(e ->
       {
         if (toggleButton.getText().equals(sumString))
@@ -199,75 +232,15 @@ public class KBSimTab extends EtoATab
           playerValues.setShowDifference(false);
         }
       });
+      final HBox buttonHBox = new HBox(optimizeButton, toggleButton);
+      buttonHBox.setAlignment(Pos.CENTER);
+      buttonHBox.getStyleClass().add("spaceandpaddding");
+      playerValuesVBox.getChildren().add(buttonHBox);
     }
     final TitledPane playerTP = new TitledPane(header, playerValuesVBox);
     playerTP.getStyleClass().add(styleClass);
     playerTP.setCollapsible(false);
     return new Group(playerTP);
-  }
-
-  private class PlayerSpinners
-  {
-    private final static String GREEN_SPINNER = "greenspinner";
-    private final static String RED_SPINNER = "redspinner";
-
-    public Spinner<Double> weapons;
-    public Spinner<Double> structure;
-    public Spinner<Double> shield;
-    public Spinner<Double> heal;
-
-    public void updateSpinners(final PlayerValues baseValues, final PlayerSpinners otherSpinners)
-    {
-      fightSimulation.SimulateFight();
-      PlayerValues plainValues = new PlayerValues(baseValues);
-      if (plainValues.weaponsProperty().getValue() >= (otherSpinners.shield.getValue() + otherSpinners.structure.getValue()))
-      {
-        weapons.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
-        addStyle(weapons, GREEN_SPINNER);
-      }
-      else if (fightSimulation.isAttackerWins())
-      {
-        weapons.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
-        weapons.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
-      }
-      else
-      {
-        weapons.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
-        addStyle(weapons, RED_SPINNER);
-      }
-      if (otherSpinners.weapons.getValue() >= (plainValues.shieldProperty().getValue() + plainValues.structureProperty().getValue()))
-      {
-        shield.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
-        structure.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
-        addStyle(shield, RED_SPINNER);
-        addStyle(structure, RED_SPINNER);
-      }
-      else
-      {
-        shield.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
-        structure.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
-        addStyle(shield, GREEN_SPINNER);
-        addStyle(structure, GREEN_SPINNER);
-      }
-      if (plainValues.healProperty().getValue() < (otherSpinners.weapons.getValue() * 0.9))
-      {
-        heal.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
-        addStyle(heal, RED_SPINNER);
-      }
-      else
-      {
-        heal.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
-        addStyle(heal, GREEN_SPINNER);
-      }
-    }
-
-    private void addStyle(final Node node, final String style)
-    {
-      if (!node.getStyleClass().contains(style))
-      {
-        node.getStyleClass().add(style);
-      }
-    }
   }
 
 }

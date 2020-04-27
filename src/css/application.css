@@ -45,6 +45,12 @@ VBox
 	-fx-padding: 0.0;
 }
 
+.spaceandpaddding
+{
+	-fx-spacing: 10.0;
+	-fx-padding: 10.0;
+}
+
 .spaceandbottompadding
 {
 	-fx-spacing: 10.0;

@@ -1,8 +1,10 @@
 - Preisrecher
 - KBSim
+	- Infra Wiederherstellung
+- Rakrechner
+- KBSim
 	- Beute: Kapazität anzeigen (Welle 1, 2 und 3)?
 	- Allianzangriffe
-- Rakrechner
 - Angriffsstatistiken
 	- Zerstört/Verloren, Gewonnen/Verloren, Schiffe nach Typ, Deff, geplünderte Ressis
 - Spio/Bauhof/Forschungs-Datenbank

@@ -145,7 +145,7 @@ public class PlanetTab extends EtoATab
     final TableColumn<Planet, Integer> systemIDCol = new TableColumn<Planet, Integer>("System ID");
     systemIDCol.setCellValueFactory(new PropertyValueFactory<Planet, Integer>("ID"));
     planetsTable.getColumns().add(systemIDCol);
-    systemIDCol.setVisible(false);
+    // systemIDCol.setVisible(false);
     final TableColumn<Planet, Integer> HLCol = new TableColumn<Planet, Integer>("HL");
     indexList = FXCollections.observableArrayList(planets.getData()).sorted();
     HLCol.setCellValueFactory(p ->
@@ -161,7 +161,7 @@ public class PlanetTab extends EtoATab
       return new ReadOnlyObjectWrapper<>(p.getValue().getHL(indexList));
     });
     planetsTable.getColumns().add(HLCol);
-    HLCol.setVisible(false);
+    // HLCol.setVisible(false);
     VBox.setVgrow(planetsTable, Priority.ALWAYS);
     return planetsTable;
   }
