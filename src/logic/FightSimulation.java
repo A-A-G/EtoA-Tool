@@ -114,8 +114,9 @@ public class FightSimulation
       lastFightReport = lastFightReport + "BEUTE" + System.lineSeparator();
       lastFightReport = lastFightReport + getLoot(spyReport, attacker.getCapacity(), attacker.getIncreasedCapacity()) + System.lineSeparator();
     }
-    double attackerExp = Math.floor(defender.getShipsExperiance(defenderValues.getShips()) + defender.getDefencesExperiance(defenderValues.getDefences()));
-    double defenderExp = Math.floor(attacker.getShipsExperiance(attackerValues.getShips()));
+    final String defenderShips = defender.restoreCivilShips(defenderValues.getShips());
+    final double attackerExp = Math.floor(defender.getShipsExperiance(defenderValues.getShips()) + defender.getDefencesExperiance(defenderValues.getDefences()));
+    final double defenderExp = Math.floor(attacker.getShipsExperiance(attackerValues.getShips()));
     final String defenceRepair = defender.repairRemainingDefences(defenderValues.getDefences());
     lastFightReport = lastFightReport + "TRÜMMERFELD" + System.lineSeparator();
     final DebrisField attackerDebrisFieldShips = attacker.getShipsDebrisField(attackerValues.getShips());
@@ -129,7 +130,7 @@ public class FightSimulation
     lastFightReport = lastFightReport + attacker.getFleetString() + System.lineSeparator();
     lastFightReport = lastFightReport + String.format("Gewonnene EXP: %,.0f", attackerExp) + System.lineSeparator() + System.lineSeparator();
     lastFightReport = lastFightReport + "VERTEIDIGENDE FLOTTE" + System.lineSeparator();
-    lastFightReport = lastFightReport + defender.getFleetString() + System.lineSeparator();
+    lastFightReport = lastFightReport + defenderShips + System.lineSeparator();
     lastFightReport = lastFightReport + "PLANETARE VERTEIDIGUNG" + System.lineSeparator();
     lastFightReport = lastFightReport + defenceRepair + System.lineSeparator();
     lastFightReport = lastFightReport + String.format("Gewonnene EXP: %,.0f", defenderExp) + System.lineSeparator() + System.lineSeparator();

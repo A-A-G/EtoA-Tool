@@ -347,7 +347,7 @@ public abstract class ShipAndDefenceBase extends EtoAItem implements Comparable<
     return new DebrisField(titan, silizium, pvc);
   }
 
-  public static double getExperiance(final ObservableMap<ShipAndDefenceBase, Integer> originalMap, final ObservableMap<ShipAndDefenceBase, Integer> currentMap)
+  public static double getExperience(final ObservableMap<ShipAndDefenceBase, Integer> originalMap, final ObservableMap<ShipAndDefenceBase, Integer> currentMap)
   {
     double exp = 0;
     if ((originalMap != null) && (currentMap != null))
@@ -356,10 +356,7 @@ public abstract class ShipAndDefenceBase extends EtoAItem implements Comparable<
       {
         if (originalMap.containsKey(pair.getKey()))
         {
-          if ((!(pair.getKey() instanceof Ship)) || 
-        	 ((!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_SHIPS)) && 
-        	  (!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_RACE_SHIPS)) && 
-        	  (!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.COLLECT_SHIPS))))
+          if ((!(pair.getKey() instanceof Ship)) || ((!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_SHIPS)) && (!((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_RACE_SHIPS))))
           {
             final int destroyed = originalMap.get(pair.getKey()) - pair.getValue();
             exp = exp + ((pair.getKey().getValue() * destroyed) / 100.0);

@@ -20,13 +20,14 @@ import javafx.collections.ObservableMap;
 public class PlayerValues
 {
   public static final int DEFAULT_TECH = 100;
-  public static final int DEFAULT_REPAIR = 40;
+  public static final int DEFAULT_DEFENCE_REPAIR = 40;
+  public static final int CIVIL_SHIPS_RESTORE = 100;
 
   private final ObjectProperty<Integer> weapontech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
   private final ObjectProperty<Integer> armortech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
   private final ObjectProperty<Integer> shieldtech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
   private final ObjectProperty<Integer> regenatech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
-  private final ObjectProperty<Integer> repair = new SimpleIntegerProperty(DEFAULT_REPAIR).asObject();
+  private final ObjectProperty<Integer> repair = new SimpleIntegerProperty(DEFAULT_DEFENCE_REPAIR).asObject();
 
   private final ObjectProperty<Double> weapons = new SimpleDoubleProperty(0).asObject();
   private final ObjectProperty<Double> structure = new SimpleDoubleProperty(0).asObject();
@@ -178,6 +179,41 @@ public class PlayerValues
     updateValues();
   }
 
+  public String restoreCivilShips(final ObservableMap<ShipAndDefenceBase, Integer> originalShipsMap)
+  {
+    String restoreString = "";
+    if ((shipsMap != null) && (originalShipsMap != null) && (!shipsMap.isEmpty()))
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
+      {
+        if (originalShipsMap.containsKey(pair.getKey()))
+        {
+          if (((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_SHIPS) || ((Ship) pair.getKey()).categoryProperty().get().equals(Ships.CIVIL_RACE_SHIPS))
+          {
+            final int originalNumber = originalShipsMap.get(pair.getKey());
+            final int currentNumber = pair.getValue();
+            final int restored = (int) Math.round(((originalNumber - currentNumber) * CIVIL_SHIPS_RESTORE) / 100.0);
+            restoreString = restoreString + pair.getKey().nameProperty().get() + " \t " + pair.getValue() + " (+" + restored + ")" + System.lineSeparator();
+            shipsMap.put(pair.getKey(), currentNumber + restored);
+          }
+          else
+          {
+            restoreString = restoreString + pair.getKey().nameProperty().get() + " \t " + pair.getValue() + System.lineSeparator();
+          }
+        }
+        else
+        {
+          System.out.println("Something wrong restoring civil ships!");
+        }
+      }
+    }
+    else
+    {
+      restoreString = restoreString + "Nichts vorhanden!" + System.lineSeparator();
+    }
+    return restoreString;
+  }
+
   public String repairRemainingDefences(final ObservableMap<ShipAndDefenceBase, Integer> originalDefencesMap)
   {
     String repairString = "";
@@ -215,15 +251,15 @@ public class PlayerValues
   {
     return ShipAndDefenceBase.getDebrisField(originalDefences, defencesMap, DebrisField.TF_FACTOR_DEFENCE);
   }
-  
+
   public double getShipsExperiance(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
   {
-    return ShipAndDefenceBase.getExperiance(originalShips, shipsMap);
+    return ShipAndDefenceBase.getExperience(originalShips, shipsMap);
   }
 
   public double getDefencesExperiance(final ObservableMap<ShipAndDefenceBase, Integer> originalDefences)
   {
-    return ShipAndDefenceBase.getExperiance(originalDefences, defencesMap);
+    return ShipAndDefenceBase.getExperience(originalDefences, defencesMap);
   }
 
   public void updateFromSpyReport(final SpyReport spyReport)

@@ -1,6 +1,4 @@
 - Preisrecher
-- KBSim
-	- Infra Wiederherstellung
 - Rakrechner
 - KBSim
 	- Beute: Kapazität anzeigen (Welle 1, 2 und 3)?
