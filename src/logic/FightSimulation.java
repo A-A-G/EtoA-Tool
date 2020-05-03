@@ -21,6 +21,8 @@ public class FightSimulation
   private static double MAX_LOOT = 0.3;
   private static double MAX_LOOT_ADD = 0.25;
 
+  private static double MAX_HEAL = 1;
+
   private PlayerValues attackerValues = null;
   private PlayerValues defenderValues = null;
 
@@ -74,7 +76,7 @@ public class FightSimulation
         final PlayerValues attackerCopy = new PlayerValues(attacker);
         attackerCopy.reduceBy(attackerLeftOver / (attacker.structureProperty().get() + attacker.shieldProperty().get()));
         lastFightReport = lastFightReport + String.format("Die Einheiten des Angreifers heilen %,.0f Struktur- und Schildpunkte.", attackerCopy.healProperty().getValue()) + System.lineSeparator();
-        attackerLeftOver = attackerLeftOver + (attackerCopy.healProperty().getValue() > (0.9 * (lastAttackerLO - attackerLeftOver)) ? 0.9 * (lastDefenderLO - defenderLeftOver) : attackerCopy.healProperty().getValue());
+        attackerLeftOver = attackerLeftOver + (attackerCopy.healProperty().getValue() > (MAX_HEAL * (lastAttackerLO - attackerLeftOver)) ? MAX_HEAL * (lastAttackerLO - attackerLeftOver) : attackerCopy.healProperty().getValue());
         lastFightReport = lastFightReport + String.format("Der Angreifer hat danach wieder %,.0f Struktur- und Schildpunkte.", attackerLeftOver) + System.lineSeparator() + System.lineSeparator();
       }
       if ((defenderLeftOver > 0) && (defender.healProperty().getValue() > 0))
@@ -82,7 +84,7 @@ public class FightSimulation
         final PlayerValues defenderCopy = new PlayerValues(defender);
         defenderCopy.reduceBy(defenderLeftOver / (defender.structureProperty().get() + defender.shieldProperty().get()));
         lastFightReport = lastFightReport + String.format("Die Einheiten des Verteidigers heilen %,.0f Struktur- und Schildpunkte.", defenderCopy.healProperty().getValue()) + System.lineSeparator();
-        defenderLeftOver = defenderLeftOver + (defenderCopy.healProperty().getValue() > (0.9 * (lastDefenderLO - defenderLeftOver)) ? 0.9 * (lastDefenderLO - defenderLeftOver) : defenderCopy.healProperty().getValue());
+        defenderLeftOver = defenderLeftOver + (defenderCopy.healProperty().getValue() > (MAX_HEAL * (lastDefenderLO - defenderLeftOver)) ? MAX_HEAL * (lastDefenderLO - defenderLeftOver) : defenderCopy.healProperty().getValue());
         lastFightReport = lastFightReport + String.format("Der Verteidiger hat danach wieder %,.0f Struktur- und Schildpunkte." + System.lineSeparator(), defenderLeftOver) + System.lineSeparator();
       }
       attacker.reduceBy(attackerLeftOver / (attacker.structureProperty().get() + attacker.shieldProperty().get()));
