@@ -1,4 +1,7 @@
 Changelog:
 
+0.5.2:
+- Civil ship restore
+
 0.5.1:
 - Optimize ship number of single type fleets 

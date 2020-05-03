@@ -41,7 +41,7 @@ import javafx.stage.Stage;
  */
 public class EtoATool extends Application
 {
-  private final static String VERSION = "0.5.1";
+  private final static String VERSION = "0.5.2";
 
   private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 06, 01);
 

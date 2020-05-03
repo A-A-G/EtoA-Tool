@@ -15,7 +15,7 @@
 		<mkdir dir="build/deploy" />
 		<fx:deploy verbose="true" embedJNLP="true" extension="false" includeDT="false" offlineAllowed="true" outdir="${basedir}/build/deploy" outfile="EtoA-Tool" nativeBundles="exe" updatemode="background">
 			<fx:platform basedir="${java.home}" />
-			<fx:info title="EtoA-Tool" vendor="DasMoeh" />
+			<fx:info title="EtoA-Tool" vendor="AAG" />
 			<fx:application refId="fxApplication" />
 			<fx:resources refid="appRes" />
 			<fx:preferences shortcut="true"/>
