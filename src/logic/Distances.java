@@ -15,7 +15,7 @@ public final class Distances
   public static final int Y_CELLS = 10;
 
   public static final double INTERSTELLAR_CONST = 600;
-  public static final double SOLARSYSTEM_CONST = 3;
+  public static final double SOLARSYSTEM_CONST = 1.89;
 
   public static class Coordinates
   {
