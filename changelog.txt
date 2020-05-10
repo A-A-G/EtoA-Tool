@@ -2,6 +2,7 @@ Changelog:
 
 0.5.2:
 - Civil ship restore
+- Loot for AIN and Aurora enabled
 
 Bugfixes:
 - Attacker heal limit

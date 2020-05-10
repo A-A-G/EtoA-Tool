@@ -22,7 +22,8 @@ import utils.StringUtils;
  */
 public class Ships extends DataHandler<Ship>
 {
-  public static final List<String> NO_LOOT_SHIPS = new ArrayList<>(Arrays.asList("AURORA Sonde", "AIN Sonde"));
+  // public static final List<String> NO_LOOT_SHIPS = new ArrayList<>(Arrays.asList("AURORA Sonde", "AIN Sonde")); // R19
+  public static final List<String> NO_LOOT_SHIPS = new ArrayList<>(); // R20
   public static final List<String> INCREASED_LOOT_SHIPS = new ArrayList<>(Arrays.asList("ORION Fighter"));
 
   public static final String CIVIL_SHIPS = "Ziviles Schiff";
