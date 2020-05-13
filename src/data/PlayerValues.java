@@ -3,9 +3,10 @@
  */
 package data;
 
-import data.ShipAndDefenceBase.DebrisField;
+import data.defence.Defence;
 import data.ships.Ship;
 import data.ships.Ships;
+import gui.utils.ShipAndDefenceSelector;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
@@ -39,9 +40,8 @@ public class PlayerValues
   private ObservableMap<ShipAndDefenceBase, Integer> shipsMap = null;
   private ObservableMap<ShipAndDefenceBase, Integer> defencesMap = null;
 
-  private PlayerValues otherPlayer = null;
-
-  private boolean showDifference = false;
+  ShipAndDefenceSelector<Ship> shipSelector = null;
+  ShipAndDefenceSelector<Defence> defenceSelector = null;
 
   public PlayerValues()
   {
@@ -117,14 +117,6 @@ public class PlayerValues
     structure.set((double) Math.round((structureBase * armortech.getValue()) / 100.0));
     shield.set((double) Math.round((shieldBase * shieldtech.getValue()) / 100.0));
     heal.set((double) Math.round((healBase * regenatech.getValue()) / 100.0));
-    if (showDifference && (otherPlayer != null))
-    {
-      weapons.set(Math.floor(weapons.get() - otherPlayer.structureProperty().get() - otherPlayer.shieldProperty().get()));
-      final double structAndShieldLeft = (structure.get() + shield.get()) - otherPlayer.weaponsProperty().get();
-      structure.set(Math.floor(structAndShieldLeft / 2.0));
-      shield.set(Math.floor(structAndShieldLeft / 2.0));
-      heal.set(heal.get() - (otherPlayer.weaponsProperty().get() * 0.9));
-    }
     unitsProperty().set(units);
   }
 
@@ -244,12 +236,12 @@ public class PlayerValues
 
   public DebrisField getShipsDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
   {
-    return ShipAndDefenceBase.getDebrisField(originalShips, shipsMap, DebrisField.TF_FACTOR_SHIPS);
+    return DebrisField.getDebrisField(originalShips, shipsMap, DebrisField.TF_FACTOR_SHIPS);
   }
 
   public DebrisField getDefencesDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalDefences)
   {
-    return ShipAndDefenceBase.getDebrisField(originalDefences, defencesMap, DebrisField.TF_FACTOR_DEFENCE);
+    return DebrisField.getDebrisField(originalDefences, defencesMap, DebrisField.TF_FACTOR_DEFENCE);
   }
 
   public double getShipsExperiance(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
@@ -298,29 +290,26 @@ public class PlayerValues
     return defencesMap;
   }
 
-  public void setShowDifference(final boolean showDifference)
+  public ShipAndDefenceSelector<Ship> getShipSelector()
   {
-    this.showDifference = showDifference;
-    updateValues();
+    return shipSelector;
   }
 
-  public boolean isShowDifference()
+  public void setShipSelector(final ShipAndDefenceSelector<Ship> shipSelector)
   {
-    return showDifference;
+    this.shipSelector = shipSelector;
+    setChoosenShips(shipSelector.getChoosenItemsMap());
   }
 
-  public PlayerValues getOtherPlayer()
+  public ShipAndDefenceSelector<Defence> getDefenceSelector()
   {
-    return otherPlayer;
+    return defenceSelector;
   }
 
-  public void setOtherPlayer(final PlayerValues otherPlayer)
+  public void setDefenceSelector(final ShipAndDefenceSelector<Defence> defenceSelector)
   {
-    this.otherPlayer = otherPlayer;
-    otherPlayer.weaponsProperty().addListener((obs, oldVal, newVal) -> updateValues());
-    otherPlayer.structureProperty().addListener((obs, oldVal, newVal) -> updateValues());
-    otherPlayer.shieldProperty().addListener((obs, oldVal, newVal) -> updateValues());
-    otherPlayer.healProperty().addListener((obs, oldVal, newVal) -> updateValues());
+    this.defenceSelector = defenceSelector;
+    setChoosenDefense(defenceSelector.getChoosenItemsMap());
   }
 
   public ObjectProperty<Integer> weapontechProperty()

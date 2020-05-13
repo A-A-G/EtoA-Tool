@@ -41,9 +41,9 @@ import javafx.stage.Stage;
  */
 public class EtoATool extends Application
 {
-  private final static String VERSION = "0.5.2";
+  private final static String VERSION = "0.6.0";
 
-  private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 06, 01);
+  private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 07, 01);
 
   private static final String ROUND = "round20";
 
@@ -126,7 +126,7 @@ public class EtoATool extends Application
       root.setBottom(statusBars.get(0));
       tabPane.getSelectionModel().select(0);
       root.setCenter(tabPane);
-      final Scene scene = new Scene(root, 1400, 800);
+      final Scene scene = new Scene(root, 1400, 1000);
       scene.getStylesheets().add(getClass().getResource(getCSSFolder() + DEFAULT_APPLICATION_CSS).toExternalForm());
       primaryStage.setScene(scene);
       primaryStage.setTitle("EtoA-Tool");

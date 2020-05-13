@@ -79,13 +79,13 @@ VBox
 	-fx-alignment: center;
 }
 
-.titled-pane.defender > .title 
+.titled-pane.Verteidiger > .title 
 {
 	-fx-alignment: center-left;	
 	-fx-background-color: -fx-box-border, -fx-inner-border, WHEAT;
 }
 
-.titled-pane.attacker > .title 
+.titled-pane.Angreifer > .title 
 {
 	-fx-alignment: center-left;
 	-fx-background-color: derive(SANDYBROWN,65.0%), derive(SANDYBROWN,30.0%), SANDYBROWN;
@@ -122,4 +122,9 @@ VBox
 .table-cell-centerleft
 { 
   -fx-alignment: center-left; 
-} 
+}
+
+.redbutton
+{
+	-fx-background-color: RED;
+}

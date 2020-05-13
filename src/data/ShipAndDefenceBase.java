@@ -26,25 +26,6 @@ public abstract class ShipAndDefenceBase extends EtoAItem implements Comparable<
 {
   private static final long serialVersionUID = -6900786368240710048L;
 
-  public static class DebrisField
-  {
-    public static final double TF_FACTOR_SHIPS = 0.5;
-    public static final double TF_FACTOR_DEFENCE = 0.4;
-
-    public double titan;
-    public double silizium;
-    public double pvc;
-
-    public DebrisField(final double titan, final double silizium, final double pvc)
-    {
-      super();
-      this.titan = titan;
-      this.silizium = silizium;
-      this.pvc = pvc;
-    }
-
-  }
-
   // Builing costs
   protected IntegerProperty titan;
   protected IntegerProperty silizium;
@@ -319,32 +300,6 @@ public abstract class ShipAndDefenceBase extends EtoAItem implements Comparable<
   public Observable[] getObservables()
   {
     return new Observable[] { titan, silizium, pvc, tritium, food, weapons, structure, shield, heal };
-  }
-
-  public static DebrisField getDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalMap, final ObservableMap<ShipAndDefenceBase, Integer> currentMap, final double factor)
-  {
-    double titan = 0;
-    double silizium = 0;
-    double pvc = 0;
-    if ((originalMap != null) && (currentMap != null))
-    {
-      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : currentMap.entrySet())
-      {
-        if (originalMap.containsKey(pair.getKey()))
-        {
-          final int destroyed = originalMap.get(pair.getKey()) - pair.getValue();
-          final double forTF = Math.ceil(destroyed * factor);
-          titan = titan + (forTF * pair.getKey().titanProperty().get());
-          silizium = silizium + (forTF * pair.getKey().siliziumProperty().get());
-          pvc = pvc + (forTF * pair.getKey().pvcProperty().get());
-        }
-        else
-        {
-          System.out.println("Something wrong computing debris field!");
-        }
-      }
-    }
-    return new DebrisField(titan, silizium, pvc);
   }
 
   public static double getExperience(final ObservableMap<ShipAndDefenceBase, Integer> originalMap, final ObservableMap<ShipAndDefenceBase, Integer> currentMap)

@@ -3,8 +3,7 @@
  */
 package logic;
 
-import data.PlayerValues;
-import data.ShipAndDefenceBase.DebrisField;
+import data.FightData;
 import data.SpyReport;
 import gui.utils.Dialogs;
 import javafx.scene.control.Alert;
@@ -23,8 +22,7 @@ public class FightSimulation
 
   private static double MAX_HEAL = 1;
 
-  private PlayerValues attackerValues = null;
-  private PlayerValues defenderValues = null;
+  private FightData fightData = null;
 
   private SpyReport spyReport = null;
 
@@ -32,9 +30,14 @@ public class FightSimulation
 
   private boolean attackerWins = false;
 
+  public FightSimulation(final FightData fightData)
+  {
+    this.fightData = fightData;
+  }
+
   public void SimulateFight()
   {
-    if ((attackerValues == null) || (defenderValues == null))
+    if (fightData == null)
     {
       return;
     }
@@ -45,50 +48,45 @@ public class FightSimulation
       lastFightReport = lastFightReport + "Verteidiger: " + spyReport.getOwner() + System.lineSeparator();
       lastFightReport = lastFightReport + System.lineSeparator();
     }
-    PlayerValues attacker = new PlayerValues(attackerValues);
     lastFightReport = lastFightReport + "ANGREIFENDE FLOTTE" + System.lineSeparator();
-    lastFightReport = lastFightReport + attacker.getFleetString() + System.lineSeparator();
-    PlayerValues defender = new PlayerValues(defenderValues);
+    lastFightReport = lastFightReport + fightData.getAttackerFleetString() + System.lineSeparator();
     lastFightReport = lastFightReport + "VERTEIDIGENDE FLOTTE" + System.lineSeparator();
-    lastFightReport = lastFightReport + defender.getFleetString() + System.lineSeparator();
+    lastFightReport = lastFightReport + fightData.getDefenderFleetString() + System.lineSeparator();
     lastFightReport = lastFightReport + "PLANETARE VERTEIDIGUNG" + System.lineSeparator();
-    lastFightReport = lastFightReport + defender.getDefencesString() + System.lineSeparator();
+    lastFightReport = lastFightReport + fightData.getDefencesString() + System.lineSeparator();
     lastFightReport = lastFightReport + "DATEN DES ANGREIFERS" + System.lineSeparator();
-    lastFightReport = lastFightReport + attacker.getValueString() + System.lineSeparator();
+    lastFightReport = lastFightReport + fightData.getAttackerValueString() + System.lineSeparator();
     lastFightReport = lastFightReport + "DATEN DES VERTEIDIGERS" + System.lineSeparator();
-    lastFightReport = lastFightReport + defender.getValueString() + System.lineSeparator();
-    double attackerLeftOver = attacker.structureProperty().get() + attacker.shieldProperty().get();
-    double defenderLeftOver = defender.structureProperty().get() + defender.shieldProperty().get();
+    lastFightReport = lastFightReport + fightData.getDefenderValueString() + System.lineSeparator();
+    double attackerLeftOver = fightData.getAttackerValues().structure + fightData.getAttackerValues().shield;
+    double defenderLeftOver = fightData.getDefenderValues().structure + fightData.getDefenderValues().shield;
     final double lastAttackerLO = attackerLeftOver;
     final double lastDefenderLO = defenderLeftOver;
+    fightData.initFight();
     for (int i = 1; i <= 5; ++i) // 5 rounds
     {
-      lastFightReport = lastFightReport + String.format("%,d Einheiten des Angreifers schießen mit einer Stärke von %,.0f auf den Verteidiger.", attacker.unitsProperty().get(), attacker.weaponsProperty().getValue()) + System.lineSeparator();
-      defenderLeftOver = Math.max(defenderLeftOver - attacker.weaponsProperty().get(), 0);
+      lastFightReport = lastFightReport + String.format("%,d Einheiten des Angreifers schießen mit einer Stärke von %,.0f auf den Verteidiger.", fightData.getAttackerValuesCopy().units, fightData.getAttackerValuesCopy().weapons) + System.lineSeparator();
+      defenderLeftOver = Math.max(defenderLeftOver - fightData.getAttackerValuesCopy().weapons, 0);
       lastFightReport = lastFightReport + String.format("Der Verteidiger hat danach noch %,.0f Struktur- und Schildpunkte.", defenderLeftOver) + System.lineSeparator() + System.lineSeparator();
-      lastFightReport = lastFightReport + String.format("%,d Einheiten des Verteidigers schießen mit einer Stärke von %,.0f auf den Verteidiger.", defender.unitsProperty().get(), defender.weaponsProperty().getValue()) + System.lineSeparator();
-      attackerLeftOver = Math.max(attackerLeftOver - defender.weaponsProperty().get(), 0);
+      lastFightReport = lastFightReport + String.format("%,d Einheiten des Verteidigers schießen mit einer Stärke von %,.0f auf den Verteidiger.", fightData.getDefenderValuesCopy().units, fightData.getDefenderValuesCopy().weapons) + System.lineSeparator();
+      attackerLeftOver = Math.max(attackerLeftOver - fightData.getDefenderValuesCopy().weapons, 0);
       lastFightReport = lastFightReport + String.format("Der Angreifer hat danach noch %,.0f Struktur- und Schildpunkte.", attackerLeftOver) + System.lineSeparator() + System.lineSeparator();
-      attacker = new PlayerValues(attackerValues);
-      defender = new PlayerValues(defenderValues);
-      if ((attackerLeftOver > 0) && (attacker.healProperty().getValue() > 0))
+      if ((attackerLeftOver > 0) && (fightData.getAttackerValues().heal > 0))
       {
-        final PlayerValues attackerCopy = new PlayerValues(attacker);
-        attackerCopy.reduceBy(attackerLeftOver / (attacker.structureProperty().get() + attacker.shieldProperty().get()));
-        lastFightReport = lastFightReport + String.format("Die Einheiten des Angreifers heilen %,.0f Struktur- und Schildpunkte.", attackerCopy.healProperty().getValue()) + System.lineSeparator();
-        attackerLeftOver = attackerLeftOver + (attackerCopy.healProperty().getValue() > (MAX_HEAL * (lastAttackerLO - attackerLeftOver)) ? MAX_HEAL * (lastAttackerLO - attackerLeftOver) : attackerCopy.healProperty().getValue());
+        final double heal = fightData.getAttackerHeal(attackerLeftOver);
+        lastFightReport = lastFightReport + String.format("Die Einheiten des Angreifers heilen %,.0f Struktur- und Schildpunkte.", heal) + System.lineSeparator();
+        attackerLeftOver = attackerLeftOver + (heal > (MAX_HEAL * (lastAttackerLO - attackerLeftOver)) ? MAX_HEAL * (lastAttackerLO - attackerLeftOver) : heal);
         lastFightReport = lastFightReport + String.format("Der Angreifer hat danach wieder %,.0f Struktur- und Schildpunkte.", attackerLeftOver) + System.lineSeparator() + System.lineSeparator();
       }
-      if ((defenderLeftOver > 0) && (defender.healProperty().getValue() > 0))
+      if ((defenderLeftOver > 0) && (fightData.getDefenderValues().heal > 0))
       {
-        final PlayerValues defenderCopy = new PlayerValues(defender);
-        defenderCopy.reduceBy(defenderLeftOver / (defender.structureProperty().get() + defender.shieldProperty().get()));
-        lastFightReport = lastFightReport + String.format("Die Einheiten des Verteidigers heilen %,.0f Struktur- und Schildpunkte.", defenderCopy.healProperty().getValue()) + System.lineSeparator();
-        defenderLeftOver = defenderLeftOver + (defenderCopy.healProperty().getValue() > (MAX_HEAL * (lastDefenderLO - defenderLeftOver)) ? MAX_HEAL * (lastDefenderLO - defenderLeftOver) : defenderCopy.healProperty().getValue());
+        final double heal = fightData.getDefenderHeal(defenderLeftOver);
+        lastFightReport = lastFightReport + String.format("Die Einheiten des Verteidigers heilen %,.0f Struktur- und Schildpunkte.", heal) + System.lineSeparator();
+        defenderLeftOver = defenderLeftOver + (heal > (MAX_HEAL * (lastDefenderLO - defenderLeftOver)) ? MAX_HEAL * (lastDefenderLO - defenderLeftOver) : heal);
         lastFightReport = lastFightReport + String.format("Der Verteidiger hat danach wieder %,.0f Struktur- und Schildpunkte." + System.lineSeparator(), defenderLeftOver) + System.lineSeparator();
       }
-      attacker.reduceBy(attackerLeftOver / (attacker.structureProperty().get() + attacker.shieldProperty().get()));
-      defender.reduceBy(defenderLeftOver / (defender.structureProperty().get() + defender.shieldProperty().get()));
+      fightData.reduceAttackerCopy(attackerLeftOver);
+      fightData.reduceDefenderCopy(defenderLeftOver);
       if ((defenderLeftOver == 0) || (attackerLeftOver == 0))
       {
         lastFightReport = lastFightReport + "Der Kampf dauerte " + i + " Runden!" + System.lineSeparator() + System.lineSeparator();
@@ -114,22 +112,17 @@ public class FightSimulation
     if ((defenderLeftOver <= 0) && (attackerLeftOver >= 0) && (spyReport != null))
     {
       lastFightReport = lastFightReport + "BEUTE" + System.lineSeparator();
-      lastFightReport = lastFightReport + getLoot(spyReport, attacker.getCapacity(), attacker.getIncreasedCapacity()) + System.lineSeparator();
+      lastFightReport = lastFightReport + getLoot(spyReport, fightData.getAttackerCopyCapacity(), fightData.getAttackerCopyIncreasedCapacity()) + System.lineSeparator();
     }
-    final String defenderShips = defender.restoreCivilShips(defenderValues.getShips());
-    final double attackerExp = Math.floor(defender.getShipsExperiance(defenderValues.getShips()) + defender.getDefencesExperiance(defenderValues.getDefences()));
-    final double defenderExp = Math.floor(attacker.getShipsExperiance(attackerValues.getShips()));
-    final String defenceRepair = defender.repairRemainingDefences(defenderValues.getDefences());
+    final String defenderShips = fightData.restoreDefenderCivilShips();
+    final double attackerExp = Math.floor(fightData.getAttackerEXP());
+    final double defenderExp = Math.floor(fightData.getDefenderEXP());
+    final String defenceRepair = fightData.repairRemainingDefences();
     lastFightReport = lastFightReport + "TRÜMMERFELD" + System.lineSeparator();
-    final DebrisField attackerDebrisFieldShips = attacker.getShipsDebrisField(attackerValues.getShips());
-    final DebrisField defenderDebrisFieldShips = defender.getShipsDebrisField(defenderValues.getShips());
-    final DebrisField defenderDebrisFieldDefences = defender.getDefencesDebrisField(defenderValues.getDefences());
-    lastFightReport = lastFightReport + String.format("Titan %,.0f", attackerDebrisFieldShips.titan + defenderDebrisFieldShips.titan + defenderDebrisFieldDefences.titan) + System.lineSeparator();
-    lastFightReport = lastFightReport + String.format("Silizium %,.0f", attackerDebrisFieldShips.silizium + defenderDebrisFieldShips.silizium + defenderDebrisFieldDefences.silizium) + System.lineSeparator();
-    lastFightReport = lastFightReport + String.format("PVC %,.0f", attackerDebrisFieldShips.pvc + defenderDebrisFieldShips.pvc + defenderDebrisFieldDefences.pvc) + System.lineSeparator() + System.lineSeparator();
+    lastFightReport = lastFightReport + fightData.getDebrisField() + System.lineSeparator();
     lastFightReport = lastFightReport + "Zustand nach dem Kampf:" + System.lineSeparator() + System.lineSeparator();
     lastFightReport = lastFightReport + "ANGREIFENDE FLOTTE" + System.lineSeparator();
-    lastFightReport = lastFightReport + attacker.getFleetString() + System.lineSeparator();
+    lastFightReport = lastFightReport + fightData.getAttackerCopyFleetString() + System.lineSeparator();
     lastFightReport = lastFightReport + String.format("Gewonnene EXP: %,.0f", attackerExp) + System.lineSeparator() + System.lineSeparator();
     lastFightReport = lastFightReport + "VERTEIDIGENDE FLOTTE" + System.lineSeparator();
     lastFightReport = lastFightReport + defenderShips + System.lineSeparator();
@@ -151,6 +144,7 @@ public class FightSimulation
     final double reduceBy = (capacity + increasedCapacity) / ressSum;
     if (reduceBy < 1)
     {
+      loot = loot + String.format("Zu wenig Lagerraum (%,.0f %)!", reduceBy * 100) + System.lineSeparator();
       titan = titan * reduceBy;
       silizium = silizium * reduceBy;
       pvc = pvc * reduceBy;
@@ -168,6 +162,7 @@ public class FightSimulation
       final double reduceByAdd = capacityLeft / (titanAdd + siliziumAdd + pvcAdd + tritiumAdd + foodAdd);
       if (reduceByAdd < 1)
       {
+        loot = loot + String.format("Zu wenig Lagerraum (%,.0f %)!", reduceBy * 100) + System.lineSeparator();
         titanAdd = titanAdd * reduceByAdd;
         siliziumAdd = siliziumAdd * reduceByAdd;
         pvcAdd = pvcAdd * reduceByAdd;
@@ -205,16 +200,6 @@ public class FightSimulation
     alertDialog.show();
   }
 
-  public void setAttackerValues(final PlayerValues attackerValues)
-  {
-    this.attackerValues = attackerValues;
-  }
-
-  public void setDefenderValues(final PlayerValues defenderValues)
-  {
-    this.defenderValues = defenderValues;
-  }
-
   public void setSpyReport(final SpyReport spyReport)
   {
     this.spyReport = spyReport;
@@ -223,6 +208,11 @@ public class FightSimulation
   public boolean isAttackerWins()
   {
     return attackerWins;
+  }
+
+  public void setFightData(final FightData fightData)
+  {
+    this.fightData = fightData;
   }
 
 }

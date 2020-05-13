@@ -3,10 +3,9 @@
  */
 package gui.utils;
 
-import data.PlayerValues;
+import data.FightData;
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
-import logic.FightSimulation;
 
 /**
  * @author AAG
@@ -17,21 +16,19 @@ public class PlayerSpinners
   private final static String GREEN_SPINNER = "greenspinner";
   private final static String RED_SPINNER = "redspinner";
 
-  public Spinner<Double> weapons;
-  public Spinner<Double> structure;
-  public Spinner<Double> shield;
-  public Spinner<Double> heal;
+  public Spinner<Double> weapons = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
+  public Spinner<Double> structure = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
+  public Spinner<Double> shield = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
+  public Spinner<Double> heal = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
 
-  public void updateSpinners(final FightSimulation fightSimulation, final PlayerValues baseValues, final PlayerSpinners otherSpinners)
+  public void updateSpinners(final FightData fightData, final boolean attackerWins)
   {
-    fightSimulation.SimulateFight();
-    final PlayerValues plainValues = new PlayerValues(baseValues);
-    if (plainValues.weaponsProperty().getValue() >= (otherSpinners.shield.getValue() + otherSpinners.structure.getValue()))
+    if (fightData.getAttackerValues().weapons >= (fightData.getDefenderValues().structure + fightData.getDefenderValues().shield))
     {
       weapons.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
       addStyle(weapons, GREEN_SPINNER);
     }
-    else if (fightSimulation.isAttackerWins())
+    else if (attackerWins)
     {
       weapons.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
       weapons.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
@@ -41,7 +38,7 @@ public class PlayerSpinners
       weapons.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
       addStyle(weapons, RED_SPINNER);
     }
-    if (otherSpinners.weapons.getValue() >= (plainValues.shieldProperty().getValue() + plainValues.structureProperty().getValue()))
+    if (fightData.getDefenderValues().weapons >= (fightData.getAttackerValues().structure + fightData.getAttackerValues().shield))
     {
       shield.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
       structure.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
@@ -55,7 +52,7 @@ public class PlayerSpinners
       addStyle(shield, GREEN_SPINNER);
       addStyle(structure, GREEN_SPINNER);
     }
-    if (plainValues.healProperty().getValue() < (otherSpinners.weapons.getValue() * 0.9))
+    if (fightData.getAttackerValues().heal < fightData.getDefenderValues().weapons)
     {
       heal.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
       addStyle(heal, RED_SPINNER);
