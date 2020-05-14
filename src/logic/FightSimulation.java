@@ -144,7 +144,7 @@ public class FightSimulation
     final double reduceBy = (capacity + increasedCapacity) / ressSum;
     if (reduceBy < 1)
     {
-      loot = loot + String.format("Zu wenig Lagerraum (%,.0f %)!", reduceBy * 100) + System.lineSeparator();
+      loot = loot + String.format("Zu wenig Lagerraum (%,.0f %%)!", reduceBy * 100) + System.lineSeparator();
       titan = titan * reduceBy;
       silizium = silizium * reduceBy;
       pvc = pvc * reduceBy;
@@ -162,7 +162,7 @@ public class FightSimulation
       final double reduceByAdd = capacityLeft / (titanAdd + siliziumAdd + pvcAdd + tritiumAdd + foodAdd);
       if (reduceByAdd < 1)
       {
-        loot = loot + String.format("Zu wenig Lagerraum (%,.0f %)!", reduceBy * 100) + System.lineSeparator();
+        loot = loot + String.format("Zu wenig Lagerraum (%,.0f %%)!", reduceBy * 100) + System.lineSeparator();
         titanAdd = titanAdd * reduceByAdd;
         siliziumAdd = siliziumAdd * reduceByAdd;
         pvcAdd = pvcAdd * reduceByAdd;

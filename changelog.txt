@@ -3,6 +3,10 @@ Changelog:
 0.6.0:
 - AKS for KBSim
 
+Bugfixes:
+- Character encoding
+- loot String
+
 0.5.2:
 - Civil ship restore
 - Loot for AIN and Aurora enabled
