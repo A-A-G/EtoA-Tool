@@ -36,6 +36,19 @@ public class FightData
     defenderValuesCopy.update(defenderListCopy);
   }
 
+  public void removeCopyZeroDeffShips()
+  {
+    if (attackerListCopy.size() != attackerList.size())
+    {
+      System.out.println("removeCopyZeroDeffShips(): Lists are not matching!");
+      return;
+    }
+    for (int i = 0; i < attackerList.size(); i++)
+    {
+      attackerListCopy.get(i).removeZeroDeffShips(attackerList.get(i).getShips());
+    }
+  }
+
   public void reduceAttackerCopy(final double attackerLeftOver)
   {
     reducePlayerValues(attackerLeftOver / (attackerValues.structure + attackerValues.shield), attackerValuesCopy, attackerList, attackerListCopy);
@@ -126,9 +139,9 @@ public class FightData
   public double getAttackerEXP()
   {
     double exp = getShipEXP(defenderList, defenderListCopy);
-    if ((defenderListCopy.size() > 0) && (defenderListCopy.size() > 0))
+    if ((defenderListCopy.size() > 0) && (defenderList.size() > 0))
     {
-      exp += defenderListCopy.get(0).getShipsExperiance(defenderList.get(0).getShips());
+      exp += defenderListCopy.get(0).getDefencesExperiance(defenderList.get(0).getDefences());
     }
     return exp / getAttackerCount();
   }
@@ -286,6 +299,7 @@ public class FightData
     String valueString = String.format("Schild (%d): %,.0f", Math.round(fightValues.shieldtech), fightValues.shield) + System.lineSeparator();
     valueString = valueString + String.format("Struktur (%d): %,.0f", Math.round(fightValues.armortech), fightValues.structure) + System.lineSeparator();
     valueString = valueString + String.format("Waffen (%d): %,.0f", Math.round(fightValues.weapontech), fightValues.weapons) + System.lineSeparator();
+    valueString = valueString + String.format("Einheiten: %d", fightValues.units) + System.lineSeparator();
     return valueString;
   }
 

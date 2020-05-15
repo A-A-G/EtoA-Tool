@@ -122,6 +122,7 @@ public class FightSimulation
     lastFightReport = lastFightReport + fightData.getDebrisField() + System.lineSeparator();
     lastFightReport = lastFightReport + "Zustand nach dem Kampf:" + System.lineSeparator() + System.lineSeparator();
     lastFightReport = lastFightReport + "ANGREIFENDE FLOTTE" + System.lineSeparator();
+    fightData.removeCopyZeroDeffShips();
     lastFightReport = lastFightReport + fightData.getAttackerCopyFleetString() + System.lineSeparator();
     lastFightReport = lastFightReport + String.format("Gewonnene EXP: %,.0f", attackerExp) + System.lineSeparator() + System.lineSeparator();
     lastFightReport = lastFightReport + "VERTEIDIGENDE FLOTTE" + System.lineSeparator();

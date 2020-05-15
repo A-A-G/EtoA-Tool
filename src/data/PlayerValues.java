@@ -234,6 +234,23 @@ public class PlayerValues
     return repairString;
   }
 
+  public void removeZeroDeffShips(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
+  {
+    if ((shipsMap != null) && (originalShips != null) && (!shipsMap.isEmpty()))
+    {
+      for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
+      {
+        if (originalShips.containsKey(pair.getKey()))
+        {
+          if ((pair.getKey().structure.get() == 0) && (pair.getKey().shield.get() == 0) && (originalShips.get(pair.getKey()) > pair.getValue()))
+          {
+            shipsMap.put(pair.getKey(), 0);
+          }
+        }
+      }
+    }
+  }
+
   public DebrisField getShipsDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
   {
     return DebrisField.getDebrisField(originalShips, shipsMap, DebrisField.TF_FACTOR_SHIPS);

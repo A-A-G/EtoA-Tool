@@ -6,6 +6,8 @@ Changelog:
 Bugfixes:
 - Character encoding
 - loot String
+- Attacker EXP
+- Onefights
 
 0.5.2:
 - Civil ship restore
