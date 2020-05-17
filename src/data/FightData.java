@@ -28,12 +28,20 @@ public class FightData
   private final FightValues attackerValuesCopy = new FightValues();
   private final FightValues defenderValuesCopy = new FightValues();
 
+  private Ships ships = null;
+
   public void initFight()
   {
     backupAttacker();
     backupDefender();
     attackerValuesCopy.update(attackerListCopy);
     defenderValuesCopy.update(defenderListCopy);
+  }
+
+  public void update()
+  {
+    attackerValues.update(attackerList);
+    defenderValues.update(defenderList);
   }
 
   public void removeCopyZeroDeffShips()
@@ -187,6 +195,24 @@ public class FightData
     String debrisFieldString = String.format("Titan %,.0f", debrisField.titan) + System.lineSeparator();
     debrisFieldString = debrisFieldString + String.format("Silizium %,.0f", debrisField.silizium) + System.lineSeparator();
     debrisFieldString = debrisFieldString + String.format("PVC %,.0f", debrisField.pvc) + System.lineSeparator() + System.lineSeparator();
+    if ((ships != null) && (Ships.TRANSPORTER_SHIPS.size() > 0))
+    {
+      debrisFieldString = debrisFieldString + "Für das Sammeln des TF's werden benötigt:" + System.lineSeparator();
+      final double total = debrisField.titan + debrisField.silizium + debrisField.pvc;
+      final ObservableList<Ship> shipList = ships.getFullObservableList();
+      shipList.sort((final Ship s1, final Ship s2) -> s1.name.get().compareTo(s2.name.get()));
+      for (final Ship ship : shipList)
+      {
+        if (Ships.SAME_CAPACITY_TRANSPORTER_EXAMPLE.equals(ship.name.get()))
+        {
+          debrisFieldString = debrisFieldString + String.format("%s: %,.0f", Ships.SAME_CAPACITY_TRANSPORTER_SHIPS, Math.floor(total / ship.capacityProperty().get())) + System.lineSeparator();
+        }
+        else if (Ships.TRANSPORTER_SHIPS.contains(ship.name.get()))
+        {
+          debrisFieldString = debrisFieldString + String.format("%s: %,.0f", ship.name.get(), Math.floor(total / ship.capacityProperty().get())) + System.lineSeparator();
+        }
+      }
+    }
     return debrisFieldString;
   }
 
@@ -429,6 +455,11 @@ public class FightData
     return defenderValuesCopy;
   }
 
+  public void setShips(final Ships ships)
+  {
+    this.ships = ships;
+  }
+
   public void updateMainSpinners(final MainSpinners spinners)
   {
     attackerValues.update(attackerList); // TODO: replace by property bindings
@@ -451,6 +482,7 @@ public class FightData
       spinners.attackerSpinners.shield.getValueFactory().setValue((attackerValues.structure + attackerValues.shield) - defenderValues.weapons);
       spinners.attackerSpinners.heal.getValueFactory().setValue(attackerValues.heal - defenderValues.weapons);
     }
+    spinners.attackerSpinners.capacity.getValueFactory().setValue(attackerValues.capacity);
     spinners.defenderWeaponTechSpinner.getValueFactory().setValue((int) Math.round(defenderValues.weapontech));
     spinners.defenderArmorTechSpinner.getValueFactory().setValue((int) Math.round(defenderValues.armortech));
     spinners.defenderShieldTechSpinner.getValueFactory().setValue((int) Math.round(defenderValues.shieldtech));

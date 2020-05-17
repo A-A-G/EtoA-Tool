@@ -19,6 +19,7 @@ public class FightValues
   public double armortech = 0;
   public double weapontech = 0;
   public double regenatech = 0;
+  public double capacity = 0;
   public int units = 0;
 
   public FightValues()
@@ -35,6 +36,7 @@ public class FightValues
     armortech = 100;
     weapontech = 100;
     regenatech = 100;
+    capacity = 0;
     units = 0;
   }
 
@@ -48,25 +50,27 @@ public class FightValues
   {
     if (playerValues.size() > 0)
     {
-      shieldtech = shield * shieldtech;
-      armortech = structure * armortech;
-      weapontech = weapons * weapontech;
-      regenatech = heal * regenatech;
+      double shieldtechBoni = 0;
+      double armortechBoni = 0;
+      double weapontechBoni = 0;
+      double regenatechBoni = 0;
       for (final PlayerValues p : playerValues)
       {
         shield += p.shieldProperty().get();
         structure += p.structureProperty().get();
         weapons += p.weaponsProperty().get();
         heal += p.healProperty().get();
-        shieldtech += p.shieldProperty().get() * p.shieldtechProperty().get();
-        armortech += p.structureProperty().get() * p.armortechProperty().get();
-        weapontech += p.weaponsProperty().get() * p.weapontechProperty().get();
         units += p.unitsProperty().get();
+        capacity += p.capacityProperty().get();
+        shieldtechBoni += p.shieldtechProperty().get();
+        armortechBoni += p.armortechProperty().get();
+        weapontechBoni += p.weapontechProperty().get();
+        regenatechBoni += p.regenatechProperty().get();
       }
-      shieldtech = shield > 0 ? shieldtech / shield : 100;
-      armortech = structure > 0 ? armortech / structure : 100;
-      weapontech = weapons > 0 ? weapontech / weapons : 100;
-      regenatech = heal > 0 ? regenatech / heal : 100;
+      shieldtech = shieldtechBoni / playerValues.size();
+      armortech = armortechBoni / playerValues.size();
+      weapontech = weapontechBoni / playerValues.size();
+      regenatech = regenatechBoni / playerValues.size();
     }
   }
 }

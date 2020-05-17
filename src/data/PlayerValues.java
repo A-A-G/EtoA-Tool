@@ -34,6 +34,7 @@ public class PlayerValues
   private final ObjectProperty<Double> structure = new SimpleDoubleProperty(0).asObject();
   private final ObjectProperty<Double> shield = new SimpleDoubleProperty(0).asObject();
   private final ObjectProperty<Double> heal = new SimpleDoubleProperty(0).asObject();
+  private final ObjectProperty<Double> capacity = new SimpleDoubleProperty(0).asObject();
 
   private final ObjectProperty<Integer> units = new SimpleIntegerProperty(0).asObject();
 
@@ -90,6 +91,7 @@ public class PlayerValues
     double structureBase = 0;
     double shieldBase = 0;
     double healBase = 0;
+    double capacity = 0;
     int units = 0;
     if (shipsMap != null)
     {
@@ -99,6 +101,17 @@ public class PlayerValues
         structureBase = structureBase + ((double) pair.getKey().structure.get() * pair.getValue());
         shieldBase = shieldBase + ((double) pair.getKey().shield.get() * pair.getValue());
         healBase = healBase + ((double) pair.getKey().heal.get() * pair.getValue());
+        if (pair.getKey() instanceof Ship)
+        {
+          if ((!Ships.NO_LOOT_SHIPS.contains(pair.getKey().nameProperty().get())) && (!Ships.INCREASED_LOOT_SHIPS.contains(pair.getKey().nameProperty().get())))
+          {
+            capacity = capacity + (((Ship) pair.getKey()).capacityProperty().get() * (double) pair.getValue());
+          }
+          else if (Ships.INCREASED_LOOT_SHIPS.contains(pair.getKey().nameProperty().get()))
+          {
+            capacity = capacity + (((Ship) pair.getKey()).capacityProperty().get() * (double) pair.getValue());
+          }
+        }
         units = units + pair.getValue();
       }
     }
@@ -117,10 +130,11 @@ public class PlayerValues
     structure.set((double) Math.round((structureBase * armortech.getValue()) / 100.0));
     shield.set((double) Math.round((shieldBase * shieldtech.getValue()) / 100.0));
     heal.set((double) Math.round((healBase * regenatech.getValue()) / 100.0));
+    capacityProperty().set(capacity);
     unitsProperty().set(units);
   }
 
-  public double getCapacity()
+  public double getNormalShipCapacity()
   {
     double capacity = 0;
     if (shipsMap != null)
@@ -372,6 +386,11 @@ public class PlayerValues
   public ObjectProperty<Double> healProperty()
   {
     return heal;
+  }
+
+  public ObjectProperty<Double> capacityProperty()
+  {
+    return capacity;
   }
 
   public ObjectProperty<Integer> unitsProperty()

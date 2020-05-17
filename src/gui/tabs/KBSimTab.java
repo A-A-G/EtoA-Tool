@@ -68,13 +68,14 @@ public class KBSimTab extends EtoATab
   public KBSimTab(final Planets planets, final Ships ships, final Defences defences, final Label statusLabel)
   {
     super(TAB_NAME, planets, ships, defences, statusLabel);
+    fightData.setShips(ships);
     final TabPane attackersTabPane = new TabPane();
     attackersTabPane.setTabClosingPolicy(TabClosingPolicy.UNAVAILABLE); // TODO: handle tab close
     HBox.setHgrow(attackersTabPane, Priority.ALWAYS);
     final Node attackerSpinnerNode = getSpinnerNode(spinners.attackerWeaponTechSpinner, spinners.attackerArmorTechSpinner, spinners.attackerShieldTechSpinner, spinners.attackerRegenaTechSpinner, spinners.attackerSpinners, PlayerValueTab.ATTACKER);
     attackerSpinnerNode.setVisible(false);
     attackerSpinnerNode.setManaged(false);
-    new PlayerValueTab(attackersTabPane, fightData, spinners, PlayerValueTab.ATTACKER, ships, defences, statusLabel, attackerSpinnerNode);
+    new PlayerValueTab(attackersTabPane, fightSimulation, spinners, PlayerValueTab.ATTACKER, ships, defences, statusLabel, attackerSpinnerNode);
     final HBox backgroundASN = new HBox(attackerSpinnerNode);
     backgroundASN.getStyleClass().add("spaceandpaddding");
     backgroundASN.setAlignment(Pos.CENTER);
@@ -87,7 +88,7 @@ public class KBSimTab extends EtoATab
     final Node defenderSpinnerNode = getSpinnerNode(spinners.defenderWeaponTechSpinner, spinners.defenderArmorTechSpinner, spinners.defenderShieldTechSpinner, spinners.defenderRegenaTechSpinner, spinners.defenderSpinners, PlayerValueTab.DEFENDER);
     defenderSpinnerNode.setVisible(false);
     defenderSpinnerNode.setManaged(false);
-    new PlayerValueTab(defendersTabPane, fightData, spinners, PlayerValueTab.DEFENDER, ships, defences, statusLabel, defenderSpinnerNode);
+    new PlayerValueTab(defendersTabPane, fightSimulation, spinners, PlayerValueTab.DEFENDER, ships, defences, statusLabel, defenderSpinnerNode);
     final HBox backgroundDSN = new HBox(defenderSpinnerNode);
     backgroundDSN.getStyleClass().add("spaceandpaddding");
     backgroundDSN.setAlignment(Pos.CENTER);
@@ -111,6 +112,7 @@ public class KBSimTab extends EtoATab
         defenderValues.getShipSelector().update(lastSpyReport.getShipsMap());
         defenderValues.getDefenceSelector().update(lastSpyReport.getDefencesMap());
         defenderValues.updateFromSpyReport(lastSpyReport);
+        fightData.update();
       }
       fightSimulation.setSpyReport(lastSpyReport);
       copyArea.clear();
@@ -165,6 +167,11 @@ public class KBSimTab extends EtoATab
     gridPaneValues.add(playerSpinners.shield, 1, 2);
     gridPaneValues.add(new Label("Heilung: "), 0, 3);
     gridPaneValues.add(playerSpinners.heal, 1, 3);
+    if (type.equals(PlayerValueTab.ATTACKER))
+    {
+      gridPaneValues.add(new Label("Laderaum: "), 0, 4);
+      gridPaneValues.add(playerSpinners.capacity, 1, 4);
+    }
     final TitledPane valuesTP = new TitledPane("Werte", new Group(gridPaneValues));
     valuesTP.setAlignment(Pos.CENTER);
     valuesTP.getStyleClass().add("toppadding");

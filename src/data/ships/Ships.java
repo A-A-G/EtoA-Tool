@@ -22,9 +22,12 @@ import utils.StringUtils;
  */
 public class Ships extends DataHandler<Ship>
 {
-  // public static final List<String> NO_LOOT_SHIPS = new ArrayList<>(Arrays.asList("AURORA Sonde", "AIN Sonde")); // R19
+  // public static final List<String> NO_LOOT_SHIPS = new ArrayList<>(Arrays.asList("AIN Sonde", "AURORA Sonde")); // R19
   public static final List<String> NO_LOOT_SHIPS = new ArrayList<>(); // R20
   public static final List<String> INCREASED_LOOT_SHIPS = new ArrayList<>(Arrays.asList("ORION Fighter"));
+  public static final String SAME_CAPACITY_TRANSPORTER_SHIPS = "EOS, ATLAS, SAIPH";
+  public static final String SAME_CAPACITY_TRANSPORTER_EXAMPLE = "EOS Transporter";
+  public static final List<String> TRANSPORTER_SHIPS = new ArrayList<>(Arrays.asList("AIN Sonde", "AURORA Sonde", "DEMETER Transporter", SAME_CAPACITY_TRANSPORTER_SHIPS, "LORIAL Transportschiff"));
 
   public static final String CIVIL_SHIPS = "Ziviles Schiff";
   public static final String WAR_SHIPS = "Kriegsschiff";
@@ -195,7 +198,7 @@ public class Ships extends DataHandler<Ship>
   @Override
   public ObservableList<Ship> getFullObservableList()
   {
-    return FXCollections.observableList(data, dataItem -> dataItem.getAllObservables());
+    return FXCollections.observableList(data, Ship::getAllObservables);
   }
 
 }

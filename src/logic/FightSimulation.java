@@ -29,6 +29,7 @@ public class FightSimulation
   String lastFightReport = "";
 
   private boolean attackerWins = false;
+  private boolean enoughCapacity = true;
 
   public FightSimulation(final FightData fightData)
   {
@@ -135,6 +136,7 @@ public class FightSimulation
 
   private String getLoot(final SpyReport spyReport, final double capacity, final double increasedCapacity)
   {
+    enoughCapacity = true;
     String loot = "";
     double titan = spyReport.getTitan() * MAX_LOOT;
     double silizium = spyReport.getSilizium() * MAX_LOOT;
@@ -145,6 +147,7 @@ public class FightSimulation
     final double reduceBy = (capacity + increasedCapacity) / ressSum;
     if (reduceBy < 1)
     {
+      enoughCapacity = false;
       loot = loot + String.format("Zu wenig Lagerraum (%,.0f %%)!", reduceBy * 100) + System.lineSeparator();
       titan = titan * reduceBy;
       silizium = silizium * reduceBy;
@@ -214,6 +217,21 @@ public class FightSimulation
   public void setFightData(final FightData fightData)
   {
     this.fightData = fightData;
+  }
+
+  public FightData getFightData()
+  {
+    return fightData;
+  }
+
+  public boolean isEnoughCapacity()
+  {
+    return enoughCapacity;
+  }
+
+  public boolean hasSpyReport()
+  {
+    return spyReport != null;
   }
 
 }

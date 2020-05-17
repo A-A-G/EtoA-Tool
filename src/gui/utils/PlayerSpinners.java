@@ -6,6 +6,7 @@ package gui.utils;
 import data.FightData;
 import javafx.scene.Node;
 import javafx.scene.control.Spinner;
+import logic.FightSimulation;
 
 /**
  * @author AAG
@@ -20,15 +21,17 @@ public class PlayerSpinners
   public Spinner<Double> structure = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
   public Spinner<Double> shield = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
   public Spinner<Double> heal = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
+  public Spinner<Double> capacity = Spinners.getDoubleSpinner(-Double.MAX_VALUE, Double.MAX_VALUE, 0, 1000, -1, false, null);
 
-  public void updateSpinners(final FightData fightData, final boolean attackerWins)
+  public void updateSpinners(final FightSimulation fightSimulation)
   {
+    final FightData fightData = fightSimulation.getFightData();
     if (fightData.getAttackerValues().weapons >= (fightData.getDefenderValues().structure + fightData.getDefenderValues().shield))
     {
       weapons.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
       addStyle(weapons, GREEN_SPINNER);
     }
-    else if (attackerWins)
+    else if (fightSimulation.isAttackerWins())
     {
       weapons.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
       weapons.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
@@ -61,6 +64,21 @@ public class PlayerSpinners
     {
       heal.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
       addStyle(heal, GREEN_SPINNER);
+    }
+    if (!fightSimulation.hasSpyReport())
+    {
+      capacity.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
+      capacity.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
+    }
+    else if (fightSimulation.isEnoughCapacity())
+    {
+      capacity.getStyleClass().remove(PlayerSpinners.RED_SPINNER);
+      addStyle(capacity, GREEN_SPINNER);
+    }
+    else
+    {
+      capacity.getStyleClass().remove(PlayerSpinners.GREEN_SPINNER);
+      addStyle(capacity, RED_SPINNER);
     }
   }
 

@@ -5,7 +5,6 @@ package gui.tabs.kbsim;
 
 import java.util.prefs.Preferences;
 
-import data.FightData;
 import data.PlayerValues;
 import data.ShipAndDefenceBase;
 import data.defence.Defence;
@@ -55,22 +54,22 @@ public class PlayerValueTab extends Tab
 
   private final MainSpinners spinners;
 
-  public PlayerValueTab(final TabPane tabPane, final FightData fightData, final MainSpinners spinners, final String type, final Ships ships, final Defences defences, final Label statusLabel, final Node spinnerNode)
+  public PlayerValueTab(final TabPane tabPane, final FightSimulation fightSimulation, final MainSpinners spinners, final String type, final Ships ships, final Defences defences, final Label statusLabel, final Node spinnerNode)
   {
-    super(type + " " + (fightData.getCount(type) + 1));
+    super(type + " " + (fightSimulation.getFightData().getCount(type) + 1));
     this.statusLabel = statusLabel;
     this.spinners = spinners;
-    final ShipAndDefenceSelector<Ship> shipSelector = new ShipAndDefenceSelector<>("Schiffe " + type + " " + (fightData.getCount(type) + 1), ships);
+    final ShipAndDefenceSelector<Ship> shipSelector = new ShipAndDefenceSelector<>("Schiffe " + type + " " + (fightSimulation.getFightData().getCount(type) + 1), ships);
     HBox.setHgrow(shipSelector, Priority.ALWAYS);
     shipSelector.setMaxWidth(Double.MAX_VALUE);
     final PlayerValues playerValues = new PlayerValues();
-    fightData.addPlayerValues(playerValues, type);
+    fightSimulation.getFightData().addPlayerValues(playerValues, type);
     playerValues.setShipSelector(shipSelector);
     final VBox playerVBox = new VBox(shipSelector);
     playerVBox.getStyleClass().add("spaceandbottompadding");
     playerVBox.setMaxWidth(Double.MAX_VALUE);
     HBox.setHgrow(playerVBox, Priority.ALWAYS);
-    if ((type.equals(DEFENDER)) && (fightData.getCount(type) == 1))
+    if ((type.equals(DEFENDER)) && (fightSimulation.getFightData().getCount(type) == 1))
     {
       final ShipAndDefenceSelector<Defence> defenceSelector = new ShipAndDefenceSelector<>("Verteidigung Verteidiger", defences);
       playerValues.setDefenceSelector(defenceSelector);
@@ -83,10 +82,10 @@ public class PlayerValueTab extends Tab
     {
       spinnerNode.setVisible(true);
       spinnerNode.setManaged(true);
-      new PlayerValueTab(tabPane, fightData, spinners, type, ships, defences, statusLabel, spinnerNode);
+      new PlayerValueTab(tabPane, fightSimulation, spinners, type, ships, defences, statusLabel, spinnerNode);
     });
     addButton.getStyleClass().add("redbutton");
-    final VBox dataButtonVBox = new VBox(getPlayerNode("Daten " + type + " " + (tabPane.getTabs().size() + 1), playerValues, type, fightData, shipSelector), addButton);
+    final VBox dataButtonVBox = new VBox(getPlayerNode("Daten " + type + " " + (tabPane.getTabs().size() + 1), playerValues, type, fightSimulation, shipSelector), addButton);
     dataButtonVBox.setAlignment(Pos.CENTER);
     final HBox playerHBox = new HBox(playerVBox, dataButtonVBox);
     playerHBox.setAlignment(Pos.CENTER);
@@ -95,7 +94,7 @@ public class PlayerValueTab extends Tab
     tabPane.getTabs().add(this);
   }
 
-  private Node getPlayerNode(final String header, final PlayerValues playerValues, final String type, final FightData fightData, final ShipAndDefenceSelector<Ship> selector)
+  private Node getPlayerNode(final String header, final PlayerValues playerValues, final String type, final FightSimulation fightSimulation, final ShipAndDefenceSelector<Ship> selector)
   {
     final Preferences preferences = Preferences.userNodeForPackage(getClass());
     if (type.equals(ATTACKER))
@@ -108,18 +107,27 @@ public class PlayerValueTab extends Tab
 
     final GridPane gridPaneBonis = new GridPane();
     gridPaneBonis.add(new Label("Waffentechnik % "), 0, 0);
-    gridPaneBonis.add(Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(WEAPONTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.weapontechProperty()), 1, 0);
+    final Spinner<Integer> weapontechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(WEAPONTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.weapontechProperty());
+    weapontechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
+    gridPaneBonis.add(weapontechSpinner, 1, 0);
     gridPaneBonis.add(new Label("Panzerung % "), 0, 1);
-    gridPaneBonis.add(Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(ARMORTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.armortechProperty()), 1, 1);
+    final Spinner<Integer> armortechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(ARMORTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.armortechProperty());
+    armortechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
+    gridPaneBonis.add(armortechSpinner, 1, 1);
     gridPaneBonis.add(new Label("Schutzschilder % "), 0, 2);
-    gridPaneBonis.add(Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(SHIELDTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.shieldtechProperty()), 1, 2);
+    final Spinner<Integer> shieldtechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(SHIELDTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.shieldtechProperty());
+    shieldtechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
+    gridPaneBonis.add(shieldtechSpinner, 1, 2);
     gridPaneBonis.add(new Label("Regenatechnik % "), 0, 3);
-    gridPaneBonis.add(Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(REGENATECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.regenatechProperty()), 1, 3);
+    final Spinner<Integer> regenatechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(REGENATECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.regenatechProperty());
+    regenatechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
+    gridPaneBonis.add(regenatechSpinner, 1, 3);
     if (type.equals(DEFENDER))
     {
       gridPaneBonis.add(new Label("Reparatur % "), 0, 4);
       final Spinner<Integer> repSpinner = Spinners.getRepairSpinner(playerValues.repairProperty());
-      playerValues.repairProperty().addListener((obs, oldVal, newVal) -> updateAttackerSpinners(fightData));
+      repSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
+      playerValues.repairProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
       gridPaneBonis.add(repSpinner, 1, 4);
     }
     final TitledPane bonisTP = new TitledPane("Bonis", new Group(gridPaneBonis));
@@ -134,20 +142,27 @@ public class PlayerValueTab extends Tab
     final GridPane gridPaneValues = new GridPane();
     gridPaneValues.add(new Label("Waffen: "), 0, 0);
     playerSpinners.weapons = Spinners.getPlayerValueSpinner(playerValues.weaponsProperty());
-    playerSpinners.weapons.valueProperty().addListener((obs, oldVal, newVal) -> updateAttackerSpinners(fightData));
+    playerSpinners.weapons.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneValues.add(playerSpinners.weapons, 1, 0);
     gridPaneValues.add(new Label("Struktur: "), 0, 1);
     playerSpinners.structure = Spinners.getPlayerValueSpinner(playerValues.structureProperty());
-    playerSpinners.structure.valueProperty().addListener((obs, oldVal, newVal) -> updateAttackerSpinners(fightData));
+    playerSpinners.structure.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneValues.add(playerSpinners.structure, 1, 1);
     gridPaneValues.add(new Label("Schild: "), 0, 2);
     playerSpinners.shield = Spinners.getPlayerValueSpinner(playerValues.shieldProperty());
-    playerSpinners.shield.valueProperty().addListener((obs, oldVal, newVal) -> updateAttackerSpinners(fightData));
+    playerSpinners.shield.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneValues.add(playerSpinners.shield, 1, 2);
     gridPaneValues.add(new Label("Heilung: "), 0, 3);
     playerSpinners.heal = Spinners.getPlayerValueSpinner(playerValues.healProperty());
-    playerSpinners.heal.valueProperty().addListener((obs, oldVal, newVal) -> updateAttackerSpinners(fightData));
+    playerSpinners.heal.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneValues.add(playerSpinners.heal, 1, 3);
+    if (type.equals(ATTACKER))
+    {
+      gridPaneValues.add(new Label("Laderaum: "), 0, 4);
+      playerSpinners.capacity = Spinners.getPlayerValueSpinner(playerValues.capacityProperty());
+      playerSpinners.capacity.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
+      gridPaneValues.add(playerSpinners.capacity, 1, 4);
+    }
     final TitledPane valuesTP = new TitledPane("Werte", new Group(gridPaneValues));
     valuesTP.setAlignment(Pos.CENTER);
     valuesTP.getStyleClass().add("toppadding");
@@ -164,7 +179,7 @@ public class PlayerValueTab extends Tab
           final ObservableMap<ShipAndDefenceBase, Integer> selectedShips = selector.getChoosenItemsMap();
           if (selectedShips.size() == 1)
           {
-            final double deffValues = fightData.getDefenderValues().structure + fightData.getDefenderValues().shield;
+            final double deffValues = fightSimulation.getFightData().getDefenderValues().structure + fightSimulation.getFightData().getDefenderValues().shield;
             final ShipAndDefenceBase selected = selectedShips.keySet().iterator().next();
             if (selected.weaponsProperty().doubleValue() > 0)
             {
@@ -198,7 +213,7 @@ public class PlayerValueTab extends Tab
               final ObservableMap<String, Integer> itemMap = FXCollections.observableHashMap();
               itemMap.put(selected.toString(), 0);
               selector.update(itemMap);
-              final double deffValues = (fightData.getDefenderValues().structure + fightData.getDefenderValues().shield) - fightData.getAttackerValues().weapons;
+              final double deffValues = (fightSimulation.getFightData().getDefenderValues().structure + fightSimulation.getFightData().getDefenderValues().shield) - fightSimulation.getFightData().getAttackerValues().weapons;
               final long number = Math.round(Math.ceil(deffValues / ((selected.weaponsProperty().doubleValue() * playerValues.weapontechProperty().get()) / 100.0)));
               itemMap.put(selected.toString(), (int) number);
               selector.update(itemMap);
@@ -225,16 +240,15 @@ public class PlayerValueTab extends Tab
     return new Group(playerTP);
   }
 
-  private void updateAttackerSpinners(final FightData fightData)
+  private void updateSpinnerValues(final FightSimulation fightSimulation)
   {
-    fightData.updateMainSpinners(spinners);
-    final FightSimulation fs = new FightSimulation(fightData);
-    fs.SimulateFight();
+    fightSimulation.getFightData().updateMainSpinners(spinners);
+    fightSimulation.SimulateFight();
     for (final PlayerSpinners sp : attackerPlayerSpinnerList)
     {
-      sp.updateSpinners(fightData, fs.isAttackerWins());
+      sp.updateSpinners(fightSimulation);
     }
-    spinners.attackerSpinners.updateSpinners(fightData, fs.isAttackerWins());
+    spinners.attackerSpinners.updateSpinners(fightSimulation);
   }
 
 }
