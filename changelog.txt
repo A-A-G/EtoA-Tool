@@ -6,6 +6,9 @@ Changelog:
 Bugfixes:
 - AKS: Tech Bonis
 
+Daten:
+- Allianzschiffe hinzugefügt
+
 0.6.0:
 - AKS for KBSim
 

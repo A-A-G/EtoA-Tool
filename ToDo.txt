@@ -1,7 +1,7 @@
 - Ressrechner (Schiffe, Raks, Deff)
 - Rakrechner
 - KBSim
-	- Beute: Kapazität anzeigen (Welle 1, 2 und 3) oder notwendige Menge Transporter angeben
+	- Beute: Kapazität anzeigen (2 und 3)
 	- Allianzangriffe
 		- Testen
 		- Bindings global values
