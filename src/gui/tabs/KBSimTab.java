@@ -97,7 +97,7 @@ public class KBSimTab extends EtoATab
     defendersHBox.setAlignment(Pos.CENTER);
     final SplitPane playersSplit = new SplitPane(attackersHBox, defendersHBox);
     playersSplit.setOrientation(Orientation.VERTICAL);
-    playersSplit.setDividerPositions(0.5f);
+    playersSplit.setDividerPositions(0.53f);
     playersSplit.getStyleClass().add("elementstyle");
     final TextArea copyArea = new TextArea();
     copyArea.setPromptText("Copy & Paste Spionagebericht!");
