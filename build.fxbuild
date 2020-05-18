@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <anttasks:AntTask xmi:version="2.0" xmlns:xmi="http://www.omg.org/XMI" xmlns:anttasks="http://org.eclipse.fx.ide.jdt/1.0" buildDirectory="${project}/build">
   <deploy embedjnlp="true">
-    <application name="EtoA-Tool" mainclass="gui.application.EtoATool" version="0.6.1"/>
+    <application name="EtoA-Tool" mainclass="gui.application.EtoATool" version="0.6.2"/>
     <info title="EtoA-Tool" vendor="AAG"/>
   </deploy>
   <signjar/>

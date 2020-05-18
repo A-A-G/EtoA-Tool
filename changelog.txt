@@ -1,5 +1,11 @@
 Changelog:
 
+0.6.2
+- Transporter für TF
+
+Bugfix:
+- KBSim: Report: Anzeige Einheiten und Kampfwerte
+
 0.6.1
 - Laderraum (Single/AKS/Report)
 

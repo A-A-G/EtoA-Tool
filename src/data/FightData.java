@@ -205,15 +205,37 @@ public class FightData
       {
         if (Ships.SAME_CAPACITY_TRANSPORTER_EXAMPLE.equals(ship.name.get()))
         {
-          debrisFieldString = debrisFieldString + String.format("%s: %,.0f", Ships.SAME_CAPACITY_TRANSPORTER_SHIPS, Math.floor(total / ship.capacityProperty().get())) + System.lineSeparator();
+          debrisFieldString = debrisFieldString + getTransporterString(ship, total, Ships.SAME_CAPACITY_TRANSPORTER_SHIPS);
         }
         else if (Ships.TRANSPORTER_SHIPS.contains(ship.name.get()))
         {
-          debrisFieldString = debrisFieldString + String.format("%s: %,.0f", ship.name.get(), Math.floor(total / ship.capacityProperty().get())) + System.lineSeparator();
+          debrisFieldString = debrisFieldString + getTransporterString(ship, total);
         }
       }
     }
     return debrisFieldString;
+  }
+
+  private String getTransporterString(final Ship ship, final double ressources)
+  {
+    return getTransporterString(ship, ressources, null);
+  }
+
+  private String getTransporterString(final Ship ship, final double ressources, String name)
+  {
+    if (name == null)
+    {
+      name = ship.name.get();
+    }
+    String ret = "";
+    final double count = ressources / ship.capacityProperty().get();
+    ret = ret + String.format("%s: %,.0f", name, Math.floor(count));
+    if (getAttackerCount() > 1)
+    {
+      ret = ret + String.format(" (%,.0f)", Math.floor(count / getAttackerCount()));
+    }
+    ret = ret + System.lineSeparator();
+    return ret;
   }
 
   public double getAttackerHeal(final double attackerLeftOver)

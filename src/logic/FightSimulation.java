@@ -42,6 +42,7 @@ public class FightSimulation
     {
       return;
     }
+    fightData.update();
     lastFightReport = "";
     if (spyReport != null)
     {

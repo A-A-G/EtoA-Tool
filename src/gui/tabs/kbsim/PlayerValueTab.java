@@ -242,8 +242,8 @@ public class PlayerValueTab extends Tab
 
   private void updateSpinnerValues(final FightSimulation fightSimulation)
   {
+    fightSimulation.SimulateFight(); // triggers value update
     fightSimulation.getFightData().updateMainSpinners(spinners);
-    fightSimulation.SimulateFight();
     for (final PlayerSpinners sp : attackerPlayerSpinnerList)
     {
       sp.updateSpinners(fightSimulation);
