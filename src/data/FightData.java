@@ -144,6 +144,25 @@ public class FightData
     return "FightData:restoreDefenderCivilShips(): Wrong defender count!";
   }
 
+  public String getAttackerEXPString()
+  {
+    return getEXPString(getAttackerEXP(), getAttackerCount());
+  }
+
+  public String getDefenderEXPString()
+  {
+    return getEXPString(getDefenderEXP(), getDefenderCount());
+  }
+
+  private static String getEXPString(final double exp, final int count)
+  {
+    if (count > 1)
+    {
+      return String.format("Gewonnene EXP: %,.0f (%,.0f)", Math.floor(exp / count), Math.floor(exp)) + System.lineSeparator();
+    }
+    return String.format("Gewonnene EXP: %,.0f", Math.floor(exp)) + System.lineSeparator();
+  }
+
   public double getAttackerEXP()
   {
     double exp = getShipEXP(defenderList, defenderListCopy);
@@ -151,7 +170,7 @@ public class FightData
     {
       exp += defenderListCopy.get(0).getDefencesExperiance(defenderList.get(0).getDefences());
     }
-    return exp / getAttackerCount();
+    return exp;
   }
 
   public double getDefenderEXP()

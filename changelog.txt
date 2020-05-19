@@ -1,7 +1,8 @@
 Changelog:
 
 0.6.2
-- Transporter für TF
+- Transporter for debris field
+- split exp by attacker count
 
 Bugfix:
 - KBSim: Report: Anzeige Einheiten und Kampfwerte
