@@ -48,17 +48,18 @@ public class PlayerValueTab extends Tab
   public final static String ATTACKER = "Angreifer";
   public final static String DEFENDER = "Verteidiger";
 
-  private final ObservableList<PlayerSpinners> attackerPlayerSpinnerList = FXCollections.observableArrayList();
+  private ObservableList<PlayerSpinners> attackerPlayerSpinnerList = null;
 
   private final Label statusLabel;
 
   private final MainSpinners spinners;
 
-  public PlayerValueTab(final TabPane tabPane, final FightSimulation fightSimulation, final MainSpinners spinners, final String type, final Ships ships, final Defences defences, final Label statusLabel, final Node spinnerNode)
+  public PlayerValueTab(final TabPane tabPane, final FightSimulation fightSimulation, final MainSpinners spinners, final String type, final Ships ships, final Defences defences, final Label statusLabel, final Node spinnerNode, final ObservableList<PlayerSpinners> attackerPlayerSpinnerList)
   {
     super(type + " " + (fightSimulation.getFightData().getCount(type) + 1));
     this.statusLabel = statusLabel;
     this.spinners = spinners;
+    this.attackerPlayerSpinnerList = attackerPlayerSpinnerList;
     final ShipAndDefenceSelector<Ship> shipSelector = new ShipAndDefenceSelector<>("Schiffe " + type + " " + (fightSimulation.getFightData().getCount(type) + 1), ships);
     HBox.setHgrow(shipSelector, Priority.ALWAYS);
     shipSelector.setMaxWidth(Double.MAX_VALUE);
@@ -82,7 +83,7 @@ public class PlayerValueTab extends Tab
     {
       spinnerNode.setVisible(true);
       spinnerNode.setManaged(true);
-      new PlayerValueTab(tabPane, fightSimulation, spinners, type, ships, defences, statusLabel, spinnerNode);
+      new PlayerValueTab(tabPane, fightSimulation, spinners, type, ships, defences, statusLabel, spinnerNode, attackerPlayerSpinnerList);
     });
     addButton.getStyleClass().add("redbutton");
     final VBox dataButtonVBox = new VBox(getPlayerNode("Daten " + type + " " + (tabPane.getTabs().size() + 1), playerValues, type, fightSimulation, shipSelector), addButton);
@@ -135,7 +136,7 @@ public class PlayerValueTab extends Tab
     bonisTP.getStyleClass().add("toppadding");
     bonisTP.setCollapsible(false);
     final PlayerSpinners playerSpinners = new PlayerSpinners();
-    if (type.equals(ATTACKER))
+    if (type.equals(ATTACKER) && (attackerPlayerSpinnerList != null))
     {
       attackerPlayerSpinnerList.add(playerSpinners);
     }
@@ -244,9 +245,12 @@ public class PlayerValueTab extends Tab
   {
     fightSimulation.SimulateFight(); // triggers value update
     fightSimulation.getFightData().updateMainSpinners(spinners);
-    for (final PlayerSpinners sp : attackerPlayerSpinnerList)
+    if (attackerPlayerSpinnerList != null)
     {
-      sp.updateSpinners(fightSimulation);
+      for (final PlayerSpinners sp : attackerPlayerSpinnerList)
+      {
+        sp.updateSpinners(fightSimulation);
+      }
     }
     spinners.attackerSpinners.updateSpinners(fightSimulation);
   }

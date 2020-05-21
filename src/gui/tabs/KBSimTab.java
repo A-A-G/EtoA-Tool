@@ -12,6 +12,8 @@ import data.ships.Ships;
 import gui.tabs.kbsim.PlayerValueTab;
 import gui.utils.PlayerSpinners;
 import gui.utils.Spinners;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
@@ -47,6 +49,8 @@ public class KBSimTab extends EtoATab
   final FightData fightData = new FightData();
   final FightSimulation fightSimulation = new FightSimulation(fightData);
 
+  private final ObservableList<PlayerSpinners> attackerPlayerSpinnerList = FXCollections.observableArrayList();
+
   public static class MainSpinners
   {
     public Spinner<Integer> attackerWeaponTechSpinner = Spinners.getPlayerTechSpinner(100, null);
@@ -75,7 +79,7 @@ public class KBSimTab extends EtoATab
     final Node attackerSpinnerNode = getSpinnerNode(spinners.attackerWeaponTechSpinner, spinners.attackerArmorTechSpinner, spinners.attackerShieldTechSpinner, spinners.attackerRegenaTechSpinner, spinners.attackerSpinners, PlayerValueTab.ATTACKER);
     attackerSpinnerNode.setVisible(false);
     attackerSpinnerNode.setManaged(false);
-    new PlayerValueTab(attackersTabPane, fightSimulation, spinners, PlayerValueTab.ATTACKER, ships, defences, statusLabel, attackerSpinnerNode);
+    new PlayerValueTab(attackersTabPane, fightSimulation, spinners, PlayerValueTab.ATTACKER, ships, defences, statusLabel, attackerSpinnerNode, attackerPlayerSpinnerList);
     final HBox backgroundASN = new HBox(attackerSpinnerNode);
     backgroundASN.getStyleClass().add("spaceandpaddding");
     backgroundASN.setAlignment(Pos.CENTER);
@@ -88,7 +92,7 @@ public class KBSimTab extends EtoATab
     final Node defenderSpinnerNode = getSpinnerNode(spinners.defenderWeaponTechSpinner, spinners.defenderArmorTechSpinner, spinners.defenderShieldTechSpinner, spinners.defenderRegenaTechSpinner, spinners.defenderSpinners, PlayerValueTab.DEFENDER);
     defenderSpinnerNode.setVisible(false);
     defenderSpinnerNode.setManaged(false);
-    new PlayerValueTab(defendersTabPane, fightSimulation, spinners, PlayerValueTab.DEFENDER, ships, defences, statusLabel, defenderSpinnerNode);
+    new PlayerValueTab(defendersTabPane, fightSimulation, spinners, PlayerValueTab.DEFENDER, ships, defences, statusLabel, defenderSpinnerNode, attackerPlayerSpinnerList);
     final HBox backgroundDSN = new HBox(defenderSpinnerNode);
     backgroundDSN.getStyleClass().add("spaceandpaddding");
     backgroundDSN.setAlignment(Pos.CENTER);
