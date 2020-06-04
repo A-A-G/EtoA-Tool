@@ -1,5 +1,8 @@
 package gui.application;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -14,6 +17,7 @@ import gui.tabs.KryptoTab;
 import gui.tabs.PlanetTab;
 import gui.tabs.PriceTab;
 import gui.tabs.RakTab;
+import gui.tabs.RigeliaTab;
 import gui.tabs.ShipsTab;
 import gui.utils.Dialogs;
 import javafx.application.Application;
@@ -41,9 +45,9 @@ import javafx.stage.Stage;
  */
 public class EtoATool extends Application
 {
-  private final static String VERSION = "0.6.2";
+  private final static String VERSION = "0.6.3";
 
-  private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 07, 01);
+  private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 8, 1);
 
   private static final String ROUND = "round20";
 
@@ -53,6 +57,11 @@ public class EtoATool extends Application
   }
 
   private static Stage PRIMARY_STAGE = null;
+
+  public static Stage getPrimaryStage()
+  {
+    return PRIMARY_STAGE;
+  }
 
   private final static String CSS_FOLDER = "/css/";
 
@@ -66,6 +75,8 @@ public class EtoATool extends Application
   private final static String IMAGE_FOLDER = "/images/";
 
   private final static String GAME_ICON = "EtoA32.png";
+
+  private final static String GITHUB_URL = "https://github.com/A-A-G/EtoA-Tool";
 
   private final ArrayList<Label> statusBars = new ArrayList<>();
 
@@ -88,18 +99,16 @@ public class EtoATool extends Application
     {
       PRIMARY_STAGE = primaryStage;
       final BorderPane root = new BorderPane();
-      final MenuBar rightBar = new MenuBar();
-      final Menu menuInfo = new Menu("Info", null, new MenuItem("EtoA-Tool " + VERSION), new MenuItem("by AAG"), new MenuItem("https://github.com/A-A-G/EtoA-Tool"));
-      rightBar.getMenus().addAll(menuInfo);
       final Region spacer = new Region();
       spacer.getStyleClass().add("menu-bar");
       HBox.setHgrow(spacer, Priority.SOMETIMES);
-      final HBox menubars = new HBox(spacer, rightBar);
+      final HBox menubars = new HBox(spacer, getRightBar());
       root.setTop(menubars);
       getStatusBar(); // KBSim
       getStatusBar(); // Distances
       getStatusBar(); // Krypto
       getStatusBar(); // Rak
+      getStatusBar(); // Rigelia
       getStatusBar(); // AttStatistics
       getStatusBar(); // Prices
       final Planets planets = new Planets(getStatusBar()); // Planets
@@ -113,15 +122,16 @@ public class EtoATool extends Application
       final Tab rakTab = new RakTab(planets, ships, defences, statusBars.get(3));
       tabPane.getTabs().add(rakTab);
       rakTab.setDisable(true);
-      final Tab attStatsTab = new AttStatisticsTab(planets, ships, defences, statusBars.get(4));
+      tabPane.getTabs().add(new RigeliaTab(planets, ships, defences, statusBars.get(4)));
+      final Tab attStatsTab = new AttStatisticsTab(planets, ships, defences, statusBars.get(5));
       tabPane.getTabs().add(attStatsTab);
       attStatsTab.setDisable(true);
-      final Tab priceTab = new PriceTab(planets, ships, defences, statusBars.get(5));
+      final Tab priceTab = new PriceTab(planets, ships, defences, statusBars.get(6));
       tabPane.getTabs().add(priceTab);
       priceTab.setDisable(true);
-      tabPane.getTabs().add(new PlanetTab(planets, ships, defences, statusBars.get(6)));
-      tabPane.getTabs().add(new ShipsTab(planets, ships, defences, statusBars.get(7)));
-      tabPane.getTabs().add(new DefenceTab(planets, ships, defences, statusBars.get(8)));
+      tabPane.getTabs().add(new PlanetTab(planets, ships, defences, statusBars.get(7)));
+      tabPane.getTabs().add(new ShipsTab(planets, ships, defences, statusBars.get(8)));
+      tabPane.getTabs().add(new DefenceTab(planets, ships, defences, statusBars.get(9)));
       tabPane.getSelectionModel().selectedIndexProperty().addListener((obs, oldValue, newValue) -> root.setBottom(statusBars.get(newValue.intValue())));
       root.setBottom(statusBars.get(0));
       tabPane.getSelectionModel().select(0);
@@ -147,9 +157,44 @@ public class EtoATool extends Application
     return statusbar;
   }
 
-  public static Stage getPrimaryStage()
+  private MenuBar getRightBar()
   {
-    return PRIMARY_STAGE;
+    final MenuBar rightBar = new MenuBar();
+    final MenuItem githubLink = new MenuItem(GITHUB_URL);
+    githubLink.getStyleClass().add("blue-menu-item");
+    githubLink.setOnAction(e ->
+    {
+      if (Desktop.isDesktopSupported())
+      {
+        try
+        {
+          Desktop.getDesktop().browse(new URI(GITHUB_URL));
+        }
+        catch (final Exception ex)
+        {
+          ex.printStackTrace();
+        }
+      }
+    });
+    final MenuItem changelog = new MenuItem("Changelog");
+    changelog.getStyleClass().add("blue-menu-item");
+    changelog.setOnAction(e ->
+    {
+      if (Desktop.isDesktopSupported())
+      {
+        try
+        {
+          Desktop.getDesktop().open(new File("changelog.txt"));
+        }
+        catch (final Exception ex)
+        {
+          ex.printStackTrace();
+        }
+      }
+    });
+    final Menu menuInfo = new Menu("Info", null, new MenuItem("EtoA-Tool " + VERSION + " by AAG"), githubLink, changelog);
+    rightBar.getMenus().addAll(menuInfo);
+    return rightBar;
   }
 
   public static void main(final String[] args)

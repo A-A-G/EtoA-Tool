@@ -1,5 +1,8 @@
 Changelog:
 
+0.6.3
+- Rigelia support
+
 0.6.2
 - Transporter for debris field
 - split exp by attacker count

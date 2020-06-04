@@ -67,6 +67,11 @@ VBox
 	-fx-text-fill: RED;
 }
 
+.blue-menu-item > .label
+{
+	-fx-text-fill: BLUE;
+}
+
 .bordered
 {
 	-fx-border-color: BLACk;
