@@ -24,11 +24,11 @@ public class SpyReport
   private int shieldtech = 0;
   private int regenatech = 0;
 
-  private long titan = -1;
-  private long silizium = -1;
-  private long pvc = -1;
-  private long tritium = -1;
-  private long nahrung = -1;
+  private long titan = 0;
+  private long silizium = 0;
+  private long pvc = 0;
+  private long tritium = 0;
+  private long nahrung = 0;
 
   private final ObservableMap<String, Integer> shipsMap = FXCollections.observableHashMap();
   private final ObservableMap<String, Integer> defencesMap = FXCollections.observableHashMap();
@@ -219,11 +219,11 @@ public class SpyReport
     armortech = 0;
     shieldtech = 0;
     regenatech = 0;
-    titan = -1;
-    silizium = -1;
-    pvc = -1;
-    tritium = -1;
-    nahrung = -1;
+    titan = 0;
+    silizium = 0;
+    pvc = 0;
+    tritium = 0;
+    nahrung = 0;
     shipsMap.clear();
     defencesMap.clear();
   }
