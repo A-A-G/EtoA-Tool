@@ -2,6 +2,7 @@ Changelog:
 
 0.6.3
 - Rigelia support
+- Sort planets on distance tab by name
 
 0.6.2
 - Transporter for debris field

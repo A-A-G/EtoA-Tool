@@ -1,15 +1,14 @@
 - Ressrechner (Schiffe, Raks, Deff)
 - Rakrechner
 - KBSim
-	- Beute: KapazitÃ¤t anzeigen (2 und 3)
+	- Beute: Kapazität anzeigen (2 und 3)
 	- Allianzangriffe
-		- Testen
 		- Bindings global values
 		- Remove tabs
 - Angriffsstatistiken
-	- ZerstÃ¶rt/Verloren, Gewonnen/Verloren, Schiffe nach Typ, Deff, geplÃ¼nderte Ressis
+	- Zerstört/Verloren, Gewonnen/Verloren, Schiffe nach Typ, Deff, geplünderte Ressis
 - Spio/Bauhof/Forschungs-Datenbank
-- Distanzen: Schiffe auswÃ¤hlen und Zeiten berechnen!
-	- KÃ¼rzeste Entfernung mit WLs
+- Distanzen: Schiffe auswählen und Zeiten berechnen!
+	- Kürzeste Entfernung mit WLs
 
 Planets, Ships, Defence <-> FF, IExplore

@@ -16,6 +16,7 @@ import gui.utils.SpeedHBox;
 import gui.utils.Spinners;
 import javafx.collections.FXCollections;
 import javafx.collections.transformation.FilteredList;
+import javafx.collections.transformation.SortedList;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -158,17 +159,19 @@ public class DistanceTab extends EtoATab
     {
       return;
     }
-    final FilteredList<Planet> planets2filter1 = new FilteredList<>(FXCollections.observableArrayList(planets.getData()), p -> true);
+    final FilteredList<Planet> planets2filter1Temp = new FilteredList<>(FXCollections.observableArrayList(planets.getData()), p -> true);
     final String player1 = player1View.getSelectionModel().getSelectedItem();
-    planets2filter1.setPredicate(planet -> planet.getOwner().equals(player1));
+    planets2filter1Temp.setPredicate(planet -> planet.getOwner().equals(player1));
+    final SortedList<Planet> planets2filter1 = planets2filter1Temp.sorted((p1, p2) -> p1.nameProperty().get().compareToIgnoreCase(p2.nameProperty().get()));
     if (planets2filter1.isEmpty())
     {
       planetError(player1);
       return;
     }
-    final FilteredList<Planet> planets2filter2 = new FilteredList<>(FXCollections.observableArrayList(planets.getData()), p -> true);
+    final FilteredList<Planet> planets2filter2Temp = new FilteredList<>(FXCollections.observableArrayList(planets.getData()), p -> true);
     final String player2 = player2View.getSelectionModel().getSelectedItem();
-    planets2filter2.setPredicate(planet -> planet.getOwner().equals(player2));
+    planets2filter2Temp.setPredicate(planet -> planet.getOwner().equals(player2));
+    final SortedList<Planet> planets2filter2 = planets2filter2Temp.sorted((p1, p2) -> p1.nameProperty().get().compareToIgnoreCase(p2.nameProperty().get()));
     if (planets2filter2.isEmpty())
     {
       planetError(player2);
