@@ -36,7 +36,7 @@ public class AppProperties extends Properties
   public final static String AUTHOR = "author";
 
   // Default values
-  private final static String DEFAULT_ROUND = "round";
+  private final static String DEFAULT_ROUND = "round21";
   private final static String DEFAULT_CSS_FOLDER = "/css/";
   private final static String DEFAULT_APPLICATION_CSS = "application.css";
   private final static String DEFAULT_IMAGE_FOLDER = "/images/";
@@ -58,7 +58,7 @@ public class AppProperties extends Properties
       try
       {
         load(new FileInputStream(file));
-        System.out.println("Properties loaded.");
+        System.out.println("App properties loaded.");
       }
       catch (final FileNotFoundException e)
       {
@@ -102,7 +102,7 @@ public class AppProperties extends Properties
     try (OutputStream out = new FileOutputStream(DEFAULT_CONFIG_PATH))
     {
       store(out, "Application Properties");
-      System.out.println("Properties updated.\n");
+      System.out.println("App properties updated.\n");
     }
     catch (final FileNotFoundException e)
     {

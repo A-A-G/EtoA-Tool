@@ -10,6 +10,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.TextArea;
 import javafx.stage.Modality;
+import properties.FightSimProperties;
 
 /**
  * @author AAG
@@ -17,11 +18,6 @@ import javafx.stage.Modality;
  */
 public class FightSimulation
 {
-  private static double MAX_LOOT = 0.3;
-  private static double MAX_LOOT_ADD = 0.25;
-
-  private static double MAX_HEAL = 1;
-
   private FightData fightData = null;
 
   private SpyReport spyReport = null;
@@ -42,6 +38,7 @@ public class FightSimulation
     {
       return;
     }
+    final FightSimProperties properties = FightSimProperties.getInstance();
     fightData.update();
     lastFightReport = "";
     if (spyReport != null)
@@ -77,14 +74,14 @@ public class FightSimulation
       {
         final double heal = fightData.getAttackerHeal(attackerLeftOver);
         lastFightReport = lastFightReport + String.format("Die Einheiten des Angreifers heilen %,.0f Struktur- und Schildpunkte.", heal) + System.lineSeparator();
-        attackerLeftOver = attackerLeftOver + (heal > (MAX_HEAL * (lastAttackerLO - attackerLeftOver)) ? MAX_HEAL * (lastAttackerLO - attackerLeftOver) : heal);
+        attackerLeftOver = attackerLeftOver + (heal > (properties.getMaxHeal() * (lastAttackerLO - attackerLeftOver)) ? properties.getMaxHeal() * (lastAttackerLO - attackerLeftOver) : heal);
         lastFightReport = lastFightReport + String.format("Der Angreifer hat danach wieder %,.0f Struktur- und Schildpunkte.", attackerLeftOver) + System.lineSeparator() + System.lineSeparator();
       }
       if ((defenderLeftOver > 0) && (fightData.getDefenderValues().heal > 0))
       {
         final double heal = fightData.getDefenderHeal(defenderLeftOver);
         lastFightReport = lastFightReport + String.format("Die Einheiten des Verteidigers heilen %,.0f Struktur- und Schildpunkte.", heal) + System.lineSeparator();
-        defenderLeftOver = defenderLeftOver + (heal > (MAX_HEAL * (lastDefenderLO - defenderLeftOver)) ? MAX_HEAL * (lastDefenderLO - defenderLeftOver) : heal);
+        defenderLeftOver = defenderLeftOver + (heal > (properties.getMaxHeal() * (lastDefenderLO - defenderLeftOver)) ? properties.getMaxHeal() * (lastDefenderLO - defenderLeftOver) : heal);
         lastFightReport = lastFightReport + String.format("Der Verteidiger hat danach wieder %,.0f Struktur- und Schildpunkte." + System.lineSeparator(), defenderLeftOver) + System.lineSeparator();
       }
       fightData.reduceAttackerCopy(attackerLeftOver);
@@ -137,13 +134,14 @@ public class FightSimulation
 
   private String getLoot(final SpyReport spyReport, final double capacity, final double increasedCapacity)
   {
+    final FightSimProperties properties = FightSimProperties.getInstance();
     enoughCapacity = true;
     String loot = "";
-    double titan = spyReport.getTitan() * MAX_LOOT;
-    double silizium = spyReport.getSilizium() * MAX_LOOT;
-    double pvc = spyReport.getPvc() * MAX_LOOT;
-    double tritium = spyReport.getTritium() * MAX_LOOT;
-    double food = spyReport.getNahrung() * MAX_LOOT;
+    double titan = spyReport.getTitan() * properties.getMaxLoot();
+    double silizium = spyReport.getSilizium() * properties.getMaxLoot();
+    double pvc = spyReport.getPvc() * properties.getMaxLoot();
+    double tritium = spyReport.getTritium() * properties.getMaxLoot();
+    double food = spyReport.getNahrung() * properties.getMaxLoot();
     final double ressSum = titan + silizium + pvc + tritium + food;
     final double reduceBy = (capacity + increasedCapacity) / ressSum;
     if (reduceBy < 1)
@@ -158,11 +156,11 @@ public class FightSimulation
     }
     else if (increasedCapacity > 0)
     {
-      double titanAdd = titan * MAX_LOOT_ADD;
-      double siliziumAdd = silizium * MAX_LOOT_ADD;
-      double pvcAdd = pvc * MAX_LOOT_ADD;
-      double tritiumAdd = tritium * MAX_LOOT_ADD;
-      double foodAdd = food * MAX_LOOT_ADD;
+      double titanAdd = titan * properties.getMaxLootAdd();
+      double siliziumAdd = silizium * properties.getMaxLootAdd();
+      double pvcAdd = pvc * properties.getMaxLootAdd();
+      double tritiumAdd = tritium * properties.getMaxLootAdd();
+      double foodAdd = food * properties.getMaxLootAdd();
       final double capacityLeft = increasedCapacity - Math.max(ressSum - capacity, 0);
       final double reduceByAdd = capacityLeft / (titanAdd + siliziumAdd + pvcAdd + tritiumAdd + foodAdd);
       if (reduceByAdd < 1)

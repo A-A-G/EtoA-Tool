@@ -32,6 +32,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import logic.FightSimulation;
+import properties.FightSimProperties;
 
 /**
  * @author AAG
@@ -105,22 +106,23 @@ public class PlayerValueTab extends Tab
       playerValues.shieldtechProperty().addListener((obs, oldValue, newValue) -> preferences.putInt(SHIELDTECH, newValue.intValue()));
       playerValues.regenatechProperty().addListener((obs, oldValue, newValue) -> preferences.putInt(REGENATECH, newValue.intValue()));
     }
-
+    final FightSimProperties properties = FightSimProperties.getInstance();
+    final int defaultTech = (int) Math.round(properties.getTechBase());
     final GridPane gridPaneBonis = new GridPane();
     gridPaneBonis.add(new Label("Waffentechnik % "), 0, 0);
-    final Spinner<Integer> weapontechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(WEAPONTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.weapontechProperty());
+    final Spinner<Integer> weapontechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(WEAPONTECH, defaultTech) : defaultTech, playerValues.weapontechProperty());
     weapontechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(weapontechSpinner, 1, 0);
     gridPaneBonis.add(new Label("Panzerung % "), 0, 1);
-    final Spinner<Integer> armortechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(ARMORTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.armortechProperty());
+    final Spinner<Integer> armortechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(ARMORTECH, defaultTech) : defaultTech, playerValues.armortechProperty());
     armortechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(armortechSpinner, 1, 1);
     gridPaneBonis.add(new Label("Schutzschilder % "), 0, 2);
-    final Spinner<Integer> shieldtechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(SHIELDTECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.shieldtechProperty());
+    final Spinner<Integer> shieldtechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(SHIELDTECH, defaultTech) : defaultTech, playerValues.shieldtechProperty());
     shieldtechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(shieldtechSpinner, 1, 2);
     gridPaneBonis.add(new Label("Regenatechnik % "), 0, 3);
-    final Spinner<Integer> regenatechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(REGENATECH, PlayerValues.DEFAULT_TECH) : PlayerValues.DEFAULT_TECH, playerValues.regenatechProperty());
+    final Spinner<Integer> regenatechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(REGENATECH, defaultTech) : defaultTech, playerValues.regenatechProperty());
     regenatechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(regenatechSpinner, 1, 3);
     if (type.equals(DEFENDER))

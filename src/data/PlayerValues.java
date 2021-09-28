@@ -13,6 +13,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.MapChangeListener;
 import javafx.collections.ObservableMap;
+import properties.FightSimProperties;
 
 /**
  * @author AAG
@@ -20,15 +21,14 @@ import javafx.collections.ObservableMap;
  */
 public class PlayerValues
 {
-  public static final int DEFAULT_TECH = 100;
-  public static final int DEFAULT_DEFENCE_REPAIR = 40;
-  public static final int CIVIL_SHIPS_RESTORE = 100;
+  private final FightSimProperties properties = FightSimProperties.getInstance();
+  private final int DEFAULT_TECH = (int) Math.round(properties.getTechBase());
 
   private final ObjectProperty<Integer> weapontech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
   private final ObjectProperty<Integer> armortech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
   private final ObjectProperty<Integer> shieldtech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
   private final ObjectProperty<Integer> regenatech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
-  private final ObjectProperty<Integer> repair = new SimpleIntegerProperty(DEFAULT_DEFENCE_REPAIR).asObject();
+  private final ObjectProperty<Integer> repair = new SimpleIntegerProperty((int) Math.round(properties.getDefenceRepair())).asObject();
 
   private final ObjectProperty<Double> weapons = new SimpleDoubleProperty(0).asObject();
   private final ObjectProperty<Double> structure = new SimpleDoubleProperty(0).asObject();
@@ -198,7 +198,7 @@ public class PlayerValues
           {
             final int originalNumber = originalShipsMap.get(pair.getKey());
             final int currentNumber = pair.getValue();
-            final int restored = (int) Math.round(((originalNumber - currentNumber) * CIVIL_SHIPS_RESTORE) / 100.0);
+            final int restored = (int) Math.round((originalNumber - currentNumber) * properties.getCivilShipsRestore());
             restoreString = restoreString + pair.getKey().nameProperty().get() + " \t " + pair.getValue() + " (+" + restored + ")" + System.lineSeparator();
             shipsMap.put(pair.getKey(), currentNumber + restored);
           }
@@ -267,12 +267,12 @@ public class PlayerValues
 
   public DebrisField getShipsDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)
   {
-    return DebrisField.getDebrisField(originalShips, shipsMap, DebrisField.TF_FACTOR_SHIPS);
+    return DebrisField.getDebrisField(originalShips, shipsMap, FightSimProperties.getInstance().getDfFactorShips());
   }
 
   public DebrisField getDefencesDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalDefences)
   {
-    return DebrisField.getDebrisField(originalDefences, defencesMap, DebrisField.TF_FACTOR_DEFENCE);
+    return DebrisField.getDebrisField(originalDefences, defencesMap, FightSimProperties.getInstance().getDfFactorDefence());
   }
 
   public double getShipsExperiance(final ObservableMap<ShipAndDefenceBase, Integer> originalShips)

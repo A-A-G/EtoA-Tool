@@ -55,6 +55,11 @@ public class EtoATool extends Application
 
   private static final Properties APP_PROPERTIES = new AppProperties(APP_NAME, VERSION, EXPIRE_DATE);
 
+  public static Properties getAppProperties()
+  {
+    return APP_PROPERTIES;
+  }
+
   public static String getRound()
   {
     return APP_PROPERTIES.getProperty(AppProperties.ROUND);

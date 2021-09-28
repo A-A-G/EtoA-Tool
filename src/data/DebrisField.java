@@ -5,6 +5,7 @@ package data;
 
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import properties.FightSimProperties;
 
 /**
  * @author AAG
@@ -12,9 +13,6 @@ import javafx.collections.ObservableMap;
  */
 public class DebrisField
 {
-  public static final double TF_FACTOR_SHIPS = 0.5;
-  public static final double TF_FACTOR_DEFENCE = 0.4;
-
   public double titan = 0;
   public double silizium = 0;
   public double pvc = 0;
@@ -48,14 +46,14 @@ public class DebrisField
     }
     for (int i = 0; i < initValues.size(); i++)
     {
-      debrisField.plus(getDebrisField(initValues.get(i).getShips(), resultValues.get(i).getShips(), TF_FACTOR_SHIPS));
+      debrisField.plus(getDebrisField(initValues.get(i).getShips(), resultValues.get(i).getShips(), FightSimProperties.getInstance().getDfFactorShips()));
     }
     return debrisField;
   }
 
   public static DebrisField getDefencesDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalMap, final ObservableMap<ShipAndDefenceBase, Integer> currentMap)
   {
-    return getDebrisField(originalMap, currentMap, TF_FACTOR_DEFENCE);
+    return getDebrisField(originalMap, currentMap, FightSimProperties.getInstance().getDfFactorDefence());
   }
 
   public static DebrisField getDebrisField(final ObservableMap<ShipAndDefenceBase, Integer> originalMap, final ObservableMap<ShipAndDefenceBase, Integer> currentMap, final double factor)

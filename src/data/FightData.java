@@ -10,6 +10,7 @@ import gui.tabs.kbsim.PlayerValueTab;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.ObservableMap;
+import properties.FightSimProperties;
 
 /**
  * @author AAG
@@ -104,7 +105,7 @@ public class FightData
           {
             final int originalNumber = originalShipsMap.get(pair.getKey());
             final int currentNumber = pair.getValue();
-            final int restored = (int) Math.round(((originalNumber - currentNumber) * PlayerValues.CIVIL_SHIPS_RESTORE) / 100.0);
+            final int restored = (int) Math.round((originalNumber - currentNumber) * FightSimProperties.getInstance().getCivilShipsRestore());
             shipsMap.put(pair.getKey(), currentNumber + restored);
             fleetMap.put(pair.getKey(), currentNumber + restored);
             restoreMap.put(pair.getKey(), restored);
