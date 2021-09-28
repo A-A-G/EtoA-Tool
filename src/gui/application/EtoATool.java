@@ -5,6 +5,7 @@ import java.io.File;
 import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Properties;
 
 import data.defence.Defences;
 import data.planets.Planets;
@@ -38,6 +39,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import properties.AppProperties;
 
 /**
  * @author AAG
@@ -45,15 +47,27 @@ import javafx.stage.Stage;
  */
 public class EtoATool extends Application
 {
-  private final static String VERSION = "0.6.3";
+  private final static String VERSION = "0.7.0";
 
   private final static LocalDate EXPIRE_DATE = LocalDate.of(2021, 12, 1);
 
-  private static final String ROUND = "round20";
+  private final static String APP_NAME = "EtoA-Tool";
+
+  private static final Properties APP_PROPERTIES = new AppProperties(APP_NAME, VERSION, EXPIRE_DATE);
 
   public static String getRound()
   {
-    return ROUND;
+    return APP_PROPERTIES.getProperty(AppProperties.ROUND);
+  }
+
+  public static String getCSSFolder()
+  {
+    return APP_PROPERTIES.getProperty(AppProperties.CSS_FOLDER);
+  }
+
+  public static String getGameIconPath()
+  {
+    return EtoATool.class.getResource(APP_PROPERTIES.getProperty(AppProperties.IMAGE_FOLDER) + APP_PROPERTIES.getProperty(AppProperties.GAME_ICON)).toExternalForm();
   }
 
   private static Stage PRIMARY_STAGE = null;
@@ -63,34 +77,14 @@ public class EtoATool extends Application
     return PRIMARY_STAGE;
   }
 
-  private final static String CSS_FOLDER = "/css/";
-
-  public static String getCSSFolder()
-  {
-    return CSS_FOLDER;
-  }
-
-  private final static String DEFAULT_APPLICATION_CSS = "application.css";
-
-  private final static String IMAGE_FOLDER = "/images/";
-
-  private final static String GAME_ICON = "EtoA32.png";
-
-  private final static String GITHUB_URL = "https://github.com/A-A-G/EtoA-Tool";
-
   private final ArrayList<Label> statusBars = new ArrayList<>();
-
-  public static String getGameIconPath()
-  {
-    return EtoATool.class.getResource(IMAGE_FOLDER + GAME_ICON).toExternalForm();
-  }
 
   @Override
   public void start(final Stage primaryStage)
   {
     if (LocalDate.now().isAfter(EXPIRE_DATE))
     {
-      final Alert alertDialog = Dialogs.buildAlert(AlertType.ERROR, "EtoA-Tool", "Time's up!", "Request new version!");
+      final Alert alertDialog = Dialogs.buildAlert(AlertType.ERROR, APP_NAME, "Time's up!", "Request new version!");
       alertDialog.showAndWait();
       Platform.exit();
       System.exit(0);
@@ -137,9 +131,9 @@ public class EtoATool extends Application
       tabPane.getSelectionModel().select(0);
       root.setCenter(tabPane);
       final Scene scene = new Scene(root, 1400, 1000);
-      scene.getStylesheets().add(getClass().getResource(getCSSFolder() + DEFAULT_APPLICATION_CSS).toExternalForm());
+      scene.getStylesheets().add(getClass().getResource(getCSSFolder() + APP_PROPERTIES.getProperty(AppProperties.APPLICATION_CSS)).toExternalForm());
       primaryStage.setScene(scene);
-      primaryStage.setTitle("EtoA-Tool");
+      primaryStage.setTitle(APP_NAME);
       primaryStage.getIcons().add(new Image(getGameIconPath()));
       primaryStage.show();
     }
@@ -160,7 +154,7 @@ public class EtoATool extends Application
   private MenuBar getRightBar()
   {
     final MenuBar rightBar = new MenuBar();
-    final MenuItem githubLink = new MenuItem(GITHUB_URL);
+    final MenuItem githubLink = new MenuItem(APP_PROPERTIES.getProperty(AppProperties.GITHUB_URL));
     githubLink.getStyleClass().add("blue-menu-item");
     githubLink.setOnAction(e ->
     {
@@ -168,7 +162,7 @@ public class EtoATool extends Application
       {
         try
         {
-          Desktop.getDesktop().browse(new URI(GITHUB_URL));
+          Desktop.getDesktop().browse(new URI(APP_PROPERTIES.getProperty(AppProperties.GITHUB_URL)));
         }
         catch (final Exception ex)
         {
@@ -184,7 +178,7 @@ public class EtoATool extends Application
       {
         try
         {
-          Desktop.getDesktop().open(new File("changelog.txt"));
+          Desktop.getDesktop().open(new File(APP_PROPERTIES.getProperty(AppProperties.CHANGELOG_PATH)));
         }
         catch (final Exception ex)
         {
@@ -192,7 +186,7 @@ public class EtoATool extends Application
         }
       }
     });
-    final Menu menuInfo = new Menu("Info", null, new MenuItem("EtoA-Tool " + VERSION + " by AAG"), githubLink, changelog);
+    final Menu menuInfo = new Menu("Info", null, new MenuItem(APP_NAME + " " + VERSION + " by " + APP_PROPERTIES.getProperty(AppProperties.AUTHOR)), githubLink, changelog);
     rightBar.getMenus().addAll(menuInfo);
     return rightBar;
   }

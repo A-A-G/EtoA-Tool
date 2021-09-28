@@ -1,5 +1,9 @@
 Changelog:
 
+0.7.0
+- R21 support
+- Properties
+
 0.6.3
 - Rigelia support
 - Sort planets on distance tab by name
