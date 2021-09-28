@@ -47,7 +47,7 @@ public class EtoATool extends Application
 {
   private final static String VERSION = "0.6.3";
 
-  private final static LocalDate EXPIRE_DATE = LocalDate.of(2020, 9, 1);
+  private final static LocalDate EXPIRE_DATE = LocalDate.of(2021, 12, 1);
 
   private static final String ROUND = "round20";
 
