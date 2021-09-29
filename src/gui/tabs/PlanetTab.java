@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui.tabs;
 
@@ -63,7 +63,7 @@ public class PlanetTab extends EtoATab
     }
     if (!noOwner && planet.ownerProperty().get().equals(Planets.NO_OWNER))
     {
-      if (!(emptyRoom && planet.typeProperty().get().equals(Planets.EMPTY_SPACE)) && !(stars && planet.typeProperty().get().equals(Planets.STAR)) && !(asteroids && planet.typeProperty().get().equals(Planets.ASTEROID)) && !(wormholes && planet.typeProperty().get().contains(Planets.WORMHOLE)))
+      if ((!emptyRoom || !planet.typeProperty().get().equals(Planets.EMPTY_SPACE)) && (!stars || !planet.typeProperty().get().equals(Planets.STAR)) && (!asteroids || !planet.typeProperty().get().equals(Planets.ASTEROID)) && (!wormholes || !planet.typeProperty().get().contains(Planets.WORMHOLE)))
       {
         return false;
       }
@@ -125,28 +125,28 @@ public class PlanetTab extends EtoATab
 
   private TableView<Planet> getPlanetsTableView(final FilteredList<Planet> filteredPlanets)
   {
-    final TableView<Planet> planetsTable = new TableView<Planet>();
+    final TableView<Planet> planetsTable = new TableView<>();
     final SortedList<Planet> sortedPlanets = filteredPlanets.sorted();
     sortedPlanets.comparatorProperty().bind(planetsTable.comparatorProperty());
     planetsTable.setItems(sortedPlanets);
-    final TableColumn<Planet, String> coordsCol = new TableColumn<Planet, String>("Koordinaten");
+    final TableColumn<Planet, String> coordsCol = new TableColumn<>("Koordinaten");
     coordsCol.setCellValueFactory(new PropertyValueFactory<Planet, String>("coords"));
     coordsCol.setComparator((final String first, final String second) -> Planet.compareCoords(first, second));
     planetsTable.getColumns().add(coordsCol);
-    final TableColumn<Planet, String> ownerCol = new TableColumn<Planet, String>("Besitzer");
+    final TableColumn<Planet, String> ownerCol = new TableColumn<>("Besitzer");
     ownerCol.setCellValueFactory(new PropertyValueFactory<Planet, String>("owner"));
     planetsTable.getColumns().add(ownerCol);
-    final TableColumn<Planet, String> nameCol = new TableColumn<Planet, String>("Name");
+    final TableColumn<Planet, String> nameCol = new TableColumn<>("Name");
     nameCol.setCellValueFactory(new PropertyValueFactory<Planet, String>("name"));
     planetsTable.getColumns().add(nameCol);
-    final TableColumn<Planet, String> typeCol = new TableColumn<Planet, String>("Typ");
+    final TableColumn<Planet, String> typeCol = new TableColumn<>("Typ");
     typeCol.setCellValueFactory(new PropertyValueFactory<Planet, String>("type"));
     planetsTable.getColumns().add(typeCol);
-    final TableColumn<Planet, Integer> systemIDCol = new TableColumn<Planet, Integer>("System ID");
+    final TableColumn<Planet, Integer> systemIDCol = new TableColumn<>("System ID");
     systemIDCol.setCellValueFactory(new PropertyValueFactory<Planet, Integer>("ID"));
     planetsTable.getColumns().add(systemIDCol);
     // systemIDCol.setVisible(false);
-    final TableColumn<Planet, Integer> HLCol = new TableColumn<Planet, Integer>("HL");
+    final TableColumn<Planet, Integer> HLCol = new TableColumn<>("HL");
     indexList = FXCollections.observableArrayList(planets.getData()).sorted();
     HLCol.setCellValueFactory(p ->
     {

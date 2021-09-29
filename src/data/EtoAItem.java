@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data;
 
@@ -18,7 +18,7 @@ import utils.StringUtils;
 
 /**
  * @author AAG
- * 
+ *
  */
 public abstract class EtoAItem implements Serializable
 {
@@ -84,7 +84,7 @@ public abstract class EtoAItem implements Serializable
 
   protected void writeObjectData(final ObjectOutputStream out) throws IOException
   {
-    out.writeUTF(this.name.get());
+    out.writeUTF(name.get());
   }
 
   private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException

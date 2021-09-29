@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data;
 
@@ -17,25 +17,25 @@ public class AttackReport
 //  private final ObservableMap<String, Integer> defenderShipsLost = FXCollections.observableHashMap();
 //  private final ObservableMap<String, Integer> defenderDefences = FXCollections.observableHashMap();
 //  private final ObservableMap<String, Integer> defenderDefencesLost = FXCollections.observableHashMap();
-//  
+//
 //  private String attackerName = "";
 //  private String defenderName = "";
-//  
+//
   private String coordsAndName = "";
 //  private String date = "";
-//  
+//
 //  private Boolean attackerIsWinner = false;
-//  
+//
 //  private int lootTitan = 0;
 //  private int lootSilizium = 0;
 //  private int lootPVC = 0;
 //  private int lootTritium = 0;
 //  private int lootNahrung = 0;
-//  
+//
 //  private int tfTitan = 0;
 //  private int tfSilizium = 0;
 //  private int tfPVC = 0;
-//  
+//
 //  private int expAttacker = 0;
 //  private int expDefender = 0;
 

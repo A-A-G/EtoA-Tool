@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui.tabs;
 
@@ -34,7 +34,7 @@ public class DefenceTab extends EtoATab
   public DefenceTab(final Planets planets, final Ships ships, final Defences defences, final Label statusLabel)
   {
     super(TAB_NAME, planets, ships, defences, statusLabel);
-    final FilteredList<Defence> filteredDefence = new FilteredList<Defence>(defences.getData(), p -> true);
+    final FilteredList<Defence> filteredDefence = new FilteredList<>(defences.getData(), p -> true);
     final TextField searchField = new TextField();
     final VBox defenceVBox = new VBox(getSearchHBox(searchField), getDefenceTableView(filteredDefence), getAddLoadSaveHBox("Verteidigungsanlage", defences));
     defenceVBox.setAlignment(Pos.CENTER);

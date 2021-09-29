@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package logic;
 
@@ -27,11 +27,11 @@ public final class Distances
 
     public Coordinates(final int[] coords)
     {
-      this.x_sector = coords[0];
-      this.y_sector = coords[1];
-      this.x_system = coords[2];
-      this.y_system = coords[3];
-      this.pos = coords[4];
+      x_sector = coords[0];
+      y_sector = coords[1];
+      x_system = coords[2];
+      y_system = coords[3];
+      pos = coords[4];
     }
 
     public Coordinates(final int x_sector, final int y_sector, final int x_system, final int y_system, final int pos)

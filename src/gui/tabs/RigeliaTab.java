@@ -24,7 +24,7 @@ public class RigeliaTab extends EtoATab
     vbox.setAlignment(Pos.CENTER);
     final HBox hbox = new HBox(vbox);
     hbox.setAlignment(Pos.CENTER);
-    this.setContent(hbox);
+    setContent(hbox);
   }
 
 }

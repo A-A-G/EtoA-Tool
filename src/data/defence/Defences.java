@@ -132,7 +132,7 @@ public class Defences extends DataHandler<Defence>
   @Override
   public ObservableList<Defence> getFullObservableList()
   {
-    return FXCollections.observableList(data, dataItem -> dataItem.getAllObservables());
+    return FXCollections.observableList(data, Defence::getAllObservables);
   }
 
 }

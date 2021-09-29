@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data.ships;
 
@@ -126,47 +126,47 @@ public class Ship extends ShipAndDefenceBase implements Serializable
   public boolean update(final Ship other)
   {
     boolean updated = super.update(other);
-    if (!(pilots.get() == other.pilots.get()))
+    if ((pilots.get() != other.pilots.get()))
     {
       pilots.set(other.pilots.get());
       updated = true;
     }
-    if (!(starting.get() == other.starting.get()))
+    if ((starting.get() != other.starting.get()))
     {
       starting.set(other.starting.get());
       updated = true;
     }
-    if (!(landing.get() == other.landing.get()))
+    if ((landing.get() != other.landing.get()))
     {
       landing.set(other.landing.get());
       updated = true;
     }
-    if (!(usagePerAR.get() == other.usagePerAR.get()))
+    if ((usagePerAR.get() != other.usagePerAR.get()))
     {
       usagePerAR.set(other.usagePerAR.get());
       updated = true;
     }
-    if (!(capacity.get() == other.capacity.get()))
+    if ((capacity.get() != other.capacity.get()))
     {
       capacity.set(other.capacity.get());
       updated = true;
     }
-    if (!(passengers.get() == other.passengers.get()))
+    if ((passengers.get() != other.passengers.get()))
     {
       passengers.set(other.passengers.get());
       updated = true;
     }
-    if (!(speed.get() == other.speed.get()))
+    if ((speed.get() != other.speed.get()))
     {
       speed.set(other.speed.get());
       updated = true;
     }
-    if (!(startDuration.get() == other.startDuration.get()))
+    if ((startDuration.get() != other.startDuration.get()))
     {
       startDuration.set(other.startDuration.get());
       updated = true;
     }
-    if (!(landDuration.get() == other.landDuration.get()))
+    if ((landDuration.get() != other.landDuration.get()))
     {
       landDuration.set(other.landDuration.get());
       updated = true;
@@ -184,19 +184,19 @@ public class Ship extends ShipAndDefenceBase implements Serializable
   {
     super.writeObjectData(out);
 
-    out.writeUTF(this.category.get());
+    out.writeUTF(category.get());
 
-    out.writeInt(this.pilots.get());
+    out.writeInt(pilots.get());
 
-    out.writeInt(this.starting.get());
-    out.writeInt(this.landing.get());
-    out.writeInt(this.usagePerAR.get());
+    out.writeInt(starting.get());
+    out.writeInt(landing.get());
+    out.writeInt(usagePerAR.get());
 
-    out.writeInt(this.capacity.get());
-    out.writeInt(this.passengers.get());
-    out.writeInt(this.speed.get());
-    out.writeInt(this.startDuration.get());
-    out.writeInt(this.landDuration.get());
+    out.writeInt(capacity.get());
+    out.writeInt(passengers.get());
+    out.writeInt(speed.get());
+    out.writeInt(startDuration.get());
+    out.writeInt(landDuration.get());
   }
 
   private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException

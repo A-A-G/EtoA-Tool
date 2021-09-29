@@ -50,7 +50,7 @@ public class RigeliaTPane extends TitledPane
 
     /*
      * (non-Javadoc)
-     * 
+     *
      * @see java.lang.Enum#toString()
      */
     @Override
@@ -88,9 +88,9 @@ public class RigeliaTPane extends TitledPane
       cautionLabel.getStyleClass().add("red");
       rigeliaVBox.getChildren().add(cautionLabel);
     }
-    this.setContent(rigeliaVBox);
-    this.setText(type.text);
-    this.setCollapsible(false);
+    setContent(rigeliaVBox);
+    setText(type.text);
+    setCollapsible(false);
   }
 
   private void updateResult(final Label result, final Type type, final int techLevel, final int shipCount, final int mystiBoni)

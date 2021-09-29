@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui.tabs;
 
@@ -302,7 +302,11 @@ public class DistanceTab extends EtoATab
 
   public enum FrameType
   {
-    TOP, RIGHT, BOTTOM, LEFT, TOPLEFT;
+    TOP,
+    RIGHT,
+    BOTTOM,
+    LEFT,
+    TOPLEFT;
 
     public static FrameType getFrameTypeP1(final int p1Counter, final int max)
     {

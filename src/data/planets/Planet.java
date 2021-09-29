@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data.planets;
 
@@ -103,9 +103,9 @@ public class Planet extends EtoAItem implements Comparable<Planet>, Serializable
   protected void writeObjectData(final ObjectOutputStream out) throws IOException
   {
     super.writeObjectData(out);
-    out.writeUTF(this.owner.get());
-    out.writeUTF(this.coords.get());
-    out.writeUTF(this.type.get());
+    out.writeUTF(owner.get());
+    out.writeUTF(coords.get());
+    out.writeUTF(type.get());
   }
 
   private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException

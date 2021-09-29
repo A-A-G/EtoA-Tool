@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data;
 
@@ -101,47 +101,47 @@ public abstract class ShipAndDefenceBase extends EtoAItem implements Comparable<
   public boolean update(final ShipAndDefenceBase other)
   {
     boolean updated = super.update(other);
-    if (!(titan.get() == other.titan.get()))
+    if ((titan.get() != other.titan.get()))
     {
       titan.set(other.titan.get());
       updated = true;
     }
-    if (!(silizium.get() == other.silizium.get()))
+    if ((silizium.get() != other.silizium.get()))
     {
       silizium.set(other.silizium.get());
       updated = true;
     }
-    if (!(pvc.get() == other.pvc.get()))
+    if ((pvc.get() != other.pvc.get()))
     {
       pvc.set(other.pvc.get());
       updated = true;
     }
-    if (!(tritium.get() == other.tritium.get()))
+    if ((tritium.get() != other.tritium.get()))
     {
       tritium.set(other.tritium.get());
       updated = true;
     }
-    if (!(food.get() == other.food.get()))
+    if ((food.get() != other.food.get()))
     {
       food.set(other.food.get());
       updated = true;
     }
-    if (!(weapons.get() == other.weapons.get()))
+    if ((weapons.get() != other.weapons.get()))
     {
       weapons.set(other.weapons.get());
       updated = true;
     }
-    if (!(structure.get() == other.structure.get()))
+    if ((structure.get() != other.structure.get()))
     {
       structure.set(other.structure.get());
       updated = true;
     }
-    if (!(shield.get() == other.shield.get()))
+    if ((shield.get() != other.shield.get()))
     {
       shield.set(other.shield.get());
       updated = true;
     }
-    if (!(heal.get() == other.heal.get()))
+    if ((heal.get() != other.heal.get()))
     {
       heal.set(other.heal.get());
       updated = true;
@@ -201,16 +201,16 @@ public abstract class ShipAndDefenceBase extends EtoAItem implements Comparable<
   {
     super.writeObjectData(out);
 
-    out.writeInt(this.titan.get());
-    out.writeInt(this.silizium.get());
-    out.writeInt(this.pvc.get());
-    out.writeInt(this.tritium.get());
-    out.writeInt(this.food.get());
+    out.writeInt(titan.get());
+    out.writeInt(silizium.get());
+    out.writeInt(pvc.get());
+    out.writeInt(tritium.get());
+    out.writeInt(food.get());
 
-    out.writeLong(this.weapons.get());
-    out.writeLong(this.structure.get());
-    out.writeLong(this.shield.get());
-    out.writeInt(this.heal.get());
+    out.writeLong(weapons.get());
+    out.writeLong(structure.get());
+    out.writeLong(shield.get());
+    out.writeInt(heal.get());
   }
 
   private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException

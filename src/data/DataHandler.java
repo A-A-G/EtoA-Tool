@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data;
 
@@ -126,7 +126,7 @@ public abstract class DataHandler<T>
       filePath = dataFile.getAbsolutePath();
       final FileOutputStream fos = new FileOutputStream(dataFile);
       final ObjectOutputStream oos = new ObjectOutputStream(fos);
-      oos.writeObject(new ArrayList<T>(data));
+      oos.writeObject(new ArrayList<>(data));
       oos.close();
       updateStatus(data.size() + " items stored to file " + filePath + ".");
     }

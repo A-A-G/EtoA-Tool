@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui.utils;
 
@@ -55,11 +55,11 @@ public class ShipAndDefenceSelector<T extends ShipAndDefenceBase> extends Titled
     final HBox itemSelectionHBox = new HBox(scrollPane, checkableListView);
     itemSelectionHBox.setMaxWidth(Double.MAX_VALUE);
     HBox.setHgrow(itemSelectionHBox, Priority.ALWAYS);
-    this.setContent(itemSelectionHBox);
-    this.setMaxHeight(Double.MAX_VALUE);
+    setContent(itemSelectionHBox);
+    setMaxHeight(Double.MAX_VALUE);
     VBox.setVgrow(this, Priority.ALWAYS);
     registerItems(dataHandler, checkableListView, selectedItemsBox);
-    dataHandler.getFullObservableList().addListener((ListChangeListener<ShipAndDefenceBase>) (changedItems) -> registerItems(dataHandler, checkableListView, selectedItemsBox)); // Can we somehow update single ships?
+    dataHandler.getFullObservableList().addListener((ListChangeListener<ShipAndDefenceBase>) changedItems -> registerItems(dataHandler, checkableListView, selectedItemsBox)); // Can we somehow update single ships?
   }
 
   private void registerItems(final DataHandler<T> dataHandler, final ListView<T> checkableListView, final VBox selectedItemsBox)
@@ -68,7 +68,7 @@ public class ShipAndDefenceSelector<T extends ShipAndDefenceBase> extends Titled
     amountHBoxesHashMap.clear();
     sortedList = dataHandler.getObservableSelectionList().sorted();
     checkableListView.setItems(sortedList);
-    sortedList.addListener((ListChangeListener<T>) (changedItems) ->
+    sortedList.addListener((ListChangeListener<T>) changedItems ->
     {
       while (changedItems.next())
       {
@@ -137,7 +137,7 @@ public class ShipAndDefenceSelector<T extends ShipAndDefenceBase> extends Titled
 
   private void unselectChoosenItems()
   {
-    for (final ShipAndDefenceBase item : new HashSet<ShipAndDefenceBase>(choosenItemsMap.keySet())) // ugly but necessary? why? better?
+    for (final ShipAndDefenceBase item : new HashSet<>(choosenItemsMap.keySet())) // ugly but necessary? why? better?
     {
       item.selectedProperty().set(false);
     }

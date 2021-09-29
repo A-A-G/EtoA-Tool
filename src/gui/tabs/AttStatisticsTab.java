@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui.tabs;
 
@@ -24,7 +24,7 @@ public class AttStatisticsTab extends EtoATab
 {
   private final static String TAB_NAME = "Angriffsstatistiken";
 
-  public AttStatisticsTab(Planets planets, Ships ships, Defences defences, Label statusLabel)
+  public AttStatisticsTab(final Planets planets, final Ships ships, final Defences defences, final Label statusLabel)
   {
     super(TAB_NAME, planets, ships, defences, statusLabel);
     final TextArea copyArea = new TextArea();
@@ -33,7 +33,7 @@ public class AttStatisticsTab extends EtoATab
     final Button addButton = new Button("Add");
     addButton.setOnAction(actionEvent ->
     {
-      //do something
+      // do something
       copyArea.clear();
     });
     final VBox cnpVBox = new VBox(copyArea, addButton);

@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package gui.tabs;
 
@@ -100,7 +100,7 @@ public class KryptoTab extends EtoATab
     decryptLevelTF.setMaxWidth(120);
     chanceLabel = new Label("Decrypt if Chance >= 0");
     chanceLabel.getStyleClass().add("highlight");
-    HBox centerHBox = new HBox();
+    final HBox centerHBox = new HBox();
     centerHBox.setAlignment(Pos.CENTER);
     centerHBox.getChildren().add(new Label("Decrypt Chance: "));
     centerHBox.getChildren().add(chanceTF);
@@ -113,7 +113,7 @@ public class KryptoTab extends EtoATab
     twentyToTwentyfiveLabel = new Label("20 <= 25 \t Also show count of ships and time in minutes");
     twentyFiveToThirtyLabel = new Label("25 <= 30 \t Also show count of every ship and exact time");
     moreThanThirtyLabel = new Label("  > 30 \t Show action");
-    VBox nocenterVBox = new VBox(lessThanZeroLabel, zeroToTenLabel, tenToFifteenLabel, fifteenToTwentyLabel, twentyToTwentyfiveLabel, twentyFiveToThirtyLabel, moreThanThirtyLabel);
+    final VBox nocenterVBox = new VBox(lessThanZeroLabel, zeroToTenLabel, tenToFifteenLabel, fifteenToTwentyLabel, twentyToTwentyfiveLabel, twentyFiveToThirtyLabel, moreThanThirtyLabel);
     nocenterVBox.getStyleClass().add("nospacing");
     final TitledPane decryptTP = new TitledPane("Decrypt Level", nocenterVBox);
     decryptTP.setCollapsible(false);
@@ -158,8 +158,8 @@ public class KryptoTab extends EtoATab
 
   private void computeKryptoValues()
   {
-    double op_stealth = targetAllyTarnSpinner.getValue() + (targetSpySpezCheckBox.selectedProperty().get() ? 2 : 0) + targetTarnSpinner.getValue();
-    double self_spy = allySpioSpinner.getValue() + (spySpezCheckBox.selectedProperty().get() ? 3 : 0) + spioSpinner.getValue();
+    final double op_stealth = targetAllyTarnSpinner.getValue() + (targetSpySpezCheckBox.selectedProperty().get() ? 2 : 0) + targetTarnSpinner.getValue();
+    final double self_spy = allySpioSpinner.getValue() + (spySpezCheckBox.selectedProperty().get() ? 3 : 0) + spioSpinner.getValue();
     final double kryptoChance = Krypto.chance(kryptoSpinner.getValue(), self_spy, targetMagnetronSpinner.getValue(), op_stealth);
     chanceTF.setText(String.format("%1.2f", kryptoChance) + " bis " + String.format("%1.2f", kryptoChance + 2));
     if (kryptoChance < 0)

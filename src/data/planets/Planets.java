@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data.planets;
 
@@ -100,7 +100,7 @@ public class Planets extends DataHandler<Planet>
     }
     updateStatus(system + ": " + planetCounter + " Planeten hinzugefügt/aktualisiert (Changed: " + changed + ", Added: " + added + ").");
   }
-  
+
   public long getPlayerPlanetsCount()
   {
     if (data == null)
@@ -109,7 +109,7 @@ public class Planets extends DataHandler<Planet>
     }
     return data.stream().filter(p -> !p.getOwner().equals(NO_OWNER)).count();
   }
-  
+
   public int getPlayerCount()
   {
     if (player == null)
@@ -208,10 +208,10 @@ public class Planets extends DataHandler<Planet>
 
   public void exportForumCode()
   {
-	Properties properties = EtoATool.getAppProperties();
-	String round = properties.getProperty(AppProperties.ROUND);
-	String encryption = properties.getProperty(AppProperties.ENCRYPTION);
-	String domain = properties.getProperty(AppProperties.DOMAIN);
+    final Properties properties = EtoATool.getAppProperties();
+    final String round = properties.getProperty(AppProperties.ROUND);
+    final String encryption = properties.getProperty(AppProperties.ENCRYPTION);
+    final String domain = properties.getProperty(AppProperties.DOMAIN);
     final FileChooser fileChooser = new FileChooser();
     fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
     fileChooser.setInitialFileName("forum.txt");
@@ -291,7 +291,7 @@ public class Planets extends DataHandler<Planet>
   @Override
   public ObservableList<Planet> getFullObservableList()
   {
-    return FXCollections.observableList(data, dataItem -> dataItem.getAllObservables());
+    return FXCollections.observableList(data, Planet::getAllObservables);
   }
 
 }

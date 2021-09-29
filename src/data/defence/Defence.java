@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package data.defence;
 
@@ -53,12 +53,12 @@ public class Defence extends ShipAndDefenceBase implements Serializable
   public boolean update(final Defence other)
   {
     boolean updated = super.update(other);
-    if (!(fields.get() == other.fields.get()))
+    if ((fields.get() != other.fields.get()))
     {
       fields.set(other.fields.get());
       updated = true;
     }
-    if (!(maxNumber.get() == other.maxNumber.get()))
+    if ((maxNumber.get() != other.maxNumber.get()))
     {
       maxNumber.set(other.maxNumber.get());
       updated = true;
@@ -75,8 +75,8 @@ public class Defence extends ShipAndDefenceBase implements Serializable
   protected void writeObjectData(final ObjectOutputStream out) throws IOException
   {
     super.writeObjectData(out);
-    out.writeInt(this.fields.get());
-    out.writeInt(this.maxNumber.get());
+    out.writeInt(fields.get());
+    out.writeInt(maxNumber.get());
   }
 
   private void readObject(final ObjectInputStream in) throws IOException, ClassNotFoundException

@@ -11,5 +11,8 @@
 - Distanzen: Schiffe auswählen und Zeiten berechnen!
 	- Kürzeste Entfernung mit WLs
 - Ship properties
+- Default size and size property
+- Update Krypto
+- Properties to Preferences
 
 Planets, Ships, Defence <-> FF, IExplore
