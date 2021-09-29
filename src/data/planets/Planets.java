@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Properties;
 
 import data.DataHandler;
 import gui.application.EtoATool;
@@ -21,6 +22,7 @@ import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.scene.control.Label;
 import javafx.stage.FileChooser;
+import properties.AppProperties;
 import utils.Comparators;
 
 /**
@@ -62,7 +64,7 @@ public class Planets extends DataHandler<Planet>
     int added = 0;
     for (String line : lines)
     {
-      if (line.contains("System "))
+      if (line.matches("System [0-9][0-9]?/[0-9][0-9]? : [0-9][0-9]?/[0-9][0-9]?"))
       {
         line = line.replace("System ", "");
         line = line.replace(" ", "");
@@ -206,6 +208,10 @@ public class Planets extends DataHandler<Planet>
 
   public void exportForumCode()
   {
+	Properties properties = EtoATool.getAppProperties();
+	String round = properties.getProperty(AppProperties.ROUND);
+	String encryption = properties.getProperty(AppProperties.ENCRYPTION);
+	String domain = properties.getProperty(AppProperties.DOMAIN);
     final FileChooser fileChooser = new FileChooser();
     fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
     fileChooser.setInitialFileName("forum.txt");
@@ -231,11 +237,11 @@ public class Planets extends DataHandler<Planet>
           }
           return false;
         });
-        String output = String.format("%1$-20s\t", player).replace(" ", " ") + "|\t";
+        String output = String.format("%1$-19s\t", player).replace(" ", " ") + "|\t";
         int planetCounter = 1;
         for (final Planet p : planets2filter)
         {
-          output = output + "[url=http://" + EtoATool.getRound() + ".trantor.etoa.net/?page=cell&id=" + p.getID() + "&hl=" + p.getHL(planets2sort) + "]" + tokens[playerCounter % 2] + "[/url]\t";
+          output = output + "[url=" + encryption + "://" + round + "." + domain + "/?page=cell&id=" + p.getID() + "&hl=" + p.getHL(planets2sort) + "]" + tokens[playerCounter % 2] + "[/url]\t";
           if ((planetCounter % 5) == 0)
           {
             output = output + "|\t";
@@ -244,7 +250,7 @@ public class Planets extends DataHandler<Planet>
         }
         for (; planetCounter <= 15; planetCounter++)
         {
-          output = output + "[url=http://" + EtoATool.getRound() + ".trantor.etoa.net/?page=cell&id=0&hl=0]" + tokens[2] + "[/url]\t";
+          output = output + "[url=" + encryption + "://" + round + "." + domain + "/?page=cell&id=0&hl=0]" + tokens[2] + "[/url]\t";
           if ((planetCounter % 5) == 0)
           {
             output = output + "|\t";
@@ -254,7 +260,7 @@ public class Planets extends DataHandler<Planet>
         pwriter.println(output);
         if ((playerCounter % 10) == 0)
         {
-          pwriter.println("--------------------\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|");
+          pwriter.println("-------------------\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|");
         }
         if ((playerCounter % 50) == 0)
         {
@@ -262,7 +268,7 @@ public class Planets extends DataHandler<Planet>
           pwriter.println("----------split here | split here | split here | split here | split here ----------");
           pwriter.println();
           pwriter.println("[font=\"DejaVu Sans Mono\"][size=11]");
-          pwriter.println("--------------------\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|");
+          pwriter.println("-------------------\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|\t----\t----\t----\t----\t----\t|");
         }
         playerCounter++;
       }

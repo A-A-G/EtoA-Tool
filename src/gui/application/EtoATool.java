@@ -60,11 +60,6 @@ public class EtoATool extends Application
     return APP_PROPERTIES;
   }
 
-  public static String getRound()
-  {
-    return APP_PROPERTIES.getProperty(AppProperties.ROUND);
-  }
-
   public static String getCSSFolder()
   {
     return APP_PROPERTIES.getProperty(AppProperties.CSS_FOLDER);

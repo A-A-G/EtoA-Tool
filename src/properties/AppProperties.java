@@ -24,6 +24,8 @@ public class AppProperties extends Properties
   // Keys
   public final static String NAME = "name";
   public final static String ROUND = "round";
+  public final static String DOMAIN = "domain";
+  public final static String ENCRYPTION = "encryption";
   public final static String CSS_FOLDER = "css_folder";
   public final static String APPLICATION_CSS = "css";
   public final static String IMAGE_FOLDER = "images";
@@ -37,6 +39,8 @@ public class AppProperties extends Properties
 
   // Default values
   private final static String DEFAULT_ROUND = "round21";
+  private final static String DEFAULT_DOMAIN = "etoa.net";
+  private final static String DEFAULT_ENCRYPTION = "https";
   private final static String DEFAULT_CSS_FOLDER = "/css/";
   private final static String DEFAULT_APPLICATION_CSS = "application.css";
   private final static String DEFAULT_IMAGE_FOLDER = "/images/";
@@ -72,6 +76,14 @@ public class AppProperties extends Properties
     if (getProperty(ROUND) == null)
     {
       setProperty(ROUND, DEFAULT_ROUND);
+    }
+    if (getProperty(DOMAIN) == null)
+    {
+      setProperty(DOMAIN, DEFAULT_DOMAIN);
+    }
+    if (getProperty(ENCRYPTION) == null)
+    {
+      setProperty(ENCRYPTION, DEFAULT_ENCRYPTION);
     }
     if (getProperty(CSS_FOLDER) == null)
     {
