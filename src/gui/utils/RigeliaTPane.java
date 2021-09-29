@@ -63,7 +63,7 @@ public class RigeliaTPane extends TitledPane
   public RigeliaTPane(final Type type)
   {
     final Preferences preferences = Preferences.userNodeForPackage(getClass());
-    final Spinner<Integer> techLevel = Spinners.getSpinner(0, 50, preferences.getInt(type.techstring, 8), 1, 55, true, null);
+    final Spinner<Integer> techLevel = Spinners.getSpinner(0, 50, preferences.getInt(type.techstring, 8), 1, 65, true, null);
     techLevel.valueProperty().addListener((obs, oldValue, newValue) -> preferences.putInt(type.techstring, newValue.intValue()));
     final Spinner<Integer> shipCount = Spinners.getSpinner(1, 1000000, preferences.getInt(SHIP_COUNT, 1), 1000, 80, true, null);
     shipCount.valueProperty().addListener((obs, oldValue, newValue) -> preferences.putInt(SHIP_COUNT, newValue.intValue()));
