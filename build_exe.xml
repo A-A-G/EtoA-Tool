@@ -10,6 +10,7 @@
 			<fx:fileset dir="${basedir}" includes="planets.rod" type="data"/>
 			<fx:fileset dir="${basedir}" includes="ships.rod" type="data"/>
 			<fx:fileset dir="${basedir}" includes="deffs.rod" type="data"/>
+			<fx:fileset dir="${basedir}" includes="changelog.txt" type="data"/>
 		</fx:resources>
 
 		<mkdir dir="build/deploy" />
