@@ -22,33 +22,33 @@ public class AppProperties extends Properties
   private static final long serialVersionUID = -2122663607890424230L;
 
   // Keys
-  public final static String NAME = "name";
-  public final static String ROUND = "round";
-  public final static String DOMAIN = "domain";
-  public final static String ENCRYPTION = "encryption";
-  public final static String CSS_FOLDER = "css_folder";
-  public final static String APPLICATION_CSS = "css";
-  public final static String IMAGE_FOLDER = "images";
-  public final static String GAME_ICON = "icon";
-  public final static String GITHUB_URL = "github";
-  public final static String CONFIG_PATH = "config";
-  public final static String VERSION = "version";
-  public final static String EXPIRE_DATE = "expire_date";
-  public final static String CHANGELOG_PATH = "changelog";
-  public final static String AUTHOR = "author";
+  public static final String NAME = "name";
+  public static final String ROUND = "round";
+  public static final String DOMAIN = "domain";
+  public static final String PROTOCOL = "protocol";
+  public static final String CSS_FOLDER = "css_folder";
+  public static final String APPLICATION_CSS = "css";
+  public static final String IMAGE_FOLDER = "images";
+  public static final String GAME_ICON = "icon";
+  public static final String GITHUB_URL = "github";
+  public static final String CONFIG_PATH = "config";
+  public static final String VERSION = "version";
+  public static final String EXPIRE_DATE = "expire_date";
+  public static final String CHANGELOG_PATH = "changelog";
+  public static final String AUTHOR = "author";
 
   // Default values
-  private final static String DEFAULT_ROUND = "round21";
-  private final static String DEFAULT_DOMAIN = "etoa.net";
-  private final static String DEFAULT_ENCRYPTION = "https";
-  private final static String DEFAULT_CSS_FOLDER = "/css/";
-  private final static String DEFAULT_APPLICATION_CSS = "application.css";
-  private final static String DEFAULT_IMAGE_FOLDER = "/images/";
-  private final static String DEFAULT_GAME_ICON = "EtoA32.png";
-  private final static String DEFAULT_GITHUB_URL = "https://github.com/A-A-G/EtoA-Tool";
-  private final static String DEFAULT_CONFIG_PATH = "app.properties";
-  private final static String DEFAULT_CHANGELOG_PATH = "changelog.txt";
-  private final static String DEFAULT_AUTHOR = "AAG";
+  private static final String DEFAULT_ROUND = "round21";
+  private static final String DEFAULT_DOMAIN = "etoa.net";
+  private static final String DEFAULT_PROTOCOL = "https";
+  private static final String DEFAULT_CSS_FOLDER = "/css/";
+  private static final String DEFAULT_APPLICATION_CSS = "application.css";
+  private static final String DEFAULT_IMAGE_FOLDER = "/images/";
+  private static final String DEFAULT_GAME_ICON = "EtoA32.png";
+  private static final String DEFAULT_GITHUB_URL = "https://github.com/A-A-G/EtoA-Tool";
+  private static final String DEFAULT_CONFIG_PATH = "app.properties";
+  private static final String DEFAULT_CHANGELOG_PATH = "changelog.txt";
+  private static final String DEFAULT_AUTHOR = "AAG";
 
   /**
    * Load and update application properties.
@@ -81,9 +81,9 @@ public class AppProperties extends Properties
     {
       setProperty(DOMAIN, DEFAULT_DOMAIN);
     }
-    if (getProperty(ENCRYPTION) == null)
+    if (getProperty(PROTOCOL) == null)
     {
-      setProperty(ENCRYPTION, DEFAULT_ENCRYPTION);
+      setProperty(PROTOCOL, DEFAULT_PROTOCOL);
     }
     if (getProperty(CSS_FOLDER) == null)
     {

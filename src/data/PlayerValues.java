@@ -21,14 +21,13 @@ import properties.FightSimProperties;
  */
 public class PlayerValues
 {
-  private final FightSimProperties properties = FightSimProperties.getInstance();
-  private final int DEFAULT_TECH = (int) Math.round(properties.getTechBase());
+  public static final int DEFAULT_TECH_BASE = 100;
 
-  private final ObjectProperty<Integer> weapontech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
-  private final ObjectProperty<Integer> armortech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
-  private final ObjectProperty<Integer> shieldtech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
-  private final ObjectProperty<Integer> regenatech = new SimpleIntegerProperty(DEFAULT_TECH).asObject();
-  private final ObjectProperty<Integer> repair = new SimpleIntegerProperty((int) Math.round(properties.getDefenceRepair())).asObject();
+  private final ObjectProperty<Integer> weapontech = new SimpleIntegerProperty(DEFAULT_TECH_BASE).asObject();
+  private final ObjectProperty<Integer> armortech = new SimpleIntegerProperty(DEFAULT_TECH_BASE).asObject();
+  private final ObjectProperty<Integer> shieldtech = new SimpleIntegerProperty(DEFAULT_TECH_BASE).asObject();
+  private final ObjectProperty<Integer> regenatech = new SimpleIntegerProperty(DEFAULT_TECH_BASE).asObject();
+  private final ObjectProperty<Integer> repair = new SimpleIntegerProperty((int) Math.round(FightSimProperties.getInstance().getDefenceRepair())).asObject();
 
   private final ObjectProperty<Double> weapons = new SimpleDoubleProperty(0).asObject();
   private final ObjectProperty<Double> structure = new SimpleDoubleProperty(0).asObject();
@@ -198,7 +197,7 @@ public class PlayerValues
           {
             final int originalNumber = originalShipsMap.get(pair.getKey());
             final int currentNumber = pair.getValue();
-            final int restored = (int) Math.round((originalNumber - currentNumber) * properties.getCivilShipsRestore());
+            final int restored = (int) Math.round((originalNumber - currentNumber) * FightSimProperties.getInstance().getCivilShipsRestore());
             restoreString = restoreString + pair.getKey().nameProperty().get() + " \t " + pair.getValue() + " (+" + restored + ")" + System.lineSeparator();
             shipsMap.put(pair.getKey(), currentNumber + restored);
           }

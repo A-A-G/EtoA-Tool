@@ -210,7 +210,7 @@ public class Planets extends DataHandler<Planet>
   {
     final Properties properties = EtoATool.getAppProperties();
     final String round = properties.getProperty(AppProperties.ROUND);
-    final String encryption = properties.getProperty(AppProperties.ENCRYPTION);
+    final String protocol = properties.getProperty(AppProperties.PROTOCOL);
     final String domain = properties.getProperty(AppProperties.DOMAIN);
     final FileChooser fileChooser = new FileChooser();
     fileChooser.setInitialDirectory(new File(System.getProperty("user.dir")));
@@ -241,7 +241,7 @@ public class Planets extends DataHandler<Planet>
         int planetCounter = 1;
         for (final Planet p : planets2filter)
         {
-          output = output + "[url=" + encryption + "://" + round + "." + domain + "/?page=cell&id=" + p.getID() + "&hl=" + p.getHL(planets2sort) + "]" + tokens[playerCounter % 2] + "[/url]\t";
+          output = output + "[url=" + protocol + "://" + round + "." + domain + "/?page=cell&id=" + p.getID() + "&hl=" + p.getHL(planets2sort) + "]" + tokens[playerCounter % 2] + "[/url]\t";
           if ((planetCounter % 5) == 0)
           {
             output = output + "|\t";
@@ -250,7 +250,7 @@ public class Planets extends DataHandler<Planet>
         }
         for (; planetCounter <= 15; planetCounter++)
         {
-          output = output + "[url=" + encryption + "://" + round + "." + domain + "/?page=cell&id=0&hl=0]" + tokens[2] + "[/url]\t";
+          output = output + "[url=" + protocol + "://" + round + "." + domain + "/?page=cell&id=0&hl=0]" + tokens[2] + "[/url]\t";
           if ((planetCounter % 5) == 0)
           {
             output = output + "|\t";

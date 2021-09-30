@@ -41,13 +41,13 @@ import properties.FightSimProperties;
 public class PlayerValueTab extends Tab
 {
 
-  private final static String WEAPONTECH = "weapontech";
-  private final static String ARMORTECH = "armortech";
-  private final static String SHIELDTECH = "shieldtech";
-  private final static String REGENATECH = "regenatech";
+  private static final String WEAPONTECH = "weapontech";
+  private static final String ARMORTECH = "armortech";
+  private static final String SHIELDTECH = "shieldtech";
+  private static final String REGENATECH = "regenatech";
 
-  public final static String ATTACKER = "Angreifer";
-  public final static String DEFENDER = "Verteidiger";
+  public static final String ATTACKER = "Angreifer";
+  public static final String DEFENDER = "Verteidiger";
 
   private ObservableList<PlayerSpinners> attackerPlayerSpinnerList = null;
 
@@ -106,23 +106,22 @@ public class PlayerValueTab extends Tab
       playerValues.shieldtechProperty().addListener((obs, oldValue, newValue) -> preferences.putInt(SHIELDTECH, newValue.intValue()));
       playerValues.regenatechProperty().addListener((obs, oldValue, newValue) -> preferences.putInt(REGENATECH, newValue.intValue()));
     }
-    final FightSimProperties properties = FightSimProperties.getInstance();
-    final int defaultTech = (int) Math.round(properties.getTechBase());
+    FightSimProperties.getInstance();
     final GridPane gridPaneBonis = new GridPane();
     gridPaneBonis.add(new Label("Waffentechnik % "), 0, 0);
-    final Spinner<Integer> weapontechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(WEAPONTECH, defaultTech) : defaultTech, playerValues.weapontechProperty());
+    final Spinner<Integer> weapontechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(WEAPONTECH, PlayerValues.DEFAULT_TECH_BASE) : PlayerValues.DEFAULT_TECH_BASE, playerValues.weapontechProperty());
     weapontechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(weapontechSpinner, 1, 0);
     gridPaneBonis.add(new Label("Panzerung % "), 0, 1);
-    final Spinner<Integer> armortechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(ARMORTECH, defaultTech) : defaultTech, playerValues.armortechProperty());
+    final Spinner<Integer> armortechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(ARMORTECH, PlayerValues.DEFAULT_TECH_BASE) : PlayerValues.DEFAULT_TECH_BASE, playerValues.armortechProperty());
     armortechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(armortechSpinner, 1, 1);
     gridPaneBonis.add(new Label("Schutzschilder % "), 0, 2);
-    final Spinner<Integer> shieldtechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(SHIELDTECH, defaultTech) : defaultTech, playerValues.shieldtechProperty());
+    final Spinner<Integer> shieldtechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(SHIELDTECH, PlayerValues.DEFAULT_TECH_BASE) : PlayerValues.DEFAULT_TECH_BASE, playerValues.shieldtechProperty());
     shieldtechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(shieldtechSpinner, 1, 2);
     gridPaneBonis.add(new Label("Regenatechnik % "), 0, 3);
-    final Spinner<Integer> regenatechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(REGENATECH, defaultTech) : defaultTech, playerValues.regenatechProperty());
+    final Spinner<Integer> regenatechSpinner = Spinners.getPlayerTechSpinner(type.equals(ATTACKER) ? preferences.getInt(REGENATECH, PlayerValues.DEFAULT_TECH_BASE) : PlayerValues.DEFAULT_TECH_BASE, playerValues.regenatechProperty());
     regenatechSpinner.valueProperty().addListener((obs, oldVal, newVal) -> updateSpinnerValues(fightSimulation));
     gridPaneBonis.add(regenatechSpinner, 1, 3);
     if (type.equals(DEFENDER))

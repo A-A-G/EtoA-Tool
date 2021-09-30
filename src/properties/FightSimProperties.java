@@ -20,32 +20,30 @@ public class FightSimProperties extends Properties
   private static final long serialVersionUID = 4703049888419932050L;
 
   // Keys
-  public final static String CONFIG_PATH = "config";
+  public static final String CONFIG_PATH = "config";
   // FightSimulation
-  public final static String MAX_LOOT = "max_loot";
-  public final static String MAX_LOOT_ADD = "max_loot_add";
-  public final static String MAX_HEAL = "max_heal";
+  public static final String MAX_LOOT = "max_loot";
+  public static final String MAX_LOOT_ADD = "max_loot_add";
+  public static final String MAX_HEAL = "max_heal";
   // DebrisField
-  public final static String DF_FACTOR_SHIPS = "tf_ships";
-  public final static String DF_FACTOR_DEFENCE = "tf_defence";
+  public static final String DF_FACTOR_SHIPS = "tf_ships";
+  public static final String DF_FACTOR_DEFENCE = "tf_defence";
   // PlayerValues
-  public final static String TECH_BASE = "tech_base";
-  public final static String DEFENCE_REPAIR = "defence_repair_base";
-  public final static String CIVIL_SHIPS_RESTORE = "civil_ships_restore";
+  public static final String DEFENCE_REPAIR = "defence_repair_base";
+  public static final String CIVIL_SHIPS_RESTORE = "civil_ships_restore";
 
   // Default values
-  private final static String DEFAULT_CONFIG_PATH = "sim.properties";
+  private static final String DEFAULT_CONFIG_PATH = "sim.properties";
   // FightSimulation
-  private final static String DEFAULT_MAX_LOOT = "0.37";
-  private final static String DEFAULT_MAX_LOOT_ADD = "0.25";
-  private final static String DEFAULT_MAX_HEAL = "1";
+  private static final String DEFAULT_MAX_LOOT = "0.37";
+  private static final String DEFAULT_MAX_LOOT_ADD = "0.25";
+  private static final String DEFAULT_MAX_HEAL = "1";
   // DebrisField
-  public final static String DEFAULT_DF_FACTOR_SHIPS = "0.6";
-  public final static String DEFAULT_DF_FACTOR_DEFENCE = "0.5";
+  public static final String DEFAULT_DF_FACTOR_SHIPS = "0.6";
+  public static final String DEFAULT_DF_FACTOR_DEFENCE = "0.5";
   // PlayerValues
-  public final static String DEFAULT_TECH_BASE = "100";
-  public final static String DEFAULT_DEFENCE_REPAIR = "40";
-  public final static String DEFAULT_CIVIL_SHIPS_RESTORE = "0.8";
+  public static final String DEFAULT_DEFENCE_REPAIR = "40";
+  public static final String DEFAULT_CIVIL_SHIPS_RESTORE = "0.8";
 
   // Singleton (optional)
   private static FightSimProperties singleton = null;
@@ -102,10 +100,6 @@ public class FightSimProperties extends Properties
     {
       setProperty(DF_FACTOR_DEFENCE, DEFAULT_DF_FACTOR_DEFENCE);
     }
-    if (getProperty(TECH_BASE) == null)
-    {
-      setProperty(TECH_BASE, DEFAULT_TECH_BASE);
-    }
     if (getProperty(DEFENCE_REPAIR) == null)
     {
       setProperty(DEFENCE_REPAIR, DEFAULT_DEFENCE_REPAIR);
@@ -152,11 +146,6 @@ public class FightSimProperties extends Properties
   public double getDfFactorDefence()
   {
     return Double.parseDouble(getProperty(DF_FACTOR_DEFENCE));
-  }
-
-  public double getTechBase()
-  {
-    return Double.parseDouble(getProperty(TECH_BASE));
   }
 
   public double getDefenceRepair()

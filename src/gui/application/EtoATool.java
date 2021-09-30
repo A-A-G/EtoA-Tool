@@ -6,6 +6,7 @@ import java.net.URI;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
+import java.util.prefs.Preferences;
 
 import data.defence.Defences;
 import data.planets.Planets;
@@ -39,6 +40,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import properties.AppProperties;
 
 /**
@@ -76,6 +78,11 @@ public class EtoATool extends Application
   {
     return PRIMARY_STAGE;
   }
+
+  private static final String WINDOW_WIDTH = "mainwindow_width";
+  private static final String WINDOW_HEIGHT = "mainWindow_height";
+  private static final double DEFAULT_WIDTH = 1600;
+  private static final double DEFAULT_HEIGHT = 1000;
 
   private final ArrayList<Label> statusBars = new ArrayList<>();
 
@@ -130,11 +137,17 @@ public class EtoATool extends Application
       root.setBottom(statusBars.get(0));
       tabPane.getSelectionModel().select(0);
       root.setCenter(tabPane);
-      final Scene scene = new Scene(root, 1400, 1000);
+      final Preferences preferences = Preferences.userNodeForPackage(getClass());
+      final Scene scene = new Scene(root, preferences.getDouble(WINDOW_WIDTH, DEFAULT_WIDTH), preferences.getDouble(WINDOW_HEIGHT, DEFAULT_HEIGHT));
       scene.getStylesheets().add(getClass().getResource(getCSSFolder() + APP_PROPERTIES.getProperty(AppProperties.APPLICATION_CSS)).toExternalForm());
       primaryStage.setScene(scene);
       primaryStage.setTitle(APP_NAME);
       primaryStage.getIcons().add(new Image(getGameIconPath()));
+      primaryStage.setOnCloseRequest((final WindowEvent event) ->
+      {
+        preferences.putDouble(WINDOW_WIDTH, Math.max(scene.getWidth(), 100));
+        preferences.putDouble(WINDOW_HEIGHT, Math.max(scene.getHeight(), 100));
+      });
       primaryStage.show();
     }
     catch (final Exception e)
