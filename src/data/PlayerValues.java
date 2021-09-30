@@ -3,6 +3,10 @@
  */
 package data;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import data.defence.Defence;
 import data.ships.Ship;
 import data.ships.Ships;
@@ -211,6 +215,7 @@ public class PlayerValues
           System.out.println("Something wrong restoring civil ships!");
         }
       }
+      restoreString = restoreString + (new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(Locale.ENGLISH))).format(FightSimProperties.getInstance().getCivilShipsRestore() * 100) + "% der zivilen Schiffe werden wiederhergestellt!" + System.lineSeparator();
     }
     else
     {
@@ -239,6 +244,7 @@ public class PlayerValues
           System.out.println("Something wrong repairing defences!");
         }
       }
+      repairString = repairString + (new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(Locale.ENGLISH))).format(repair.get()) + "% der Verteidigungsanlagen werden repariert!" + System.lineSeparator();
     }
     else
     {

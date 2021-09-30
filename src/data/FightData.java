@@ -3,6 +3,10 @@
  */
 package data;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.Locale;
+
 import data.ships.Ship;
 import data.ships.Ships;
 import gui.tabs.KBSimTab.MainSpinners;
@@ -140,6 +144,7 @@ public class FightData
           restoreString = restoreString + pair.getKey().nameProperty().get() + " \t " + pair.getValue() + System.lineSeparator();
         }
       }
+      restoreString = restoreString + (new DecimalFormat("#.##", DecimalFormatSymbols.getInstance(Locale.ENGLISH))).format(FightSimProperties.getInstance().getCivilShipsRestore() * 100) + "% der zivilen Schiffe werden wiederhergestellt!" + System.lineSeparator();
       return restoreString;
     }
     return "FightData:restoreDefenderCivilShips(): Wrong defender count!";
