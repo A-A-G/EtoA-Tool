@@ -19,7 +19,6 @@ import properties.FightSimProperties;
 public class FightSimulation
 {
   private FightData fightData = null;
-
   private SpyReport spyReport = null;
 
   String lastFightReport = "";
@@ -62,7 +61,7 @@ public class FightSimulation
     final double lastAttackerLO = attackerLeftOver;
     final double lastDefenderLO = defenderLeftOver;
     fightData.initFight();
-    for (int i = 1; i <= 5; ++i) // 5 rounds
+    for (int i = 1; i <= properties.getMaxRounds(); ++i)
     {
       lastFightReport = lastFightReport + String.format("%,d Einheiten des Angreifers schießen mit einer Stärke von %,.0f auf den Verteidiger.", fightData.getAttackerValuesCopy().units, fightData.getAttackerValuesCopy().weapons) + System.lineSeparator();
       defenderLeftOver = Math.max(defenderLeftOver - fightData.getAttackerValuesCopy().weapons, 0);

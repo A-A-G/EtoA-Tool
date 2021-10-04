@@ -95,12 +95,12 @@ public class FightData
     {
       return defenderListCopy.get(0).restoreCivilShips(defenderList.get(0).getShips());
     }
-    else if ((defenderListCopy.size() > 1) && (defenderList.size() > 1))
+    else if ((defenderListCopy.size() > 1) && (defenderList.size() > 1)) // TODO: This is done differently by EtoA and needs to be fixed. There will be an error of +-1 ship which may increase during the battle.
     {
       final ObservableMap<ShipAndDefenceBase, Integer> fleetMap = FXCollections.observableHashMap();
       final ObservableMap<ShipAndDefenceBase, Integer> restoreMap = FXCollections.observableHashMap();
       final ObservableMap<ShipAndDefenceBase, Integer> originalShipsMap = defenderList.get(0).getShips();
-      ObservableMap<ShipAndDefenceBase, Integer> shipsMap = defenderList.get(0).getShips();
+      ObservableMap<ShipAndDefenceBase, Integer> shipsMap = defenderListCopy.get(0).getShips();
       for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
       {
         if (originalShipsMap.containsKey(pair.getKey()))
@@ -110,9 +110,9 @@ public class FightData
             final int originalNumber = originalShipsMap.get(pair.getKey());
             final int currentNumber = pair.getValue();
             final int restored = (int) Math.round((originalNumber - currentNumber) * FightSimProperties.getInstance().getCivilShipsRestore());
-            shipsMap.put(pair.getKey(), currentNumber + restored);
-            fleetMap.put(pair.getKey(), currentNumber + restored);
+            fleetMap.put(pair.getKey(), currentNumber);
             restoreMap.put(pair.getKey(), restored);
+            shipsMap.put(pair.getKey(), currentNumber + restored);
           }
           else
           {
@@ -124,9 +124,10 @@ public class FightData
           System.out.println("Something wrong restoring civil ships!");
         }
       }
-      for (int i = 1; i < defenderList.size(); i++)
+      defenderListCopy.get(0).setChoosenShips(shipsMap); // Update for debris field with restored ships.
+      for (int i = 1; i < defenderListCopy.size(); i++)
       {
-        shipsMap = defenderList.get(i).getShips();
+        shipsMap = defenderListCopy.get(i).getShips();
         for (final ObservableMap.Entry<ShipAndDefenceBase, Integer> pair : shipsMap.entrySet())
         {
           fleetMap.put(pair.getKey(), fleetMap.getOrDefault(pair.getKey(), 0) + pair.getValue());
@@ -254,10 +255,10 @@ public class FightData
     }
     String ret = "";
     final double count = ressources / ship.capacityProperty().get();
-    ret = ret + String.format("%s: %,.0f", name, Math.floor(count));
+    ret = ret + String.format("%s: %,.0f", name, Math.ceil(count));
     if (getAttackerCount() > 1)
     {
-      ret = ret + String.format(" (%,.0f)", Math.floor(count / getAttackerCount()));
+      ret = ret + String.format(" (%,.0f)", Math.ceil(count / getAttackerCount()));
     }
     ret = ret + System.lineSeparator();
     return ret;

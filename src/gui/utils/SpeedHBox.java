@@ -15,8 +15,10 @@ import javafx.scene.layout.HBox;
  */
 public class SpeedHBox extends HBox
 {
-  private final Spinner<Integer> speedSpinner;
+  private static final int DEFAULT_SPEED = 15000;
+  private static final int DEFAULT_STARTLAND = 113;
 
+  private final Spinner<Integer> speedSpinner;
   private final Spinner<Integer> startLandSpinner;
 
   public SpeedHBox()
@@ -25,11 +27,11 @@ public class SpeedHBox extends HBox
     getStyleClass().add("smallspacing");
     setAlignment(Pos.CENTER_LEFT);
     getChildren().add(new Label("Geschwindigkeit:"));
-    speedSpinner = Spinners.getSpinner(0, 200000, 15000, 100, 100, true, null);
+    speedSpinner = Spinners.getSpinner(0, 200000, DEFAULT_SPEED, 100, 100, true, null);
     getChildren().add(speedSpinner);
     getChildren().add(new Label("AE/h,"));
     getChildren().add(new Label("Start + Landung:"));
-    startLandSpinner = Spinners.getSpinner(0, 10000, 120, 10, 70, true, null);
+    startLandSpinner = Spinners.getSpinner(0, 10000, DEFAULT_STARTLAND, 10, 70, true, null);
     getChildren().add(startLandSpinner);
     getChildren().add(new Label("s"));
   }

@@ -25,6 +25,7 @@ public class FightSimProperties extends Properties
   public static final String MAX_LOOT = "max_loot";
   public static final String MAX_LOOT_ADD = "max_loot_add";
   public static final String MAX_HEAL = "max_heal";
+  public static final String MAX_ROUNDS = "max_rounds";
   // DebrisField
   public static final String DF_FACTOR_SHIPS = "tf_ships";
   public static final String DF_FACTOR_DEFENCE = "tf_defence";
@@ -38,6 +39,7 @@ public class FightSimProperties extends Properties
   private static final String DEFAULT_MAX_LOOT = "0.37";
   private static final String DEFAULT_MAX_LOOT_ADD = "0.25";
   private static final String DEFAULT_MAX_HEAL = "1";
+  private static final String DEFAULT_MAX_ROUNDS = "5";
   // DebrisField
   public static final String DEFAULT_DF_FACTOR_SHIPS = "0.6";
   public static final String DEFAULT_DF_FACTOR_DEFENCE = "0.5";
@@ -91,6 +93,10 @@ public class FightSimProperties extends Properties
     if (getProperty(MAX_HEAL) == null)
     {
       setProperty(MAX_HEAL, DEFAULT_MAX_HEAL);
+    }
+    if (getProperty(MAX_ROUNDS) == null)
+    {
+      setProperty(MAX_ROUNDS, DEFAULT_MAX_ROUNDS);
     }
     if (getProperty(DF_FACTOR_SHIPS) == null)
     {
@@ -156,6 +162,11 @@ public class FightSimProperties extends Properties
   public double getCivilShipsRestore()
   {
     return Double.parseDouble(getProperty(CIVIL_SHIPS_RESTORE));
+  }
+
+  public int getMaxRounds()
+  {
+    return Integer.parseInt(getProperty(MAX_ROUNDS));
   }
 
 }

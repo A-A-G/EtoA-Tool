@@ -67,10 +67,10 @@ public class FightValues
         weapontechBoni += p.weapontechProperty().get();
         regenatechBoni += p.regenatechProperty().get();
       }
-      shieldtech = shieldtechBoni / playerValues.size();
-      armortech = armortechBoni / playerValues.size();
-      weapontech = weapontechBoni / playerValues.size();
-      regenatech = regenatechBoni / playerValues.size();
+      shieldtech = Math.round(shieldtechBoni / playerValues.size());
+      armortech = Math.round(armortechBoni / playerValues.size());
+      weapontech = Math.round(weapontechBoni / playerValues.size());
+      regenatech = Math.round(regenatechBoni / playerValues.size());
     }
   }
 }
