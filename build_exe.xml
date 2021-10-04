@@ -3,10 +3,10 @@
 	<import file="build_jar.xml" as="build_jar" />
 
 	<target name="do-deploy" depends="build_jar.do-dist">
-		<mkdir dir="build/deploy" />
+		<mkdir dir="${basedir}/build/deploy" />
 
 		<fx:resources id="appRes">
-			<fx:fileset dir="build/dist" includes="EtoA-Tool.jar" />
+			<fx:fileset dir="${basedir}/build/dist" includes="EtoA-Tool.jar" />
 			<fx:fileset dir="${basedir}" includes="planets.rod" type="data"/>
 			<fx:fileset dir="${basedir}" includes="ships.rod" type="data"/>
 			<fx:fileset dir="${basedir}" includes="deffs.rod" type="data"/>
