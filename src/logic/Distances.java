@@ -4,6 +4,7 @@
 package logic;
 
 import data.planets.Planet;
+import properties.UniverseProperties;
 
 /**
  * @author AAG
@@ -11,11 +12,6 @@ import data.planets.Planet;
  */
 public final class Distances
 {
-  public static final int X_CELLS = 10;
-  public static final int Y_CELLS = 10;
-
-  public static final double INTERSTELLAR_CONST = 600;
-  public static final double SOLARSYSTEM_CONST = 1.89;
 
   public static class Coordinates
   {
@@ -75,22 +71,23 @@ public final class Distances
 
   public static double getDistance(final Coordinates c1, final Coordinates c2)
   {
-    final double dx = Math.abs((((c1.x_sector - 1) * X_CELLS) + c1.x_system) - (((c2.x_sector - 1) * X_CELLS) + c2.x_system));
-    final double dy = Math.abs((((c1.y_sector - 1) * Y_CELLS) + c1.y_system) - (((c2.y_sector - 1) * Y_CELLS) + c2.y_system));
-    final double sd = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
-    final double sae = (Math.max(sd - 1, 0) * INTERSTELLAR_CONST) / 2;
-
-    double ps;
+    final UniverseProperties uniProperties = UniverseProperties.getInstance();
+    final double cellLength = uniProperties.getCellLength();
+    final int xCells = uniProperties.getXCells();
+    final int yCells = uniProperties.getYCells();
+    final double distanceInnerOuterEntity = cellLength / 4.0 / uniProperties.getMaxNumberPlanets();
     if (c1.isSameSystem(c2))
     {
-      ps = Math.abs(c1.pos - c2.pos) * SOLARSYSTEM_CONST;
+      return Math.round(Math.abs(c1.pos - c2.pos) * distanceInnerOuterEntity);
     }
     else
     {
-      ps = INTERSTELLAR_CONST - (c1.pos * SOLARSYSTEM_CONST) - (c2.pos * SOLARSYSTEM_CONST);
+      final double dx = Math.abs((((c1.x_sector - 1) * xCells) + c1.x_system) - (((c2.x_sector - 1) * xCells) + c2.x_system));
+      final double dy = Math.abs((((c1.y_sector - 1) * yCells) + c1.y_system) - (((c2.y_sector - 1) * yCells) + c2.y_system));
+      final double hypotenuse = Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2));
+      final double cellDistanceAE = hypotenuse * cellLength;
+      return Math.round((cellDistanceAE + cellLength) - (distanceInnerOuterEntity * (c1.pos + c2.pos)));
     }
-
-    return sae + ps;
   }
 
   public static double getDistance(final String coords1, final String coords2) // Howto handle errors in coordinate strings?

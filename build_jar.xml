@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EtoA-Tool" default="do-dist" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
 
-	<property name="version" value="0.7.1"/>
+	<property name="version" value="0.7.2"/>
 	<property name="jre_version" value="1.8"/>
 	
 	<target name="init-fx-tasks">

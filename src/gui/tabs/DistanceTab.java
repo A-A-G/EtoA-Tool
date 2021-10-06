@@ -36,6 +36,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import logic.Distances;
+import properties.UniverseProperties;
 
 /**
  * @author AAG
@@ -44,11 +45,7 @@ import logic.Distances;
 public class DistanceTab extends EtoATab
 {
   private final static String TAB_NAME = "Entfernungen";
-
   private final static String DISTANCE_TAB_CSS = "distancetab.css";
-
-  private final static int RAK_RANGE = 3000;
-
   private final static String KRYPTO_LEVEL = "Krypto-Level";
 
   public DistanceTab(final Planets planets, final Ships ships, final Defences defences, final Label statusLabel)
@@ -63,9 +60,9 @@ public class DistanceTab extends EtoATab
     VBox.setVgrow(player1View, Priority.ALWAYS);
     final VBox player1VBox = new VBox(p1Label, player1View);
     player1VBox.setAlignment(Pos.CENTER);
-    final Spinner<Integer> kryptoLevelSpinner = Spinners.getSpinner(0, 10, 0, 1, 60, true, null);
-    final Spinner<Integer> kryptoRangeSpinner = Spinners.getSpinner(0, 7000, 0, 700, 80, true, null);
-    kryptoLevelSpinner.valueProperty().addListener((obs, oldValue, newValue) -> kryptoRangeSpinner.getValueFactory().setValue(newValue * 700));
+    final Spinner<Integer> kryptoLevelSpinner = Spinners.getSpinner(0, 10, 0, 1, 70, true, null);
+    final Spinner<Integer> kryptoRangeSpinner = Spinners.getSpinner(0, 7000, 0, 700, 100, true, null);
+    kryptoLevelSpinner.valueProperty().addListener((obs, oldValue, newValue) -> kryptoRangeSpinner.getValueFactory().setValue(newValue * UniverseProperties.getInstance().getKryptoRange()));
     final Preferences preferences = Preferences.userNodeForPackage(getClass());
     kryptoLevelSpinner.getValueFactory().setValue(preferences.getInt(KRYPTO_LEVEL, 0));
     kryptoLevelSpinner.valueProperty().addListener((obs, oldValue, newValue) -> preferences.putInt(KRYPTO_LEVEL, newValue));
@@ -217,11 +214,12 @@ public class DistanceTab extends EtoATab
         distanceLabel.setMaxHeight(Double.MAX_VALUE);
         GridPane.setHgrow(distanceLabel, Priority.ALWAYS);
         GridPane.setVgrow(distanceLabel, Priority.ALWAYS);
-        if ((distance < RAK_RANGE) && (distance < kryptoRange))
+        final int rakRange = UniverseProperties.getInstance().getRakRange();
+        if ((distance < rakRange) && (distance < kryptoRange))
         {
           distanceLabel.getStyleClass().add("rakandkrypto");
         }
-        else if (distance < RAK_RANGE)
+        else if (distance < rakRange)
         {
           distanceLabel.getStyleClass().add("rakrange");
         }

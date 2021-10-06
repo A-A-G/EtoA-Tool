@@ -1,5 +1,9 @@
 Changelog:
 
+0.7.2
+- Bugfixes Distance
+- Universe properties
+
 0.7.1
 - Bugfixes KBSim
 

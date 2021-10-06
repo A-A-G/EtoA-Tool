@@ -41,11 +41,11 @@ public class FightSimProperties extends Properties
   private static final String DEFAULT_MAX_HEAL = "1";
   private static final String DEFAULT_MAX_ROUNDS = "5";
   // DebrisField
-  public static final String DEFAULT_DF_FACTOR_SHIPS = "0.6";
-  public static final String DEFAULT_DF_FACTOR_DEFENCE = "0.5";
+  private static final String DEFAULT_DF_FACTOR_SHIPS = "0.6";
+  private static final String DEFAULT_DF_FACTOR_DEFENCE = "0.5";
   // PlayerValues
-  public static final String DEFAULT_DEFENCE_REPAIR = "40";
-  public static final String DEFAULT_CIVIL_SHIPS_RESTORE = "0.8";
+  private static final String DEFAULT_DEFENCE_REPAIR = "40"; // Percent!
+  private static final String DEFAULT_CIVIL_SHIPS_RESTORE = "0.8";
 
   // Singleton (optional)
   private static FightSimProperties singleton = null;
