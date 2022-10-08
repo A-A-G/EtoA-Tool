@@ -36,12 +36,12 @@ public class FightSimProperties extends Properties
   // Default values
   private static final String DEFAULT_CONFIG_PATH = "sim.properties";
   // FightSimulation
-  private static final String DEFAULT_MAX_LOOT = "0.37";
+  private static final String DEFAULT_MAX_LOOT = "0.33";
   private static final String DEFAULT_MAX_LOOT_ADD = "0.25";
   private static final String DEFAULT_MAX_HEAL = "1";
   private static final String DEFAULT_MAX_ROUNDS = "5";
   // DebrisField
-  private static final String DEFAULT_DF_FACTOR_SHIPS = "0.6";
+  private static final String DEFAULT_DF_FACTOR_SHIPS = "0.65";
   private static final String DEFAULT_DF_FACTOR_DEFENCE = "0.5";
   // PlayerValues
   private static final String DEFAULT_DEFENCE_REPAIR = "40"; // Percent!

@@ -38,7 +38,7 @@ public class AppProperties extends Properties
   public static final String AUTHOR = "author";
 
   // Default values
-  private static final String DEFAULT_ROUND = "round21";
+  private static final String DEFAULT_ROUND = "round22";
   private static final String DEFAULT_DOMAIN = "etoa.net";
   private static final String DEFAULT_PROTOCOL = "https";
   private static final String DEFAULT_CSS_FOLDER = "/css/";
