@@ -71,9 +71,14 @@ public class FightSimulation
       lastFightReport = lastFightReport + String.format("Der Angreifer hat danach noch %,.0f Struktur- und Schildpunkte.", attackerLeftOver) + System.lineSeparator() + System.lineSeparator();
       if ((attackerLeftOver > 0) && (fightData.getAttackerValues().heal > 0))
       {
-        final double heal = fightData.getAttackerHeal(attackerLeftOver);
+        double heal = fightData.getAttackerHeal(attackerLeftOver);
+        double maxHeal = properties.getMaxHeal() * (lastAttackerLO - attackerLeftOver);
+        if (heal > maxHeal)
+        {
+        	heal = maxHeal;
+        }
         lastFightReport = lastFightReport + String.format("Die Einheiten des Angreifers heilen %,.0f Struktur- und Schildpunkte.", heal) + System.lineSeparator();
-        attackerLeftOver = attackerLeftOver + (heal > (properties.getMaxHeal() * (lastAttackerLO - attackerLeftOver)) ? properties.getMaxHeal() * (lastAttackerLO - attackerLeftOver) : heal);
+        attackerLeftOver = attackerLeftOver + heal;
         lastFightReport = lastFightReport + String.format("Der Angreifer hat danach wieder %,.0f Struktur- und Schildpunkte.", attackerLeftOver) + System.lineSeparator() + System.lineSeparator();
       }
       if ((defenderLeftOver > 0) && (fightData.getDefenderValues().heal > 0))
