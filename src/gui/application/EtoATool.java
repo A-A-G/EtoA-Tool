@@ -51,7 +51,7 @@ public class EtoATool extends Application
 {
   private final static String VERSION = "0.7.3";
 
-  private final static LocalDate EXPIRE_DATE = LocalDate.of(2023, 1, 1);
+  private final static LocalDate EXPIRE_DATE = LocalDate.of(2024, 1, 1);
 
   private final static String APP_NAME = "EtoA-Tool";
 
