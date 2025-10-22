@@ -1,5 +1,8 @@
 Changelog:
 
+0.8.0:
+- Update Java to 25 (requires JavaFX and deployment changes)
+
 0.7.2
 - Bugfixes Distance
 - Universe properties

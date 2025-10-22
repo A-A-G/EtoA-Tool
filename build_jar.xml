@@ -1,45 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="EtoA-Tool" default="do-dist" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
+<project name="EtoA-Tool" default="do-dist" basedir=".">
 
-	<property name="version" value="0.7.3"/>
-	<property name="jre_version" value="1.8"/>
-	
-	<target name="init-fx-tasks">
-		<path id="fxant">
-			<filelist>
-				<file name="${java.home}\..\lib\ant-javafx.jar" />
-				<file name="${java.home}\lib\jfxrt.jar" />
-				<file name="${basedir}/res/" />
-			</filelist>
-		</path>
-		<taskdef resource="com/sun/javafx/tools/ant/antlib.xml" uri="javafx:com.sun.javafx.tools.ant" classpathref="fxant" />
-	</target>
+    <property name="version" value="0.8.0"/>
+    <property name="jre_version" value="23"/>
+    <!-- Set this to your JavaFX SDK root directory -->
+    <property name="javafx.sdk.dir" value="C:/Program Files (x86)/Java/javafx-sdk-25.0.1"/>
 
-	<target name='do-compile'>
-		<delete dir="build" />
-		<mkdir dir="build" />
-		<mkdir dir="build/classes" />
-		<javac includeantruntime="false" debug="true" target="${jre_version}" srcdir="${basedir}/src" destdir="build/classes" encoding="UTF-8" />
-		<copy todir="build/classes">
-			<fileset dir="src" />
-		</copy>
-	</target>
+    <path id="javafx.classpath">
+        <fileset dir="${javafx.sdk.dir}/lib">
+            <include name="*.jar"/>
+        </fileset>
+    </path>
 
-	<target name="do-dist" depends="do-compile, init-fx-tasks">
-		<mkdir dir="build/dist" />
+    <target name="do-compile">
+        <delete dir="build" />
+        <mkdir dir="build" />
+        <mkdir dir="build/classes" />
+        <javac includeantruntime="false" debug="true" release="${jre_version}"
+               srcdir="${basedir}/src" destdir="build/classes" encoding="UTF-8">
+            <classpath refid="javafx.classpath"/>
+        </javac>
+        <copy todir="build/classes">
+            <fileset dir="src" />
+        </copy>
+    </target>
 
-		<fx:application id="fxApplication" name="EtoA-Tool" mainClass="gui.application.EtoATool" toolkit="fx" version="${version}" />
-
-		<fx:jar destfile="build/dist/EtoA-Tool.jar">
-			<fx:application refid="fxApplication" />
-			<fileset dir="build/classes" />
-			<manifest>
-				<attribute name="Implementation-Vendor" value="AAG" />
-				<attribute name="Implementation-Title" value="EtoA-Tool" />
-				<attribute name="Implementation-Version" value="${version}" />
-				<attribute name="JavaFX-Feature-Proxy" value="None" />
-			</manifest>
-		</fx:jar>
-	</target>
+    <target name="do-dist" depends="do-compile">
+        <mkdir dir="build/dist" />
+        <jar destfile="build/dist/EtoA-Tool.jar">
+            <fileset dir="build/classes" />
+            <manifest>
+                <attribute name="Main-Class" value="gui.application.EtoATool" />
+                <attribute name="Implementation-Vendor" value="AAG" />
+                <attribute name="Implementation-Title" value="EtoA-Tool" />
+                <attribute name="Implementation-Version" value="${version}" />
+            </manifest>
+        </jar>
+        <echo>
+            ------------------------------------------------------------
+            To run the application, use:
+            java --module-path "${javafx.sdk.dir}/lib" --add-modules javafx.controls,javafx.fxml --enable-native-access=javafx.graphics -jar build/dist/EtoA-Tool.jar
+            ------------------------------------------------------------
+        </echo>
+    </target>
 
 </project>

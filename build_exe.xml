@@ -1,26 +1,79 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="EtoA-Tool_EXE" default="do-deploy" basedir="." xmlns:fx="javafx:com.sun.javafx.tools.ant">
-	<import file="build_jar.xml" as="build_jar" />
+<project name="EtoA-Tool_EXE" default="do-deploy" basedir=".">
+    <import file="build_jar.xml" as="build_jar" />
 
-	<target name="do-deploy" depends="build_jar.do-dist">
-		<mkdir dir="${basedir}/build/deploy" />
+    <property name="app.name" value="EtoA-Tool"/>
+    <property name="main.class" value="gui.application.EtoATool"/>
+    <property name="version" value="0.8.0"/>
+    <property name="vendor" value="AAG"/>
+    <property name="javafx.sdk.dir" value="C:/Program Files (x86)/Java/javafx-sdk-25.0.1"/>
+    <property name="dist.dir" value="${basedir}/build/dist"/>
+    <property name="deploy.dir" value="${basedir}/build/deploy"/>
+    <property name="icon.path" value="${basedir}/bin/images/EtoA32.ico"/>
+    <property name="runtime.dir" value="${basedir}/build/custom-runtime"/>
 
-		<fx:resources id="appRes">
-			<fx:fileset dir="${basedir}/build/dist" includes="EtoA-Tool.jar" />
-			<fx:fileset dir="${basedir}" includes="planets.rod" type="data"/>
-			<fx:fileset dir="${basedir}" includes="ships.rod" type="data"/>
-			<fx:fileset dir="${basedir}" includes="deffs.rod" type="data"/>
-			<fx:fileset dir="${basedir}" includes="changelog.txt" type="data"/>
-		</fx:resources>
+    <target name="make-runtime" unless="runtime.exists">
+        <echo>Creating custom runtime at ${runtime.dir}...</echo>
+        <exec executable="jlink" osfamily="windows" failonerror="true" dir="${basedir}">
+            <arg value="--module-path"/>
+            <arg value="%JAVA_HOME%\\jmods;${javafx.sdk.dir}/lib"/>
+            <arg value="--add-modules"/>
+            <arg value="java.base,java.desktop,java.logging,java.xml,java.scripting,javafx.base,javafx.controls,javafx.fxml,javafx.graphics,javafx.media,javafx.web,jdk.crypto.ec"/>
+            <arg value="--output"/>
+            <arg value="${runtime.dir}"/>
+        </exec>
+        <!-- Copy JavaFX native DLLs into the custom runtime's bin directory -->
+        <copy todir="${runtime.dir}/bin" flatten="true">
+            <fileset dir="${javafx.sdk.dir}/bin">
+                <include name="*.dll"/>
+            </fileset>
+        </copy>
+    </target>
 
-		<mkdir dir="build/deploy" />
-		<fx:deploy verbose="true" embedJNLP="true" extension="false" includeDT="false" offlineAllowed="true" outdir="${basedir}/build/deploy" outfile="EtoA-Tool" nativeBundles="exe" updatemode="background">
-			<fx:platform basedir="${java.home}" />
-			<fx:info title="EtoA-Tool" vendor="AAG" />
-			<fx:application refId="fxApplication" />
-			<fx:resources refid="appRes" />
-			<fx:preferences shortcut="true"/>
-		</fx:deploy>
-	</target>
+    <target name="copy-resources" depends="build_jar.do-dist">
+        <available file="${runtime.dir}" type="dir" property="runtime.exists"/>
+        <antcall target="make-runtime"/>
+        <copy file="${dist.dir}/${app.name}.jar" todir="${deploy.dir}"/>
+        <copy file="${basedir}/planets.rod" todir="${deploy.dir}"/>
+        <copy file="${basedir}/ships.rod" todir="${deploy.dir}"/>
+        <copy file="${basedir}/deffs.rod" todir="${deploy.dir}"/>
+        <copy file="${basedir}/changelog.txt" todir="${deploy.dir}"/>
+    </target>
+
+    <target name="do-deploy" depends="copy-resources">
+        <echo>Packaging application as Windows EXE using jpackage and a custom runtime...</echo>
+        <exec executable="jpackage" failonerror="true">
+            <arg value="--type"/>
+            <arg value="app-image"/>
+            <arg value="--input"/>
+            <arg value="${deploy.dir}"/>
+            <arg value="--dest"/>
+            <arg value="${deploy.dir}"/>
+            <arg value="--name"/>
+            <arg value="${app.name}"/>
+            <arg value="--main-jar"/>
+            <arg value="${app.name}.jar"/>
+            <arg value="--main-class"/>
+            <arg value="${main.class}"/>
+            <arg value="--app-version"/>
+            <arg value="${version}"/>
+            <arg value="--vendor"/>
+            <arg value="${vendor}"/>
+            <arg value="--icon"/>
+            <arg value="${icon.path}"/>
+            <arg value="--runtime-image"/>
+            <arg value="${runtime.dir}"/>
+            <arg value="--java-options"/>
+            <arg value="--enable-native-access=javafx.graphics"/>
+            <arg value="--java-options"/>
+            <arg value="-Dfile.encoding=UTF-8"/>
+        </exec>
+        <!-- Copy data files next to the EXE in the app image directory -->
+        <copy file="${deploy.dir}/planets.rod" todir="${deploy.dir}/${app.name}"/>
+        <copy file="${deploy.dir}/ships.rod" todir="${deploy.dir}/${app.name}"/>
+        <copy file="${deploy.dir}/deffs.rod" todir="${deploy.dir}/${app.name}"/>
+        <copy file="${deploy.dir}/changelog.txt" todir="${deploy.dir}/${app.name}"/>
+        <echo>EXE package created in ${deploy.dir}\${app.name}</echo>
+    </target>
 
 </project>
