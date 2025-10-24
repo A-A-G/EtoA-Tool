@@ -4,7 +4,7 @@
 
     <property name="app.name" value="EtoA-Tool"/>
     <property name="main.class" value="gui.application.EtoATool"/>
-    <property name="version" value="0.8.0"/>
+    <property name="version" value="0.8.1"/>
     <property name="vendor" value="AAG"/>
     <property name="javafx.sdk.dir" value="C:/Program Files (x86)/Java/javafx-sdk-25.0.1"/>
     <property name="dist.dir" value="${basedir}/build/dist"/>

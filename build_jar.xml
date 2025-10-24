@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="EtoA-Tool" default="do-dist" basedir=".">
 
-    <property name="version" value="0.8.0"/>
+    <property name="version" value="0.8.1"/>
     <property name="jre_version" value="23"/>
     <!-- Set this to your JavaFX SDK root directory -->
     <property name="javafx.sdk.dir" value="C:/Program Files (x86)/Java/javafx-sdk-25.0.1"/>
