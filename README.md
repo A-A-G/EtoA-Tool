@@ -16,6 +16,7 @@
 
 <a name="build"></a>
 ## Beginner's Guide to compile your own KB-Sim (by misThor_bean)
+**:warning: The Beginner's Guide is OUTDATED! :warning:**
 
 ### Voraussetzungen/Requirements
 - Java SDK       ###  Download: http://enos.itcollege.ee/~jpoial/allalaadimised/jdk8/jdk-8u241-windows-x64.exe
